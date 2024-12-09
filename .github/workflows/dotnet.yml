@@ -30,7 +30,7 @@ jobs:
     - name: Setup variables
       id: variables
       run: |                    
-        echo "group=${{ env.GROUP }}" >> $GITHUB_OUTPUT
+        echo "group=$(printf '%02d' ${GROUP})" >> $GITHUB_OUTPUT
         echo "port=$((50000 + 100 * 10#${{ env.GROUP }}))" >> $GITHUB_OUTPUT
         echo "zip-filename=G${{ env.GROUP }}-V$GITHUB_RUN_NUMBER-$(date +'%Y-%m-%d').tar.gz" >> $GITHUB_OUTPUT 
         echo "publish-folder=${{ github.workspace }}/published" >> $GITHUB_OUTPUT        
