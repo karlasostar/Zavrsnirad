@@ -1,0 +1,180 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "RPPP08Context",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "RPPP_WebApp",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[AKGod]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[bira]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[donosiOdluku]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Dvorana]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Fakultetsko]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FinModul]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Natjecaj_za_upis]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[natjeceSe]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[nosi]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OdlukeFV]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Osoba]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Povjerentsvo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Predavanje]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Predmet]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PredUlogaZap]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Prijava]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Raspored]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Sjednica]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Status_trans]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[StatusNatjecaja]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[StatusPrijave]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Strucno]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Student]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TematskoPodrucje]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Transakcija]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UlogaNaPred]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ulogaVijece]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[upisujePredmet]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Vijeće]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VijeceUlogaZap]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VrstaOdluke]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VrstaSjednice]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Zaposlenik]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ZavrsniRad]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false
+}
