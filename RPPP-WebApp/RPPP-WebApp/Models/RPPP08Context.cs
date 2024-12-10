@@ -75,13 +75,11 @@ public partial class RPPP08Context : DbContext
     {
         modelBuilder.Entity<Akgod>(entity =>
         {
-            entity.HasKey(e => e.IdAkGod).HasName("PK__AKGod__25348AA27FDDA2A0");
+            entity.HasKey(e => e.IdAkGod).HasName("PK__AKGod__25348AA23A545D37");
 
             entity.ToTable("AKGod");
 
-            entity.Property(e => e.IdAkGod)
-                .ValueGeneratedNever()
-                .HasColumnName("idAkGod");
+            entity.Property(e => e.IdAkGod).HasColumnName("idAkGod");
             entity.Property(e => e.Razdoblje)
                 .IsRequired()
                 .HasMaxLength(200)
@@ -91,13 +89,11 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<Dvorana>(entity =>
         {
-            entity.HasKey(e => e.IdDvorana).HasName("PK__Dvorana__584BC5AE8CF77826");
+            entity.HasKey(e => e.IdDvorana).HasName("PK__Dvorana__584BC5AE00776F54");
 
             entity.ToTable("Dvorana");
 
-            entity.Property(e => e.IdDvorana)
-                .ValueGeneratedNever()
-                .HasColumnName("idDvorana");
+            entity.Property(e => e.IdDvorana).HasColumnName("idDvorana");
             entity.Property(e => e.Kapacitet).HasColumnName("kapacitet");
             entity.Property(e => e.OznDvorana)
                 .IsRequired()
@@ -108,7 +104,7 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<Fakultetsko>(entity =>
         {
-            entity.HasKey(e => e.IdVijeca).HasName("PK__Fakultet__F6F68FE943F51907");
+            entity.HasKey(e => e.IdVijeca).HasName("PK__Fakultet__F6F68FE9579F1A93");
 
             entity.ToTable("Fakultetsko");
 
@@ -119,18 +115,16 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.IdVijecaNavigation).WithOne(p => p.Fakultetsko)
                 .HasForeignKey<Fakultetsko>(d => d.IdVijeca)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Fakultets__id_vi__2BC97F7C");
+                .HasConstraintName("FK__Fakultets__id_vi__178D7CA5");
         });
 
         modelBuilder.Entity<FinModul>(entity =>
         {
-            entity.HasKey(e => e.IdFinModul).HasName("PK__FinModul__0E4FEAC8112D433A");
+            entity.HasKey(e => e.IdFinModul).HasName("PK__FinModul__0E4FEAC81280F346");
 
             entity.ToTable("FinModul");
 
-            entity.Property(e => e.IdFinModul)
-                .ValueGeneratedNever()
-                .HasColumnName("idFinModul");
+            entity.Property(e => e.IdFinModul).HasColumnName("idFinModul");
             entity.Property(e => e.VrstaModula)
                 .IsRequired()
                 .HasMaxLength(100)
@@ -140,13 +134,11 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<NatjecajZaUpi>(entity =>
         {
-            entity.HasKey(e => e.IdNatjecanja).HasName("PK__Natjecaj__44404AED8777C6DB");
+            entity.HasKey(e => e.IdNatjecanja).HasName("PK__Natjecaj__44404AEDE93A2790");
 
             entity.ToTable("Natjecaj_za_upis");
 
-            entity.Property(e => e.IdNatjecanja)
-                .ValueGeneratedNever()
-                .HasColumnName("Id_natjecanja");
+            entity.Property(e => e.IdNatjecanja).HasColumnName("Id_natjecanja");
             entity.Property(e => e.BrojMjesta).HasColumnName("Broj_Mjesta");
             entity.Property(e => e.DatumOtvaranja).HasColumnName("Datum_Otvaranja");
             entity.Property(e => e.IdStatus).HasColumnName("id_status");
@@ -154,7 +146,7 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.IdStatusNavigation).WithMany(p => p.NatjecajZaUpis)
                 .HasForeignKey(d => d.IdStatus)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Natjecaj___id_st__05A3D694");
+                .HasConstraintName("FK__Natjecaj___id_st__7167D3BD");
 
             entity.HasMany(d => d.IdUpisas).WithMany(p => p.IdNatjecanjas)
                 .UsingEntity<Dictionary<string, object>>(
@@ -162,14 +154,14 @@ public partial class RPPP08Context : DbContext
                     r => r.HasOne<Prijava>().WithMany()
                         .HasForeignKey("IdUpisa")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__natjeceSe__idUpi__52E34C9D"),
+                        .HasConstraintName("FK__natjeceSe__idUpi__3EA749C6"),
                     l => l.HasOne<NatjecajZaUpi>().WithMany()
                         .HasForeignKey("IdNatjecanja")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__natjeceSe__Id_na__51EF2864"),
+                        .HasConstraintName("FK__natjeceSe__Id_na__3DB3258D"),
                     j =>
                     {
-                        j.HasKey("IdNatjecanja", "IdUpisa").HasName("PK__natjeceS__8A743A52FCECFA95");
+                        j.HasKey("IdNatjecanja", "IdUpisa").HasName("PK__natjeceS__8A743A52097FCA45");
                         j.ToTable("natjeceSe");
                         j.IndexerProperty<int>("IdNatjecanja").HasColumnName("Id_natjecanja");
                         j.IndexerProperty<int>("IdUpisa").HasColumnName("idUpisa");
@@ -178,13 +170,11 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<OdlukeFv>(entity =>
         {
-            entity.HasKey(e => e.IdOdluke).HasName("PK__OdlukeFV__73B84A717A7DBB22");
+            entity.HasKey(e => e.IdOdluke).HasName("PK__OdlukeFV__73B84A7148A1E9DC");
 
             entity.ToTable("OdlukeFV");
 
-            entity.Property(e => e.IdOdluke)
-                .ValueGeneratedNever()
-                .HasColumnName("idOdluke");
+            entity.Property(e => e.IdOdluke).HasColumnName("idOdluke");
             entity.Property(e => e.DatumOdluke).HasColumnName("datumOdluke");
             entity.Property(e => e.IdRad).HasColumnName("id_rad");
             entity.Property(e => e.IdVrstaOdluke).HasColumnName("idVrstaOdluke");
@@ -197,12 +187,12 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.IdRadNavigation).WithMany(p => p.OdlukeFvs)
                 .HasForeignKey(d => d.IdRad)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__OdlukeFV__id_rad__6225902D");
+                .HasConstraintName("FK__OdlukeFV__id_rad__4DE98D56");
 
             entity.HasOne(d => d.IdVrstaOdlukeNavigation).WithMany(p => p.OdlukeFvs)
                 .HasForeignKey(d => d.IdVrstaOdluke)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__OdlukeFV__idVrst__6319B466");
+                .HasConstraintName("FK__OdlukeFV__idVrst__4EDDB18F");
 
             entity.HasMany(d => d.IdVijecas).WithMany(p => p.IdOdlukes)
                 .UsingEntity<Dictionary<string, object>>(
@@ -210,14 +200,14 @@ public partial class RPPP08Context : DbContext
                     r => r.HasOne<Fakultetsko>().WithMany()
                         .HasForeignKey("IdVijeca")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__donosiOdl__id_vi__66EA454A"),
+                        .HasConstraintName("FK__donosiOdl__id_vi__52AE4273"),
                     l => l.HasOne<OdlukeFv>().WithMany()
                         .HasForeignKey("IdOdluke")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__donosiOdl__idOdl__65F62111"),
+                        .HasConstraintName("FK__donosiOdl__idOdl__51BA1E3A"),
                     j =>
                     {
-                        j.HasKey("IdOdluke", "IdVijeca").HasName("PK__donosiOd__FCD7228FA6954697");
+                        j.HasKey("IdOdluke", "IdVijeca").HasName("PK__donosiOd__FCD7228F66ED970C");
                         j.ToTable("donosiOdluku");
                         j.IndexerProperty<int>("IdOdluke").HasColumnName("idOdluke");
                         j.IndexerProperty<int>("IdVijeca").HasColumnName("id_vijeca");
@@ -226,7 +216,7 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<Osoba>(entity =>
         {
-            entity.HasKey(e => e.Oib).HasName("PK__Osoba__C2FFCF11A47DE3B2");
+            entity.HasKey(e => e.Oib).HasName("PK__Osoba__C2FFCF1159B0FFE4");
 
             entity.ToTable("Osoba");
 
@@ -267,14 +257,14 @@ public partial class RPPP08Context : DbContext
                     r => r.HasOne<FinModul>().WithMany()
                         .HasForeignKey("IdFinModul")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__bira__idFinModul__36470DEF"),
+                        .HasConstraintName("FK__bira__idFinModul__220B0B18"),
                     l => l.HasOne<Osoba>().WithMany()
                         .HasForeignKey("Oib")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__bira__oib__3552E9B6"),
+                        .HasConstraintName("FK__bira__oib__2116E6DF"),
                     j =>
                     {
-                        j.HasKey("Oib", "IdFinModul").HasName("PK__bira__521B31BD20A55A4A");
+                        j.HasKey("Oib", "IdFinModul").HasName("PK__bira__521B31BD1A2A4A9A");
                         j.ToTable("bira");
                         j.IndexerProperty<string>("Oib")
                             .HasMaxLength(20)
@@ -286,7 +276,7 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<Povjerentsvo>(entity =>
         {
-            entity.HasKey(e => e.IdVijeca).HasName("PK__Povjeren__F6F68FE91BC0179B");
+            entity.HasKey(e => e.IdVijeca).HasName("PK__Povjeren__F6F68FE9B99081BF");
 
             entity.ToTable("Povjerentsvo");
 
@@ -298,21 +288,23 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.IdVijecaNavigation).WithOne(p => p.Povjerentsvo)
                 .HasForeignKey<Povjerentsvo>(d => d.IdVijeca)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Povjerent__id_vi__318258D2");
+                .HasConstraintName("FK__Povjerent__id_vi__1D4655FB");
 
             entity.HasOne(d => d.IdVijecaStrucnoNavigation).WithMany(p => p.Povjerentsvos)
                 .HasForeignKey(d => d.IdVijecaStrucno)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Povjerent__id_vi__32767D0B");
+                .HasConstraintName("FK__Povjerent__id_vi__1E3A7A34");
         });
 
         modelBuilder.Entity<PredUlogaZap>(entity =>
         {
-            entity.HasKey(e => new { e.IdPredUlogaZap, e.SifPredmet, e.Oib, e.UlogaId }).HasName("PK__PredUlog__A0C98A525A8DAAFC");
+            entity.HasKey(e => new { e.IdPredUlogaZap, e.SifPredmet, e.Oib, e.UlogaId }).HasName("PK__PredUlog__A0C98A52CB1E7E08");
 
             entity.ToTable("PredUlogaZap");
 
-            entity.Property(e => e.IdPredUlogaZap).HasColumnName("idPredUlogaZap");
+            entity.Property(e => e.IdPredUlogaZap)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("idPredUlogaZap");
             entity.Property(e => e.SifPredmet).HasColumnName("sifPredmet");
             entity.Property(e => e.Oib)
                 .HasMaxLength(20)
@@ -323,28 +315,26 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.OibNavigation).WithMany(p => p.PredUlogaZaps)
                 .HasForeignKey(d => d.Oib)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PredUlogaZa__oib__1B9317B3");
+                .HasConstraintName("FK__PredUlogaZa__oib__075714DC");
 
             entity.HasOne(d => d.SifPredmetNavigation).WithMany(p => p.PredUlogaZaps)
                 .HasForeignKey(d => d.SifPredmet)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PredUloga__sifPr__1A9EF37A");
+                .HasConstraintName("FK__PredUloga__sifPr__0662F0A3");
 
             entity.HasOne(d => d.Uloga).WithMany(p => p.PredUlogaZaps)
                 .HasForeignKey(d => d.UlogaId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PredUloga__uloga__1C873BEC");
+                .HasConstraintName("FK__PredUloga__uloga__084B3915");
         });
 
         modelBuilder.Entity<Predavanje>(entity =>
         {
-            entity.HasKey(e => e.IdPredavanja).HasName("PK__Predavan__7EEB8EB9BD3B4610");
+            entity.HasKey(e => e.IdPredavanja).HasName("PK__Predavan__7EEB8EB940FFF619");
 
             entity.ToTable("Predavanje");
 
-            entity.Property(e => e.IdPredavanja)
-                .ValueGeneratedNever()
-                .HasColumnName("idPredavanja");
+            entity.Property(e => e.IdPredavanja).HasColumnName("idPredavanja");
             entity.Property(e => e.IdRaspored).HasColumnName("id_raspored");
             entity.Property(e => e.SifPredmet).HasColumnName("sifPredmet");
             entity.Property(e => e.VrijemePocetka)
@@ -357,12 +347,12 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.IdRasporedNavigation).WithMany(p => p.Predavanjes)
                 .HasForeignKey(d => d.IdRaspored)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Predavanj__id_ra__3FD07829");
+                .HasConstraintName("FK__Predavanj__id_ra__2B947552");
 
             entity.HasOne(d => d.SifPredmetNavigation).WithMany(p => p.Predavanjes)
                 .HasForeignKey(d => d.SifPredmet)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Predavanj__sifPr__40C49C62");
+                .HasConstraintName("FK__Predavanj__sifPr__2C88998B");
 
             entity.HasMany(d => d.Oibs).WithMany(p => p.IdPredavanjas)
                 .UsingEntity<Dictionary<string, object>>(
@@ -370,14 +360,14 @@ public partial class RPPP08Context : DbContext
                     r => r.HasOne<Zaposlenik>().WithMany()
                         .HasForeignKey("Oib")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__nosi__oib__56B3DD81"),
+                        .HasConstraintName("FK__nosi__oib__4277DAAA"),
                     l => l.HasOne<Predavanje>().WithMany()
                         .HasForeignKey("IdPredavanja")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__nosi__idPredavan__55BFB948"),
+                        .HasConstraintName("FK__nosi__idPredavan__4183B671"),
                     j =>
                     {
-                        j.HasKey("IdPredavanja", "Oib").HasName("PK__nosi__72C472481646D75F");
+                        j.HasKey("IdPredavanja", "Oib").HasName("PK__nosi__72C472481D3B896C");
                         j.ToTable("nosi");
                         j.IndexerProperty<int>("IdPredavanja").HasColumnName("idPredavanja");
                         j.IndexerProperty<string>("Oib")
@@ -389,13 +379,11 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<Predmet>(entity =>
         {
-            entity.HasKey(e => e.SifPredmet).HasName("PK__Predmet__84B5E06409A5F6CB");
+            entity.HasKey(e => e.SifPredmet).HasName("PK__Predmet__84B5E0644D0FB983");
 
             entity.ToTable("Predmet");
 
-            entity.Property(e => e.SifPredmet)
-                .ValueGeneratedNever()
-                .HasColumnName("sifPredmet");
+            entity.Property(e => e.SifPredmet).HasColumnName("sifPredmet");
             entity.Property(e => e.Ects).HasColumnName("ECTS");
             entity.Property(e => e.JelIzboran).HasColumnName("jelIzboran");
             entity.Property(e => e.Naziv)
@@ -415,13 +403,11 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<Prijava>(entity =>
         {
-            entity.HasKey(e => e.IdUpisa).HasName("PK__Prijava__E3470BFD4BCD6709");
+            entity.HasKey(e => e.IdUpisa).HasName("PK__Prijava__E3470BFDCD83D0E4");
 
             entity.ToTable("Prijava");
 
-            entity.Property(e => e.IdUpisa)
-                .ValueGeneratedNever()
-                .HasColumnName("idUpisa");
+            entity.Property(e => e.IdUpisa).HasColumnName("idUpisa");
             entity.Property(e => e.BrUpisa).HasColumnName("brUpisa");
             entity.Property(e => e.DatumUpisa).HasColumnName("datumUpisa");
             entity.Property(e => e.IdPrijave).HasColumnName("idPrijave");
@@ -435,7 +421,7 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.IdPrijaveNavigation).WithMany(p => p.Prijavas)
                 .HasForeignKey(d => d.IdPrijave)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Prijava__idPrija__39237A9A");
+                .HasConstraintName("FK__Prijava__idPrija__24E777C3");
 
             entity.HasMany(d => d.SifPredmets).WithMany(p => p.IdUpisas)
                 .UsingEntity<Dictionary<string, object>>(
@@ -443,14 +429,14 @@ public partial class RPPP08Context : DbContext
                     r => r.HasOne<Predmet>().WithMany()
                         .HasForeignKey("SifPredmet")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__upisujePr__sifPr__5A846E65"),
+                        .HasConstraintName("FK__upisujePr__sifPr__46486B8E"),
                     l => l.HasOne<Prijava>().WithMany()
                         .HasForeignKey("IdUpisa")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__upisujePr__idUpi__59904A2C"),
+                        .HasConstraintName("FK__upisujePr__idUpi__45544755"),
                     j =>
                     {
-                        j.HasKey("IdUpisa", "SifPredmet").HasName("PK__upisujeP__BB0C55FB5E99D0D8");
+                        j.HasKey("IdUpisa", "SifPredmet").HasName("PK__upisujeP__BB0C55FB95D42E1F");
                         j.ToTable("upisujePredmet");
                         j.IndexerProperty<int>("IdUpisa").HasColumnName("idUpisa");
                         j.IndexerProperty<int>("SifPredmet").HasColumnName("sifPredmet");
@@ -459,13 +445,11 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<Raspored>(entity =>
         {
-            entity.HasKey(e => e.IdRaspored).HasName("PK__Raspored__9509AE6CAA1EE959");
+            entity.HasKey(e => e.IdRaspored).HasName("PK__Raspored__9509AE6CC8A326CC");
 
             entity.ToTable("Raspored");
 
-            entity.Property(e => e.IdRaspored)
-                .ValueGeneratedNever()
-                .HasColumnName("id_raspored");
+            entity.Property(e => e.IdRaspored).HasColumnName("id_raspored");
             entity.Property(e => e.IdAkGod).HasColumnName("idAkGod");
             entity.Property(e => e.IdDvorana).HasColumnName("idDvorana");
             entity.Property(e => e.Opis)
@@ -476,23 +460,21 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.IdAkGodNavigation).WithMany(p => p.Rasporeds)
                 .HasForeignKey(d => d.IdAkGod)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Raspored__idAkGo__3BFFE745");
+                .HasConstraintName("FK__Raspored__idAkGo__27C3E46E");
 
             entity.HasOne(d => d.IdDvoranaNavigation).WithMany(p => p.Rasporeds)
                 .HasForeignKey(d => d.IdDvorana)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Raspored__idDvor__3CF40B7E");
+                .HasConstraintName("FK__Raspored__idDvor__28B808A7");
         });
 
         modelBuilder.Entity<Sjednica>(entity =>
         {
-            entity.HasKey(e => e.IdSjednica).HasName("PK__Sjednica__6246AAA87F90D4CD");
+            entity.HasKey(e => e.IdSjednica).HasName("PK__Sjednica__6246AAA8DEA3A35C");
 
             entity.ToTable("Sjednica");
 
-            entity.Property(e => e.IdSjednica)
-                .ValueGeneratedNever()
-                .HasColumnName("id_sjednica");
+            entity.Property(e => e.IdSjednica).HasColumnName("id_sjednica");
             entity.Property(e => e.DatumSjednice).HasColumnName("datumSjednice");
             entity.Property(e => e.IdDvorana).HasColumnName("idDvorana");
             entity.Property(e => e.IdVijeca).HasColumnName("id_vijeca");
@@ -502,28 +484,26 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.IdDvoranaNavigation).WithMany(p => p.Sjednicas)
                 .HasForeignKey(d => d.IdDvorana)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Sjednica__idDvor__4589517F");
+                .HasConstraintName("FK__Sjednica__idDvor__314D4EA8");
 
             entity.HasOne(d => d.IdVijecaNavigation).WithMany(p => p.Sjednicas)
                 .HasForeignKey(d => d.IdVijeca)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Sjednica__id_vij__43A1090D");
+                .HasConstraintName("FK__Sjednica__id_vij__2F650636");
 
             entity.HasOne(d => d.IdVrsteSjedniceNavigation).WithMany(p => p.Sjednicas)
                 .HasForeignKey(d => d.IdVrsteSjednice)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Sjednica__id_vrs__44952D46");
+                .HasConstraintName("FK__Sjednica__id_vrs__30592A6F");
         });
 
         modelBuilder.Entity<StatusNatjecaja>(entity =>
         {
-            entity.HasKey(e => e.IdStatus).HasName("PK__StatusNa__5D2DC6E80D753A96");
+            entity.HasKey(e => e.IdStatus).HasName("PK__StatusNa__5D2DC6E85F2AB61B");
 
             entity.ToTable("StatusNatjecaja");
 
-            entity.Property(e => e.IdStatus)
-                .ValueGeneratedNever()
-                .HasColumnName("id_status");
+            entity.Property(e => e.IdStatus).HasColumnName("id_status");
             entity.Property(e => e.StatusNatjecanja)
                 .IsRequired()
                 .HasMaxLength(250)
@@ -533,13 +513,11 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<StatusPrijave>(entity =>
         {
-            entity.HasKey(e => e.IdPrijave).HasName("PK__StatusPr__934D57CD481FF37E");
+            entity.HasKey(e => e.IdPrijave).HasName("PK__StatusPr__934D57CD6C46DDFD");
 
             entity.ToTable("StatusPrijave");
 
-            entity.Property(e => e.IdPrijave)
-                .ValueGeneratedNever()
-                .HasColumnName("idPrijave");
+            entity.Property(e => e.IdPrijave).HasColumnName("idPrijave");
             entity.Property(e => e.StatusPrijave1)
                 .IsRequired()
                 .HasMaxLength(40)
@@ -549,13 +527,11 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<StatusTran>(entity =>
         {
-            entity.HasKey(e => e.IdStatus).HasName("PK__Status_t__01936F7489DDA7AE");
+            entity.HasKey(e => e.IdStatus).HasName("PK__Status_t__01936F74E991927A");
 
             entity.ToTable("Status_trans");
 
-            entity.Property(e => e.IdStatus)
-                .ValueGeneratedNever()
-                .HasColumnName("idStatus");
+            entity.Property(e => e.IdStatus).HasColumnName("idStatus");
             entity.Property(e => e.StatusTrans)
                 .IsRequired()
                 .HasMaxLength(30)
@@ -565,7 +541,7 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<Strucno>(entity =>
         {
-            entity.HasKey(e => e.IdVijeca).HasName("PK__Strucno__F6F68FE9FA208E4D");
+            entity.HasKey(e => e.IdVijeca).HasName("PK__Strucno__F6F68FE99A808DF3");
 
             entity.ToTable("Strucno");
 
@@ -576,22 +552,24 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.IdVijecaNavigation).WithOne(p => p.Strucno)
                 .HasForeignKey<Strucno>(d => d.IdVijeca)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Strucno__id_vije__2EA5EC27");
+                .HasConstraintName("FK__Strucno__id_vije__1A69E950");
         });
 
         modelBuilder.Entity<Student>(entity =>
         {
-            entity.HasKey(e => new { e.Oib, e.IdUpisa }).HasName("PK__Student__0CCBBFAED7A31F02");
+            entity.HasKey(e => new { e.Oib, e.IdUpisa }).HasName("PK__Student__0CCBBFAEC9E80047");
 
             entity.ToTable("Student");
 
-            entity.HasIndex(e => e.Jmbag, "UQ__Student__FA2137AAE0060EAB").IsUnique();
+            entity.HasIndex(e => e.Jmbag, "UQ__Student__FA2137AAEB39A639").IsUnique();
 
             entity.Property(e => e.Oib)
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("oib");
-            entity.Property(e => e.IdUpisa).HasColumnName("idUpisa");
+            entity.Property(e => e.IdUpisa)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("idUpisa");
             entity.Property(e => e.Jmbag)
                 .IsRequired()
                 .HasMaxLength(15)
@@ -606,28 +584,26 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.IdUpisaNavigation).WithMany(p => p.Students)
                 .HasForeignKey(d => d.IdUpisa)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Student__idUpisa__4E1E9780");
+                .HasConstraintName("FK__Student__idUpisa__39E294A9");
 
             entity.HasOne(d => d.OibNavigation).WithMany(p => p.Students)
                 .HasForeignKey(d => d.Oib)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Student__oib__4D2A7347");
+                .HasConstraintName("FK__Student__oib__38EE7070");
 
             entity.HasOne(d => d.OibMentoraNavigation).WithMany(p => p.Students)
                 .HasForeignKey(d => d.OibMentora)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Student__oib_men__4F12BBB9");
+                .HasConstraintName("FK__Student__oib_men__3AD6B8E2");
         });
 
         modelBuilder.Entity<TematskoPodrucje>(entity =>
         {
-            entity.HasKey(e => e.IdTematskogPodrucja).HasName("PK__Tematsko__E4906E9ACCDD80BB");
+            entity.HasKey(e => e.IdTematskogPodrucja).HasName("PK__Tematsko__E4906E9A83997A93");
 
             entity.ToTable("TematskoPodrucje");
 
-            entity.Property(e => e.IdTematskogPodrucja)
-                .ValueGeneratedNever()
-                .HasColumnName("idTematskogPodrucja");
+            entity.Property(e => e.IdTematskogPodrucja).HasColumnName("idTematskogPodrucja");
             entity.Property(e => e.TematskoPodrucje1)
                 .IsRequired()
                 .HasMaxLength(500)
@@ -637,13 +613,11 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<Transakcija>(entity =>
         {
-            entity.HasKey(e => e.IdTransakcije).HasName("PK__Transakc__33A5BCE217BA9B9F");
+            entity.HasKey(e => e.IdTransakcije).HasName("PK__Transakc__33A5BCE2D6B1EF64");
 
             entity.ToTable("Transakcija");
 
-            entity.Property(e => e.IdTransakcije)
-                .ValueGeneratedNever()
-                .HasColumnName("idTransakcije");
+            entity.Property(e => e.IdTransakcije).HasColumnName("idTransakcije");
             entity.Property(e => e.BrRata).HasColumnName("brRata");
             entity.Property(e => e.IdStatus).HasColumnName("idStatus");
             entity.Property(e => e.Iznos).HasColumnName("iznos");
@@ -669,23 +643,21 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.IdStatusNavigation).WithMany(p => p.Transakcijas)
                 .HasForeignKey(d => d.IdStatus)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Transakci__idSta__4959E263");
+                .HasConstraintName("FK__Transakci__idSta__351DDF8C");
 
             entity.HasOne(d => d.OibNavigation).WithMany(p => p.Transakcijas)
                 .HasForeignKey(d => d.Oib)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Transakcija__oib__4865BE2A");
+                .HasConstraintName("FK__Transakcija__oib__3429BB53");
         });
 
         modelBuilder.Entity<UlogaNaPred>(entity =>
         {
-            entity.HasKey(e => e.UlogaId).HasName("PK__UlogaNaP__03C8E0D8F7191A0A");
+            entity.HasKey(e => e.UlogaId).HasName("PK__UlogaNaP__03C8E0D87C1AA50E");
 
             entity.ToTable("UlogaNaPred");
 
-            entity.Property(e => e.UlogaId)
-                .ValueGeneratedNever()
-                .HasColumnName("uloga_id");
+            entity.Property(e => e.UlogaId).HasColumnName("uloga_id");
             entity.Property(e => e.UlogaNaziv)
                 .IsRequired()
                 .HasMaxLength(30)
@@ -695,13 +667,11 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<UlogaVijece>(entity =>
         {
-            entity.HasKey(e => e.IdUlogaVijece).HasName("PK__ulogaVij__29A83D451C5CC9D5");
+            entity.HasKey(e => e.IdUlogaVijece).HasName("PK__ulogaVij__29A83D451029C94B");
 
             entity.ToTable("ulogaVijece");
 
-            entity.Property(e => e.IdUlogaVijece)
-                .ValueGeneratedNever()
-                .HasColumnName("id_UlogaVijece");
+            entity.Property(e => e.IdUlogaVijece).HasColumnName("id_UlogaVijece");
             entity.Property(e => e.NazivUlogaVijece)
                 .IsRequired()
                 .HasMaxLength(30)
@@ -711,11 +681,13 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<VijeceUlogaZap>(entity =>
         {
-            entity.HasKey(e => new { e.IdVijeceulogazap, e.IdVijeca, e.IdUlogaVijece, e.Oib }).HasName("PK__VijeceUl__EA27AD2ACEFCA7FB");
+            entity.HasKey(e => new { e.IdVijeceulogazap, e.IdVijeca, e.IdUlogaVijece, e.Oib }).HasName("PK__VijeceUl__EA27AD2ACDAE16FF");
 
             entity.ToTable("VijeceUlogaZap");
 
-            entity.Property(e => e.IdVijeceulogazap).HasColumnName("id_vijeceulogazap");
+            entity.Property(e => e.IdVijeceulogazap)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("id_vijeceulogazap");
             entity.Property(e => e.IdVijeca).HasColumnName("id_vijeca");
             entity.Property(e => e.IdUlogaVijece).HasColumnName("id_UlogaVijece");
             entity.Property(e => e.Oib)
@@ -726,45 +698,41 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.IdUlogaVijeceNavigation).WithMany(p => p.VijeceUlogaZaps)
                 .HasForeignKey(d => d.IdUlogaVijece)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__VijeceUlo__id_Ul__22401542");
+                .HasConstraintName("FK__VijeceUlo__id_Ul__0E04126B");
 
             entity.HasOne(d => d.IdVijecaNavigation).WithMany(p => p.VijeceUlogaZaps)
                 .HasForeignKey(d => d.IdVijeca)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__VijeceUlo__id_vi__214BF109");
+                .HasConstraintName("FK__VijeceUlo__id_vi__0D0FEE32");
 
             entity.HasOne(d => d.OibNavigation).WithMany(p => p.VijeceUlogaZaps)
                 .HasForeignKey(d => d.Oib)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__VijeceUloga__oib__2334397B");
+                .HasConstraintName("FK__VijeceUloga__oib__0EF836A4");
         });
 
         modelBuilder.Entity<Vijeće>(entity =>
         {
-            entity.HasKey(e => e.IdVijeca).HasName("PK__Vijeće__F6F68FE92D427C8A");
+            entity.HasKey(e => e.IdVijeca).HasName("PK__Vijeće__F6F68FE958D4D412");
 
             entity.ToTable("Vijeće");
 
-            entity.Property(e => e.IdVijeca)
-                .ValueGeneratedNever()
-                .HasColumnName("id_vijeca");
+            entity.Property(e => e.IdVijeca).HasColumnName("id_vijeca");
             entity.Property(e => e.IdAkGod).HasColumnName("idAkGod");
 
             entity.HasOne(d => d.IdAkGodNavigation).WithMany(p => p.Vijećes)
                 .HasForeignKey(d => d.IdAkGod)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Vijeće__idAkGod__0A688BB1");
+                .HasConstraintName("FK__Vijeće__idAkGod__762C88DA");
         });
 
         modelBuilder.Entity<VrstaOdluke>(entity =>
         {
-            entity.HasKey(e => e.IdVrstaOdluke).HasName("PK__VrstaOdl__E92D560C16433246");
+            entity.HasKey(e => e.IdVrstaOdluke).HasName("PK__VrstaOdl__E92D560C55B96CDE");
 
             entity.ToTable("VrstaOdluke");
 
-            entity.Property(e => e.IdVrstaOdluke)
-                .ValueGeneratedNever()
-                .HasColumnName("idVrstaOdluke");
+            entity.Property(e => e.IdVrstaOdluke).HasColumnName("idVrstaOdluke");
             entity.Property(e => e.VrstaOdluke1)
                 .IsRequired()
                 .HasMaxLength(150)
@@ -774,13 +742,11 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<VrstaSjednice>(entity =>
         {
-            entity.HasKey(e => e.IdVrsteSjednice).HasName("PK__VrstaSje__22811E13EA0FADBB");
+            entity.HasKey(e => e.IdVrsteSjednice).HasName("PK__VrstaSje__22811E13652DF90B");
 
             entity.ToTable("VrstaSjednice");
 
-            entity.Property(e => e.IdVrsteSjednice)
-                .ValueGeneratedNever()
-                .HasColumnName("id_vrsteSjednice");
+            entity.Property(e => e.IdVrsteSjednice).HasColumnName("id_vrsteSjednice");
             entity.Property(e => e.NazivVrsteSjednice)
                 .IsRequired()
                 .HasMaxLength(35)
@@ -790,33 +756,33 @@ public partial class RPPP08Context : DbContext
 
         modelBuilder.Entity<Zaposlenik>(entity =>
         {
-            entity.HasKey(e => e.Oib).HasName("PK__Zaposlen__C2FFCF1158C17736");
+            entity.HasKey(e => e.Oib).HasName("PK__Zaposlen__C2FFCF110E74C675");
 
             entity.ToTable("Zaposlenik");
 
-            entity.HasIndex(e => e.IdClan, "UQ__Zaposlen__6FA7836B6F82957A").IsUnique();
+            entity.HasIndex(e => e.IdClan, "UQ__Zaposlen__6FA7836B8EF08E55").IsUnique();
 
             entity.Property(e => e.Oib)
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("oib");
-            entity.Property(e => e.IdClan).HasColumnName("id_clan");
+            entity.Property(e => e.IdClan)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("id_clan");
 
             entity.HasOne(d => d.OibNavigation).WithOne(p => p.Zaposlenik)
                 .HasForeignKey<Zaposlenik>(d => d.Oib)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Zaposlenik__oib__15DA3E5D");
+                .HasConstraintName("FK__Zaposlenik__oib__019E3B86");
         });
 
         modelBuilder.Entity<ZavrsniRad>(entity =>
         {
-            entity.HasKey(e => e.IdRad).HasName("PK__ZavrsniR__6ABE0F8E550CF2BE");
+            entity.HasKey(e => e.IdRad).HasName("PK__ZavrsniR__6ABE0F8EE46AD02B");
 
             entity.ToTable("ZavrsniRad");
 
-            entity.Property(e => e.IdRad)
-                .ValueGeneratedNever()
-                .HasColumnName("id_rad");
+            entity.Property(e => e.IdRad).HasColumnName("id_rad");
             entity.Property(e => e.DatumObrane).HasColumnName("datumObrane");
             entity.Property(e => e.IdTematskogPodrucja).HasColumnName("idTematskogPodrucja");
             entity.Property(e => e.IdUpisa).HasColumnName("idUpisa");
@@ -856,17 +822,17 @@ public partial class RPPP08Context : DbContext
             entity.HasOne(d => d.IdTematskogPodrucjaNavigation).WithMany(p => p.ZavrsniRads)
                 .HasForeignKey(d => d.IdTematskogPodrucja)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ZavrsniRa__idTem__5D60DB10");
+                .HasConstraintName("FK__ZavrsniRa__idTem__4924D839");
 
             entity.HasOne(d => d.IdVijecaNavigation).WithMany(p => p.ZavrsniRads)
                 .HasForeignKey(d => d.IdVijeca)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ZavrsniRa__id_vi__5F492382");
+                .HasConstraintName("FK__ZavrsniRa__id_vi__4B0D20AB");
 
             entity.HasOne(d => d.Student).WithMany(p => p.ZavrsniRads)
                 .HasForeignKey(d => new { d.Oib, d.IdUpisa })
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ZavrsniRad__5E54FF49");
+                .HasConstraintName("FK__ZavrsniRad__4A18FC72");
         });
 
         OnModelCreatingPartial(modelBuilder);

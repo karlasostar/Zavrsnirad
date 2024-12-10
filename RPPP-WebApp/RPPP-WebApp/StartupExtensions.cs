@@ -29,19 +29,18 @@ public static class StartupExtensions
 
         var serviceProvider = services.AddDbContext<RPPP08Context>().BuildServiceProvider();
 
-        using (var context =
-        serviceProvider.GetService<RPPP08Context>())
+        using (var context = serviceProvider.GetService<RPPP08Context>())
         {
             Dvorana dvorana = new Dvorana
             {
-                OznDvorana = "RoomB",  
-                Kapacitet = 200
+                OznDvorana = "D2",
+                Kapacitet = 260
             };
+
             context.Dvoranas.Add(dvorana);
+
             context.SaveChanges();
         }
-
-
 
 
         return builder.Build();
