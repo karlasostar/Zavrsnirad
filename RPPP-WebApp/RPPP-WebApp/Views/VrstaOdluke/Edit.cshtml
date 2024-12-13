@@ -1,0 +1,14 @@
+﻿@model RPPP_WebApp.Models.VrstaOdluke
+
+<h2>Uređivanje vrste odluke</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="IdVrstaOdluke" />
+    <div class="form-group">
+        <label for="TematskoPodrucje1">Naziv</label>
+        <input asp-for="VrstaOdluke1" class="form-control" />
+        <span asp-validation-for="VrstaOdluke1" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Spremi</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>

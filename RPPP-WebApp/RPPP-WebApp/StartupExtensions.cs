@@ -58,6 +58,10 @@ public static class StartupExtensions
 
         app.MapDefaultControllerRoute();
 
+        app.MapControllerRoute(
+            name: "dvorana",
+            pattern: "{controller=Dvorana}/{action=Index}/{id?}");
+
         return app;
     }
 }

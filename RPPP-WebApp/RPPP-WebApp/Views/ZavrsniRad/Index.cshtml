@@ -1,0 +1,44 @@
+﻿@model IEnumerable<RPPP_WebApp.Models.ZavrsniRad>
+
+@{
+    ViewData["Title"] = "Završni Radovi";
+}
+
+<h1>Završni Radovi</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Naslov</th>
+            <th>Tema</th>
+            <th>Opis</th>
+            <th>Sazetak</th>
+            <th>Datum Obrane</th>
+            <th>Tematsko Područje</th>
+            <th>Student</th>
+            <th>Vijeće</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Naslov</td>
+                <td>@item.Tema</td>
+                <td>@item.Opis</td>
+                <td>@item.Sazetak</td>
+                <td>@item.DatumObrane?.ToString("yyyy-MM-dd")</td>
+                <td>@item.IdTematskogPodrucjaNavigation?.TematskoPodrucje1</td>
+                <td>@item.Student?.Jmbag</td>
+                <td>@item.IdVijecaNavigation?.IdVijeca</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdRad" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.IdRad" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-primary">Stvori novi Završni Rad</a>
