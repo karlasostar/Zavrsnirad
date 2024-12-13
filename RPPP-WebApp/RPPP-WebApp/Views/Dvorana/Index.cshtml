@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Dvorana>
+
+<table class="table table-sm table-striped table-hover" id="tablicaDvorane">
+    <thead>
+        <tr>
+            <td>Oznaka dvorane</td>
+            <td>ID dvorane</td>
+            <td>Kapacitet</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var dvorana in Model)
+		{
+			<tr>
+				<td>@dvorana.OznDvorana</td>
+				<td>@dvorana.IdDvorana</td>
+				<td>@dvorana.Kapacitet</td>
+			</tr>
+		}
+    </tbody>
+</table>
+
+
+@* stranicenje na klijentskoj strani *@
+
+@section styles{
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+}
+
+@section scripts{
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script>
+     $(document).ready(function(){
+            $('#tablicaDvorane').DataTable();
+         });
+    </script>
+    }
