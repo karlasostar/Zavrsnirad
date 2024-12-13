@@ -25,4 +25,8 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.14" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\KarlaSostar\" />
+  </ItemGroup>
+
 </Project>
