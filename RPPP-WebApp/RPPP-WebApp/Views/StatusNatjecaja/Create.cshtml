@@ -1,0 +1,13 @@
+﻿@model RPPP_WebApp.Models.StatusNatjecaja
+
+<h2>Stvaranje novog statusa natječaja</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="StatusNatjecanja">Naziv</label>
+        <input asp-for="StatusNatjecanja" class="form-control" />
+        <span asp-validation-for="StatusNatjecanja" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Stvori</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>

@@ -19,10 +19,10 @@ using System.Runtime.InteropServices;
 
 public class KarlaSostarController : Controller
 {
-    public IActionResult StatusNatjecaja()
-    {
-        return View();
-    }
+    //public IActionResult StatusNatjecaja()
+    //{
+    //    return View();
+    //}
 
     public IActionResult StatusPrijave()
     {
