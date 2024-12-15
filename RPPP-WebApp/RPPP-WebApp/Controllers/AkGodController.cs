@@ -63,5 +63,52 @@ namespace RPPP_WebApp.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var akgod = await context.Akgods.FindAsync(id);
+            if (akgod == null) return NotFound();
+
+            return View(akgod);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, [Bind("IdAkGod,Razdoblje")] Akgod akgod)
+        {
+            var existingAkgod = await context.Akgods.FirstOrDefaultAsync(a => a.Razdoblje == akgod.Razdoblje);
+
+            if (existingAkgod != null)
+            {
+                ModelState.AddModelError("Razdoblje", "Ova akademska godina vec postoji!");
+                return View(akgod);
+            }
+
+            if (id != akgod.IdAkGod)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    context.Update(akgod);
+                    await context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException)
+                {
+                    TempData["ErrorMessage"] = "Greška prilikom spremanja promjena.";
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Uneseni podaci nisu ispravni. Provjerite formu.";
+            }
+
+            return View(akgod);
+        }
     }
 }
