@@ -7,6 +7,7 @@ using RPPP_WebApp.Models;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Data.SqlClient;
 using RPPP_WebApp.ViewModels;
+using RPPP_WebApp.Extensions.Selectors;
 
 
 namespace RPPP_WebApp.Controllers
@@ -14,31 +15,96 @@ namespace RPPP_WebApp.Controllers
     public class ZavrsniRadController : Controller
     {
         private readonly RPPP08Context _context;
+        private readonly ILogger<ZavrsniRadController> logger;
+        private readonly AppSettings appData;
 
-        public ZavrsniRadController(RPPP08Context ctx)
+        public ZavrsniRadController(RPPP08Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<ZavrsniRadController> logger)
         {
             this._context = ctx;
+            this.logger = logger;
+            appData = options.Value;
         }
 
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    var zavrsniRadovi = await _context.ZavrsniRads
+        //        .Include(z => z.IdTematskogPodrucjaNavigation)
+        //        .Include(z => z.IdVijecaNavigation)
+        //        .Include(z => z.Student)
+        //        .Select(z => new ZavrsniRadViewModel
+        //        {
+        //            ZavrsniRad = z,
+        //            ZadnjaOdluka = _context.OdlukeFvs
+        //                .Where(o => o.IdRad == z.IdRad)
+        //                .OrderByDescending(o => o.DatumOdluke)
+        //                .Select(o => o.IdVrstaOdlukeNavigation.VrstaOdluke1)
+        //                .FirstOrDefault()
+        //        })
+        //        .ToListAsync();
+
+        //    return View(zavrsniRadovi);
+        //}
+        public async Task<IActionResult> Index(int page = 1, int sort = 1, bool ascending = true)
         {
-            var zavrsniRadovi = await _context.ZavrsniRads
-                .Include(z => z.IdTematskogPodrucjaNavigation)
-                .Include(z => z.IdVijecaNavigation)
-                .Include(z => z.Student)
-                .Select(z => new ZavrsniRadViewModel
-                {
-                    ZavrsniRad = z,
-                    ZadnjaOdluka = _context.OdlukeFvs
-                        .Where(o => o.IdRad == z.IdRad)
-                        .OrderByDescending(o => o.DatumOdluke)
-                        .Select(o => o.IdVrstaOdlukeNavigation.VrstaOdluke1)
-                        .FirstOrDefault()
-                })
-                .ToListAsync();
+            int pagesize = appData.PageSize;
+            var query = (IQueryable<ZavrsniRad>)_context.ZavrsniRads
+                .Include(zr => zr.IdTematskogPodrucjaNavigation)
+                .Include(zr => zr.IdVijecaNavigation)
+                .Include(zr => zr.OdlukeFvs);
 
-            return View(zavrsniRadovi);
+            int count = await query.CountAsync();
+
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                Sort = sort,
+                Ascending = ascending,
+                ItemsPerPage = pagesize,
+                TotalItems = count
+            };
+
+            if (page < 1 || page > pagingInfo.TotalPages)
+            {
+                return RedirectToAction(nameof(Index), new { page = 1, sort, ascending });
+            }
+
+            query = query.ApplySort(sort, ascending);
+
+            var zavrsniRads = await query.Skip((page - 1) * pagesize).Take(pagesize).ToListAsync();
+
+            // Map ZavrsniRad to ZavrsniRadWithDecision
+            var zavrsniRadWithDecisions = zavrsniRads
+                .Select(zr => new ZavrsniRadSOdlukom
+            {
+                IdRad = zr.IdRad,
+                Naslov = zr.Naslov,
+                Metodologija = zr.Metodologija,
+                Ocjena = zr.Ocjena,
+                Tema = zr.Tema,
+                Opis = zr.Opis,
+                Sazetak = zr.Sazetak,
+                DatumObrane = zr.DatumObrane,
+                IdTematskogPodrucja = zr.IdTematskogPodrucja,
+                IdTematskogPodrucjaNavigation = zr.IdTematskogPodrucjaNavigation,
+                IdVijecaNavigation = zr.IdVijecaNavigation,
+                Oib = zr.Oib,
+                IdUpisa = zr.IdUpisa,
+                IdVijeca = zr.IdVijeca,
+                // Fetch the latest Odluka
+                ZadnjaOdluka = zr.OdlukeFvs
+                    .OrderByDescending(od => od.DatumOdluke)
+                    .FirstOrDefault()?.OpisOdluke // Get the latest decision description
+            }).ToList();
+
+            var model = new ZavrsniRadViewModel2
+            {
+                ZavrsniRad = zavrsniRadWithDecisions,
+                PagingInfo = pagingInfo
+            };
+
+            return View(model);
         }
+
 
 
         [HttpGet]
