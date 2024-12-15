@@ -1,23 +1,32 @@
-﻿@model IEnumerable<RPPP_WebApp.Models.VrstaOdluke>
+﻿@using RPPP_WebApp.ViewModels
+@model VrstaOdlukeViewModel
 
 <h2>Vrste Odluke</h2>
 
 <a asp-action="Create" class="btn btn-primary">Dodaj novu stavku</a>
 
+<pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu"
+       class="float-end">
+</pager>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParam"]">ID</a>
+                <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
+                    ID
+                </a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NazivSortParam"]">Naziv</a>
+                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
+                    Vrsta odluke
+                </a>
             </th>
             <th>Akcije</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.VrstaOdluke)
         {
             <tr>
                 <td>@item.IdVrstaOdluke</td>
@@ -34,18 +43,7 @@
     </tbody>
 </table>
 
-<div class="d-flex justify-content-end mt-3">
-    <nav>
-        <ul class="pagination">
-            @for (int i = 1; i <= (int)ViewData["TotalPages"]; i++)
-            {
-                <li class="page-item @(i == (int)ViewData["CurrentPage"] ? "active" : "")">
-                    <a class="page-link" asp-action="Index" asp-route-pageNumber="@i" asp-route-sortOrder="@ViewData["CurrentSort"]">@i</a>
-                </li>
-            }
-        </ul>
-    </nav>
-</div>
+
 
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">

@@ -6,7 +6,7 @@ using System.Text.Json;
 using RPPP_WebApp.Models;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Data.SqlClient;
-using RPPP_WebApp.ViewModel;
+using RPPP_WebApp.ViewModels;
 
 
 namespace RPPP_WebApp.Controllers

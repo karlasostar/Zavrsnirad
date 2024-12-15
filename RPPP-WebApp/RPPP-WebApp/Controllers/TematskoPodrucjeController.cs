@@ -1,50 +1,58 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.VisualBasic;
 using RPPP_WebApp.Models;
+using RPPP_WebApp.ViewModels;
+using RPPP_WebApp.Extensions.Selectors;
+using RPPP_WebApp.Extensions;
 
 namespace RPPP_WebApp.Controllers
 {
     public class TematskoPodrucjeController : Controller
     {
         private readonly RPPP08Context _context;
+        private readonly ILogger<TematskoPodrucjeController> logger;
+        private readonly AppSettings appData;
 
-        public TematskoPodrucjeController(RPPP08Context context)
+        public TematskoPodrucjeController(RPPP08Context context, IOptionsSnapshot<AppSettings> options, ILogger<TematskoPodrucjeController> logger)
         {
             _context = context;
+            this.logger = logger;
+            appData = options.Value;
         }
-        public async Task<IActionResult> Index(string sortOrder, int? pageNumber)
+        public async Task<IActionResult> Index(int page = 1, int sort = 1, bool ascending = true)
         {
-            ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
-            ViewData["NazivSortParam"] = sortOrder == "Naziv" ? "naziv_desc" : "Naziv";
+            int pagesize = appData.PageSize;
+            var query = _context.TematskoPodrucjes.AsNoTracking(); //or AsQueryable()
+            int count = await query.CountAsync();
 
-            var tematskoPodrucje = from v in _context.TematskoPodrucjes select v;
-
-            switch (sortOrder)
+            var pagingInfo = new PagingInfo
             {
-                case "id_desc":
-                    tematskoPodrucje = tematskoPodrucje.OrderByDescending(v => v.IdTematskogPodrucja);
-                    break;
-                case "Naziv":
-                    tematskoPodrucje = tematskoPodrucje.OrderBy(v => v.TematskoPodrucje1);
-                    break;
-                case "naziv_desc":
-                    tematskoPodrucje = tematskoPodrucje.OrderByDescending(v => v.TematskoPodrucje1);
-                    break;
-                default:
-                    tematskoPodrucje = tematskoPodrucje.OrderBy(v => v.IdTematskogPodrucja);
-                    break;
+                CurrentPage = page,
+                Sort = sort,
+                Ascending = ascending,
+                ItemsPerPage = pagesize,
+                TotalItems = count
+            };
+            if (page < 1 || page > pagingInfo.TotalPages)
+            {
+                return RedirectToAction(nameof(Index), new { page = 1, sort, ascending });
             }
 
-            int pageSize = 5;
-            int currentPage = pageNumber ?? 1;
-            int totalRecords = await tematskoPodrucje.CountAsync();
+            query = query.ApplySort(sort, ascending);
 
-            var pagedData = await tematskoPodrucje.Skip((currentPage - 1) * pageSize).Take(pageSize).ToListAsync();
+            var podrucja = await query.Skip((page - 1) * pagesize).Take(pagesize).ToListAsync();
 
-            ViewData["CurrentPage"] = currentPage;
-            ViewData["TotalPages"] = (int)Math.Ceiling(totalRecords / (double)pageSize);
+            var model = new TematskoPodrucjeViewModel
+            {
+                TematskoPodrucje = podrucja,
+                PagingInfo = pagingInfo,
+            };
 
-            return View(pagedData);
+            return View(model);
         }
 
         public IActionResult Create()

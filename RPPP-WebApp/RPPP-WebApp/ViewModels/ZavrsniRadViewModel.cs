@@ -1,6 +1,6 @@
 ﻿using RPPP_WebApp.Models;
 
-namespace RPPP_WebApp.ViewModel
+namespace RPPP_WebApp.ViewModels
 {
     public class ZavrsniRadViewModel
     {

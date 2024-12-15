@@ -1,53 +1,54 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using RPPP_WebApp.Extensions.Selectors;
 using RPPP_WebApp.Models;
+using RPPP_WebApp.ViewModels;
 
 namespace RPPP_WebApp.Controllers
 {
     public class VrstaOdlukeController : Controller
     {
         private readonly RPPP08Context _context;
+        private readonly ILogger<TematskoPodrucjeController> logger;
+        private readonly AppSettings appData;
 
-        public VrstaOdlukeController(RPPP08Context context)
+        public VrstaOdlukeController(RPPP08Context context, IOptionsSnapshot<AppSettings> options, ILogger<TematskoPodrucjeController> logger)
         {
-            _context = context; 
+            _context = context;
+            this.logger = logger;
+            appData = options.Value;
         }
-        public async Task<IActionResult> Index(string sortOrder, int? pageNumber)
+        public async Task<IActionResult> Index(int page = 1, int sort = 1, bool ascending = true)
         {
-            ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
-            ViewData["NazivSortParam"] = sortOrder == "Naziv" ? "naziv_desc" : "Naziv";
+            int pagesize = appData.PageSize;
+            var query = _context.VrstaOdlukes.AsNoTracking(); //or AsQueryable()
+            int count = await query.CountAsync();
 
-            var vrsteOdluke = from v in _context.VrstaOdlukes select v;
-
-            switch (sortOrder)
+            var pagingInfo = new PagingInfo
             {
-                case "id_desc":
-                    vrsteOdluke = vrsteOdluke.OrderByDescending(v => v.IdVrstaOdluke);
-                    break;
-                case "Naziv":
-                    vrsteOdluke = vrsteOdluke.OrderBy(v => v.VrstaOdluke1);
-                    break;
-                case "naziv_desc":
-                    vrsteOdluke = vrsteOdluke.OrderByDescending(v => v.VrstaOdluke1);
-                    break;
-                default:
-                    vrsteOdluke = vrsteOdluke.OrderBy(v => v.IdVrstaOdluke);
-                    break;
+                CurrentPage = page,
+                Sort = sort,
+                Ascending = ascending,
+                ItemsPerPage = pagesize,
+                TotalItems = count
+            };
+            if (page < 1 || page > pagingInfo.TotalPages)
+            {
+                return RedirectToAction(nameof(Index), new { page = 1, sort, ascending });
             }
 
-            int pageSize = 5;
-            int currentPage = pageNumber ?? 1;
-            int totalRecords = await vrsteOdluke.CountAsync();
+            query = query.ApplySort(sort, ascending);
 
-            var pagedData = await vrsteOdluke
-                .Skip((currentPage - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            var odluke = await query.Skip((page - 1) * pagesize).Take(pagesize).ToListAsync();
 
-            ViewData["CurrentPage"] = currentPage;
-            ViewData["TotalPages"] = (int)Math.Ceiling(totalRecords / (double)pageSize);
+            var model = new VrstaOdlukeViewModel
+            {
+                VrstaOdluke = odluke,
+                PagingInfo = pagingInfo,
+            };
 
-            return View(pagedData);
+            return View(model);
         }
 
         public IActionResult Create()
