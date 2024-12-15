@@ -12,7 +12,6 @@ namespace RPPP_WebApp.Controllers
         {
             _context = context; 
         }
-
         public async Task<IActionResult> Index(string sortOrder, int? pageNumber)
         {
             ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
@@ -20,7 +19,6 @@ namespace RPPP_WebApp.Controllers
 
             var vrsteOdluke = from v in _context.VrstaOdlukes select v;
 
-            // Sorting logic
             switch (sortOrder)
             {
                 case "id_desc":
@@ -37,7 +35,6 @@ namespace RPPP_WebApp.Controllers
                     break;
             }
 
-            // Paging logic
             int pageSize = 5;
             int currentPage = pageNumber ?? 1;
             int totalRecords = await vrsteOdluke.CountAsync();
@@ -62,14 +59,29 @@ namespace RPPP_WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(VrstaOdluke vrsteOdluke)
         {
+            if (vrsteOdluke == null)
+            {
+                ModelState.AddModelError(string.Empty, "Vrsta odluke ne može biti prazna.");
+                return View(vrsteOdluke);
+            }
+
             if (ModelState.IsValid)
             {
-                _context.Add(vrsteOdluke);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(vrsteOdluke);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError(string.Empty, "Greška prilikom spremanja podataka. Pokušajte ponovo.");
+                }
             }
             return View(vrsteOdluke);
         }
+
+
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -85,7 +97,16 @@ namespace RPPP_WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, VrstaOdluke vrsteOdluke)
         {
-            if (id != vrsteOdluke.IdVrstaOdluke) return NotFound();
+            if (vrsteOdluke == null)
+            {
+                ModelState.AddModelError(string.Empty, "Vrsta odluke ne može biti prazna.");
+                return View(vrsteOdluke);
+            }
+
+            if (id != vrsteOdluke.IdVrstaOdluke)
+            {
+                return NotFound();
+            }
 
             if (ModelState.IsValid)
             {
@@ -93,16 +114,25 @@ namespace RPPP_WebApp.Controllers
                 {
                     _context.Update(vrsteOdluke);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!VrstaOdlukeExists(id)) return NotFound();
+                    if (!VrstaOdlukeExists(id))
+                    {
+                        return NotFound();
+                    }
                     throw;
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError(string.Empty, "Greška prilikom ažuriranja podataka. Pokušajte ponovo.");
+                }
             }
             return View(vrsteOdluke);
         }
+
+
 
         private bool VrstaOdlukeExists(int id)
         {

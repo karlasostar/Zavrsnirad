@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RPPP_WebApp.Models;
-using System.Threading.Tasks;
-using System.Linq;
-
 
 namespace RPPP_WebApp.Controllers
 {
@@ -59,11 +56,25 @@ namespace RPPP_WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TematskoPodrucje tematskoPodrucje)
         {
+            if( tematskoPodrucje == null)
+            {
+                ModelState.AddModelError(string.Empty, "Tematsko područje ne može biti prazno");
+                return View(tematskoPodrucje);
+            }
+            
             if (ModelState.IsValid)
             {
-                _context.Add(tematskoPodrucje);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(tematskoPodrucje);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(DbUpdateException) 
+                {
+                    ModelState.AddModelError(string.Empty, "Greška prilikom spremanja.");
+                }
+
             }
             return View(tematskoPodrucje);
         }
@@ -82,6 +93,12 @@ namespace RPPP_WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, TematskoPodrucje tematskoPodrucje)
         {
+            if(tematskoPodrucje == null)
+            {
+                ModelState.AddModelError(string.Empty, "Tematsko područje ne može biti prazno.");
+                return View(tematskoPodrucje);
+            }
+
             if (id != tematskoPodrucje.IdTematskogPodrucja) return NotFound();
 
             if (ModelState.IsValid)
@@ -90,13 +107,18 @@ namespace RPPP_WebApp.Controllers
                 {
                     _context.Update(tematskoPodrucje);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!TematskoPodrucjeExists(id)) return NotFound();
                     throw;
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException) 
+                {
+                    ModelState.AddModelError(string.Empty, "Greška prilikom ažuriranja podataka.");
+                }
+                
             }
             return View(tematskoPodrucje);
         }

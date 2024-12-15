@@ -2,7 +2,7 @@
 
 <h2>Uređivanje tematskog područja</h2>
 
-<form asp-action="Edit" method="post">
+<form asp-action="Edit" method="post" id="tematskoPodrucjeForm">
     <input type="hidden" asp-for="IdTematskogPodrucja" />
     <div class="form-group">
         <label for="TematskoPodrucje1">Naziv</label>
@@ -12,3 +12,15 @@
     <button type="submit" class="btn btn-primary">Spremi</button>
     <a asp-action="Index" class="btn btn-secondary">Odustani</a>
 </form>
+
+@section Scripts {
+    <script>
+        document.getElementById("tematskoPodrucjeForm").addEventListener("submit", function (e) {
+            const tematskoPodrucje = document.getElementById("TematskoPodrucje1").value.trim();
+            if (!tematskoPodrucje) {
+                e.preventDefault();
+                alert("Tematsko područje ne smije biti prazno.");
+            }
+        });
+    </script>
+}

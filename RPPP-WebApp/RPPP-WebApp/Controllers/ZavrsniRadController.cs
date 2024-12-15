@@ -5,6 +5,8 @@ using Microsoft.Extensions.Options;
 using System.Text.Json;
 using RPPP_WebApp.Models;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Data.SqlClient;
+using RPPP_WebApp.ViewModel;
 
 
 namespace RPPP_WebApp.Controllers
@@ -12,41 +14,37 @@ namespace RPPP_WebApp.Controllers
     public class ZavrsniRadController : Controller
     {
         private readonly RPPP08Context _context;
-        private readonly ILogger<ZavrsniRadController> logger;
-        private readonly AppSettings appData;
 
-        public ZavrsniRadController(RPPP08Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<ZavrsniRadController> logger)
+        public ZavrsniRadController(RPPP08Context ctx)
         {
             this._context = ctx;
-            this.logger = logger;
-            appData = options.Value;
         }
 
-        // GET: ZavrsniRad/Index
-        public async Task<IActionResult> Index(int page = 1, int sort = 1, bool ascending = true)
+        public async Task<IActionResult> Index()
         {
-            int pageSize = appData.PageSize;
-
-            var query = _context.ZavrsniRads.AsQueryable();
-            int count = await query.CountAsync();
-
-            //query = query.ApplySort(sort, ascending)
-
-            var zavrsniRadovi = _context.ZavrsniRads
+            var zavrsniRadovi = await _context.ZavrsniRads
                 .Include(z => z.IdTematskogPodrucjaNavigation)
                 .Include(z => z.IdVijecaNavigation)
-                .Include(z => z.Student);
+                .Include(z => z.Student)
+                .Select(z => new ZavrsniRadViewModel
+                {
+                    ZavrsniRad = z,
+                    ZadnjaOdluka = _context.OdlukeFvs
+                        .Where(o => o.IdRad == z.IdRad)
+                        .OrderByDescending(o => o.DatumOdluke)
+                        .Select(o => o.IdVrstaOdlukeNavigation.VrstaOdluke1)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
 
-            return View(await zavrsniRadovi.ToListAsync());
+            return View(zavrsniRadovi);
         }
 
-        // GET: ZavrsniRad/Create
+
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["IdTematskogPodrucja"] = new SelectList(_context.TematskoPodrucjes, "Id", "Naziv");
-            ViewData["IdVijeca"] = new SelectList(_context.Povjerentsvos, "Id", "Naziv");
-            ViewData["Oib"] = new SelectList(_context.Students, "Oib", "ImePrezime");
+            await PrepareDropDownLists();
             return View();
         }
 
@@ -57,41 +55,87 @@ namespace RPPP_WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(zavrsniRad);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var student = await _context.Students.FirstOrDefaultAsync(s => s.Oib == zavrsniRad.Oib);
+
+                    if (student == null)
+                    {
+                        ModelState.AddModelError("", "Student not found.");
+                        await PrepareDropDownLists();
+                        return View(zavrsniRad);
+                    }
+
+                    zavrsniRad.IdUpisa = student.IdUpisa;
+                    _context.Add(zavrsniRad);
+                    await _context.SaveChangesAsync();
+                    TempData["Message"] = $"Završni rad '{zavrsniRad.Naslov}' uspješno dodan.";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException ex)
+                {
+                    ModelState.AddModelError(string.Empty, $"Greška prilikom spremanja: {ex.Message}");
+                    await PrepareDropDownLists();
+                    return View(zavrsniRad);
+                }
             }
-            ViewData["IdTematskogPodrucja"] = new SelectList(_context.TematskoPodrucjes, "Id", "Naziv", zavrsniRad.IdTematskogPodrucja);
-            ViewData["IdVijeca"] = new SelectList(_context.Povjerentsvos, "Id", "Naziv", zavrsniRad.IdVijeca);
-            ViewData["Oib"] = new SelectList(_context.Students, "Oib", "ImePrezime", zavrsniRad.Oib);
-            return View(zavrsniRad);
+            else
+            {
+                await PrepareDropDownLists();
+                return View(zavrsniRad);
+            }
+
+        }
+        private async Task PrepareDropDownLists()
+        {
+            ViewBag.TematskaPodrucja = new SelectList(
+                await _context.TematskoPodrucjes
+                    .OrderBy(tp => tp.TematskoPodrucje1)
+                    .Select(z => new { z.IdTematskogPodrucja, z.TematskoPodrucje1 })
+                    .ToListAsync(),
+                "IdTematskogPodrucja", "TematskoPodrucje1"
+            );
+
+            ViewBag.Studenti = new SelectList(
+                await _context.Students
+                    .OrderBy(s => s.Jmbag)
+                    .Select(z => new { z.Oib })
+                    .ToListAsync(),
+                "Oib", "Oib"
+            );
+
+            ViewBag.Povjerenstva = new SelectList(
+                await _context.Povjerentsvos
+                    .OrderBy(p => p.IdVijeca)
+                    .Select(z => new { z.IdVijeca })
+                    .ToListAsync(),
+                "IdVijeca", "IdVijeca"
+            );
+
         }
 
-        // GET: ZavrsniRad/Edit/5
+
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var zavrsniRad = await _context.ZavrsniRads.FindAsync(id);
-            if (zavrsniRad == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdTematskogPodrucja"] = new SelectList(_context.TematskoPodrucjes, "Id", "Naziv", zavrsniRad.IdTematskogPodrucja);
-            ViewData["IdVijeca"] = new SelectList(_context.Povjerentsvos, "Id", "Naziv", zavrsniRad.IdVijeca);
-            ViewData["Oib"] = new SelectList(_context.Students, "Oib", "ImePrezime", zavrsniRad.Oib);
+            if (zavrsniRad == null) return NotFound();
+            await PrepareDropDownLists();
             return View(zavrsniRad);
         }
 
-        // POST: ZavrsniRad/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ZavrsniRad zavrsniRad)
         {
+            if (zavrsniRad == null)
+            {
+                ModelState.AddModelError(string.Empty, "Vrsta odluke ne može biti prazna.");
+                return View(zavrsniRad);
+            }
+
             if (id != zavrsniRad.IdRad)
             {
                 return NotFound();
@@ -99,71 +143,90 @@ namespace RPPP_WebApp.Controllers
 
             if (ModelState.IsValid)
             {
+
                 try
                 {
+                    var student = await _context.Students.FirstOrDefaultAsync(s => s.Oib == zavrsniRad.Oib);
+
+                    if (student == null)
+                    {
+                        ModelState.AddModelError("", "Student not found.");
+                        await PrepareDropDownLists();
+                        return View(zavrsniRad);
+                    }
+
+                    zavrsniRad.IdUpisa = student.IdUpisa;
                     _context.Update(zavrsniRad);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ZavrsniRadExists(zavrsniRad.IdRad))
+                    if (!ZavrsniRadExists(id))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError(string.Empty, "Greška prilikom ažuriranja podataka. Pokušajte ponovo.");
+                }
             }
-            ViewData["IdTematskogPodrucja"] = new SelectList(_context.TematskoPodrucjes, "Id", "Naziv", zavrsniRad.IdTematskogPodrucja);
-            ViewData["IdVijeca"] = new SelectList(_context.Povjerentsvos, "Id", "Naziv", zavrsniRad.IdVijeca);
-            ViewData["Oib"] = new SelectList(_context.Students, "Oib", "ImePrezime", zavrsniRad.Oib);
+            await PrepareDropDownLists();
             return View(zavrsniRad);
         }
 
-        // GET: ZavrsniRad/Delete/5
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var zavrsniRad = await _context.ZavrsniRads
-                .Include(z => z.IdTematskogPodrucjaNavigation)
-                .Include(z => z.IdVijecaNavigation)
-                .Include(z => z.Student)
-                .FirstOrDefaultAsync(m => m.IdRad == id);
-
-            if (zavrsniRad == null)
-            {
-                return NotFound();
-            }
-
-            return View(zavrsniRad);
-        }
-
-        // POST: ZavrsniRad/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var zavrsniRad = await _context.ZavrsniRads.FindAsync(id);
-            _context.ZavrsniRads.Remove(zavrsniRad);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
         private bool ZavrsniRadExists(int id)
         {
             return _context.ZavrsniRads.Any(e => e.IdRad == id);
         }
+
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null) return NotFound();
+
+        //    var zavrsniRad = await _context.ZavrsniRads
+        //        .FirstOrDefaultAsync(m => m.IdRad == id);
+
+        //    if (zavrsniRad == null) return NotFound();
+
+        //    return View(zavrsniRad);
+        //}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var zavrsniRad = await _context.ZavrsniRads.FindAsync(id);
+            if (zavrsniRad != null)
+            {
+                _context.ZavrsniRads.Remove(zavrsniRad);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Detalji(int id)
+        {
+            var zavrsniRad = await _context.ZavrsniRads
+                .Include(z => z.IdTematskogPodrucjaNavigation)
+                .Include(z => z.IdVijecaNavigation)
+                .Include(z => z.Student)
+                .Include(z => z.OdlukeFvs)
+                .ThenInclude(o => o.IdVrstaOdlukeNavigation)
+                .FirstOrDefaultAsync(z => z.IdRad == id);
+
+            if (zavrsniRad == null)
+            {
+                return NotFound($"Završni rad sa ID-om {id} nije pronađen.");
+            }
+
+            return View(zavrsniRad);
+        }
+
+
+
     }
-
 }
-
-
-

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RPPP_WebApp.Models.ZavrsniRad>
+﻿@model IEnumerable<RPPP_WebApp.ViewModel.ZavrsniRadViewModel>
 
 @{
     ViewData["Title"] = "Završni Radovi";
@@ -6,39 +6,90 @@
 
 <h1>Završni Radovi</h1>
 
+<a asp-action="Create" class="btn btn-primary">Stvori novi Završni Rad</a>
+
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Id</th>
             <th>Naslov</th>
             <th>Tema</th>
+            <th>Metodologija</th>
             <th>Opis</th>
             <th>Sazetak</th>
             <th>Datum Obrane</th>
+            <th>Ocjena</th>
             <th>Tematsko Područje</th>
             <th>Student</th>
             <th>Vijeće</th>
-            <th>Actions</th>
+            <th>Zadnja odluka</th>
+            <th>Akcije</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.Naslov</td>
-                <td>@item.Tema</td>
-                <td>@item.Opis</td>
-                <td>@item.Sazetak</td>
-                <td>@item.DatumObrane?.ToString("yyyy-MM-dd")</td>
-                <td>@item.IdTematskogPodrucjaNavigation?.TematskoPodrucje1</td>
-                <td>@item.Student?.Jmbag</td>
-                <td>@item.IdVijecaNavigation?.IdVijeca</td>
+                <td>@item.ZavrsniRad.IdRad</td>
+                <td>@item.ZavrsniRad.Naslov</td>
+                <td>@item.ZavrsniRad.Tema</td>
+                <td>@item.ZavrsniRad.Metodologija</td>
+                <td>@item.ZavrsniRad.Opis</td>
+                <td>@item.ZavrsniRad.Sazetak</td>
+                <td>@item.ZavrsniRad.DatumObrane?.ToString("dd.MM.yyyy")</td>
+                <td>@item.ZavrsniRad.Ocjena</td>
+                <td>@item.ZavrsniRad.IdTematskogPodrucjaNavigation?.TematskoPodrucje1</td>
+                <td>@item.ZavrsniRad.Student?.Jmbag</td>
+                <td>@item.ZavrsniRad.IdVijecaNavigation?.IdVijeca</td>
+                <td>@item.ZadnjaOdluka</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.IdRad" class="btn btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@item.IdRad" class="btn btn-danger">Delete</a>
+                    <a asp-action="Detalji" asp-route-id="@item.ZavrsniRad.IdRad" class="btn btn-info">Detalji</a>
+                    <a asp-action="Edit" asp-route-id="@item.ZavrsniRad.IdRad" class="btn btn-primary">Uredi</a>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                            data-id="@item.ZavrsniRad.IdRad" data-name="@item.ZavrsniRad.Naslov">
+                        Izbriši
+                    </button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<a asp-action="Create" class="btn btn-primary">Stvori novi Završni Rad</a>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Jeste li sigurni da želite izbrisati stavku <strong id="deleteItemName"></strong>?
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="post">
+                    <input type="hidden" id="deleteItemId" name="id" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+                    <button type="submit" class="btn btn-danger">Izbriši</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var itemId = button.getAttribute('data-id');
+            var itemName = button.getAttribute('data-name');
+
+            document.getElementById('deleteItemId').value = itemId;
+            document.getElementById('deleteItemName').textContent = itemName;
+
+            var deleteForm = document.getElementById('deleteForm');
+            deleteForm.action = '/ZavrsniRad/DeleteConfirmed/' + itemId;
+        });
+    </script>
+}
+

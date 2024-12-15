@@ -2,12 +2,24 @@
 
 <h2>Stvorite novu vrstu odluke</h2>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" id="vrstaOdlukeForm">
     <div class="form-group">
         <label for="VrstaOdluke1">Naziv</label>
         <input asp-for="VrstaOdluke1" class="form-control" />
         <span asp-validation-for="VrstaOdluke1" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-success">Stvori</button>
+    <button type="submit" class="btn btn-primary">Stvori</button>
     <a asp-action="Index" class="btn btn-secondary">Odustani</a>
 </form>
+
+@section Scripts {
+    <script>
+        document.getElementById("vrstaOdlukeForm").addEventListener("submit", function (e) {
+            const vrstaOdluke = document.getElementById("VrstaOdluke1").value.trim();
+            if (!vrstaOdluke) {
+                e.preventDefault();  
+                alert("Vrsta odluke ne smije biti prazna.");
+            }
+        });
+    </script>
+}
