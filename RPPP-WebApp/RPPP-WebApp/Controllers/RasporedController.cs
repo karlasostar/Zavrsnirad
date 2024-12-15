@@ -24,13 +24,6 @@ namespace RPPP_WebApp.Controllers
 			appSettings = optionsSnapshot.Value;
 		}
 
-		[HttpGet]
-		public IActionResult Stvori()
-		{
-			return View();
-		}
-
-
 		public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
 		{
 			int pagesize = appSettings.PageSize;
@@ -149,7 +142,7 @@ namespace RPPP_WebApp.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Edit(int id, int page = 1, int sort = 1, bool ascending = true)
+		public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true)
 		{
 			var raspored = ctx.Rasporeds.AsNoTracking().Where(d => d.IdRaspored == id).SingleOrDefault();
 			if (raspored == null)
@@ -162,6 +155,7 @@ namespace RPPP_WebApp.Controllers
 				ViewBag.Page = page;
 				ViewBag.Sort = sort;
 				ViewBag.Ascending = ascending;
+				await PrepareDropDownLists();
 				return View(raspored);
 			}
 		}
@@ -195,6 +189,7 @@ namespace RPPP_WebApp.Controllers
 					catch (Exception exc)
 					{
 						ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
+						await PrepareDropDownLists();
 						return View(raspored);
 					}
 				}

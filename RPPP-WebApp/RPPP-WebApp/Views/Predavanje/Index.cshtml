@@ -15,34 +15,24 @@
 <table class="table table-sm table-striped table-hover">
     <thead>
         <tr>
-            <th>
-                <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
-                    Vrijeme početka
+            <th class="text-center">
+                <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
+                    ID
                 </a>
             </th>
-            <th>
-                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
-                    Vrijeme završetka
-                </a>
-            </th>
-            <th>
-                <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
-                    ID predavanja
-                </a>
-            </th>
-            <th>
-                <a asp-route-sort="4" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
-                    Raspored
-                </a>
-            </th>
-            <th>
-                <a asp-route-sort="5" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
+            <th class="text-center">
+                <a asp-route-sort="5" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
                     Predmet
                 </a>
             </th>
-            <th>
-                <a asp-route-sort="6" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
-                    ECTS
+            <th class="text-center">
+                <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
+                    Vrijeme početka
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 4 ? !Model.PagingInfo.Ascending : true)">
+                    Vrijeme završetka
                 </a>
             </th>
             <th></th>
@@ -52,25 +42,24 @@
         @foreach (var predavanje in Model.Predavanja)
         {
             <tr>
-                <td class="text-center">@predavanje.VrijemePocetka</td>
-                <td class="text-left">@predavanje.VrijemeZavrsetka</td>
                 <td class="text-center">@predavanje.IdPredavanja</td>
-                <td class="text-center">@predavanje.IdRaspored</td>
-                <td class="text-center">@predavanje.SifPredmet</td>
+                <td class="text-center">@predavanje.SifPredmetNavigation?.Naziv</td>
+                <td class="text-center">@predavanje.VrijemePocetka</td>
+                <td class="text-center">@predavanje.VrijemeZavrsetka</td>
                 <td class="btn-group">
                     <a asp-action="Edit"
                        asp-route-id="@predavanje.IdPredavanja"
                        asp-route-page="@Model.PagingInfo.CurrentPage"
                        asp-route-sort="@Model.PagingInfo.Sort"
                        asp-route-ascending="@Model.PagingInfo.Ascending"
-                       class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i></a>
+                       class="btn btn-sm btn-warning edit" title="Ažuriraj">Uredi</a>
 
                     <form asp-action="Delete" method="post"
                           asp-route-page="@Model.PagingInfo.CurrentPage"
                           asp-route-sort="@Model.PagingInfo.Sort"
                           asp-route-ascending="@Model.PagingInfo.Ascending">
                         <input type="hidden" name="IdPredavanja" value="@predavanje.IdPredavanja" />
-                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši"><i class="fas fa-trash-alt"></i></button>
+                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">Obriši</button>
                     </form>
                 </td>
             </tr>

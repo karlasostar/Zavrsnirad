@@ -9,8 +9,8 @@ namespace RPPP_WebApp.Extensions.Selectors
         {
             Expression<Func<Dvorana, object>> orderSelector = sort switch
             {
-                1 => d => d.OznDvorana,
-                2 => d => d.IdDvorana,
+                1 => d => d.IdDvorana,
+                2 => d => d.OznDvorana,
                 3 => d => d.Kapacitet,
                 _ => null
             };

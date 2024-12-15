@@ -148,7 +148,7 @@ namespace RPPP_WebApp.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Edit(int id, int page = 1, int sort = 1, bool ascending = true)
+		public async Task<IActionResult> Edit(int idRaspored, int id, int page = 1, int sort = 1, bool ascending = true)
 		{
 			var predavanje = ctx.Predavanjes.AsNoTracking().Where(d => d.IdPredavanja == id).SingleOrDefault();
 			if (predavanje == null)
@@ -161,13 +161,15 @@ namespace RPPP_WebApp.Controllers
 				ViewBag.Page = page;
 				ViewBag.Sort = sort;
 				ViewBag.Ascending = ascending;
+				ViewBag.idRaspored = idRaspored;
+				await PrepareDropDownLists();
 				return View(predavanje);
 			}
 		}
 
 		[HttpPost, ActionName("Edit")]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
+		public async Task<IActionResult> Update(int idRaspored, int id, int page = 1, int sort = 1, bool ascending = true)
 		{
 			try
 			{
@@ -189,7 +191,8 @@ namespace RPPP_WebApp.Controllers
 						await ctx.SaveChangesAsync();
 						TempData[Constants.Message] = "Predavanje ažurirano.";
 						TempData[Constants.ErrorOccurred] = false;
-						return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
+						await PrepareDropDownLists();
+						return RedirectToAction(nameof(Index), new { idRaspored = idRaspored, page = page, sort = sort, ascending = ascending });
 					}
 					catch (Exception exc)
 					{

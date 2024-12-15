@@ -15,24 +15,24 @@
 <table class="table table-sm table-striped table-hover">
     <thead>
         <tr>
-            <th>
+            <th class="text-center">
                 <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
                     ID rasporeda
                 </a>
             </th>
-            <th>
-                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
+            <th class="text-center">
+                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
                     Opis rasporeda
                 </a>
             </th>
-            <th>
-                <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
-                    ID akademske godine
+            <th class="text-center">
+                <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
+                    Akademska godina
                 </a>
             </th>
-            <th>
-                <a asp-route-sort="4" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
-                    ID dvorane
+            <th class="text-center">
+                <a asp-route-sort="4" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 4 ? !Model.PagingInfo.Ascending : true)">
+                    Dvorana
                 </a>
             </th>
             <th></th>
@@ -50,21 +50,21 @@
                     <a asp-controller="Predavanje"
                     asp-action="Index"
                     asp-route-idRaspored="@raspored.IdRaspored"
-                    class="btn btn-sm" title="Detalji">Detalji</a>
+                       class="btn btn-sm" style="background-color: #58b957; color: white;" title="Detalji">Detalji</a>
 
                     <a asp-action="Edit"
                        asp-route-id="@raspored.IdRaspored"
                        asp-route-page="@Model.PagingInfo.CurrentPage"
                        asp-route-sort="@Model.PagingInfo.Sort"
                        asp-route-ascending="@Model.PagingInfo.Ascending"
-                       class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i></a>
+                       class="btn btn-sm btn-warning edit" title="Ažuriraj">Uredi</a>
 
                     <form asp-action="Delete" method="post"
                           asp-route-page="@Model.PagingInfo.CurrentPage"
                           asp-route-sort="@Model.PagingInfo.Sort"
                           asp-route-ascending="@Model.PagingInfo.Ascending">
                         <input type="hidden" name="IdRaspored" value="@raspored.IdRaspored" />
-                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši"><i class="fas fa-trash-alt"></i></button>
+                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">Obriši</button>
                     </form>
                 </td>
             </tr>

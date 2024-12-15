@@ -15,15 +15,19 @@
 		<input asp-for="Opis" class="form-control" />
 		<span asp-validation-for="Opis" class="text-danger"></span>
 	</div>
-	<div class="form-group">
-		<label asp-for="IdAkGod" class="control-label"></label>
-		<input asp-for="IdAkGod" class="form-control" />
-		<span asp-validation-for="IdAkGod" class="text-danger"></span>
+	<div class="mb-3">
+		<label asp-for="IdAkGod" class="form-label"></label>
+		<select class="form-control" asp-for="IdAkGod" asp-items="ViewBag.AkGodine">
+			<option disabled selected value="">Odaberite akademsku godinu</option>
+		</select>
+		<div class="form-text"><span asp-validation-for="IdAkGod" class="text-danger"></span></div>
 	</div>
-	<div class="form-group">
-		<label asp-for="IdDvorana" class="control-label"></label>
-		<input asp-for="IdDvorana" class="form-control" />
-		<span asp-validation-for="IdDvorana" class="text-danger"></span>
+	<div class="mb-3">
+		<label asp-for="IdDvorana" class="form-label"></label>
+		<select class="form-control" asp-for="IdDvorana" asp-items="ViewBag.Dvorane">
+			<option disabled selected value="">Odaberite dvoranu</option>
+		</select>
+		<div class="form-text"><span asp-validation-for="IdDvorana" class="text-danger"></span></div>
 	</div>
     <div class="text-center">
         <button class="btn btn-primary" type="submit">Spremi</button>
