@@ -11,12 +11,12 @@ using RPPP_WebApp.ViewModels;
 
 namespace RPPP_WebApp.Controllers
 {
-    public class DvoranaController : Controller
+    public class PredmetController : Controller
     {
         private readonly RPPP08Context ctx;
-        private readonly ILogger<DvoranaController> logger;
+        private readonly ILogger<PredmetController> logger;
         private readonly AppSettings appSettings;
-        public DvoranaController(RPPP08Context ctx, IOptionsSnapshot<AppSettings> optionsSnapshot, ILogger<DvoranaController> logger)
+        public PredmetController(RPPP08Context ctx, IOptionsSnapshot<AppSettings> optionsSnapshot, ILogger<PredmetController> logger)
         {
             this.ctx = ctx;
             this.logger = logger;
@@ -34,14 +34,14 @@ namespace RPPP_WebApp.Controllers
         {
             int pagesize = appSettings.PageSize;
 
-            var query = ctx.Dvoranas
+            var query = ctx.Predmets
                            .AsNoTracking();
 
             int count = query.Count();
             if (count == 0)
             {
-                logger.LogInformation("Ne postoji nijedna dvorana");
-                TempData[Constants.Message] = "Ne postoji niti jedna dvorana.";
+                logger.LogInformation("Ne postoji nijedan predmet");
+                TempData[Constants.Message] = "Ne postoji niti jedan predmet.";
                 TempData[Constants.ErrorOccurred] = false;
                 return RedirectToAction(nameof(Create));
             }
@@ -61,14 +61,14 @@ namespace RPPP_WebApp.Controllers
 
             query = query.ApplySort(sort, ascending);
 
-            var dvorane = query
+            var predmeti = query
                         .Skip((page - 1) * pagesize)
                         .Take(pagesize)
                         .ToList();
 
-            var model = new DvoranaViewModel
+            var model = new PredmetViewModel
             {
-                Dvorane = dvorane,
+                Predmeti = predmeti,
                 PagingInfo = pagingInfo
             };
 
@@ -83,48 +83,48 @@ namespace RPPP_WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Dvorana dvorana)
+        public IActionResult Create(Predmet predmet)
         {
-            logger.LogTrace(JsonSerializer.Serialize(dvorana));
+            logger.LogTrace(JsonSerializer.Serialize(predmet));
             if (ModelState.IsValid)
             {
                 try
                 {
-                    ctx.Add(dvorana);
+                    ctx.Add(predmet);
                     ctx.SaveChanges();
-                    logger.LogInformation(new EventId(1000), $"Dvorana {dvorana.OznDvorana} dodana.");
+                    logger.LogInformation(new EventId(1000), $"Predmet {predmet.Naziv} dodan.");
 
-                    TempData[Constants.Message] = $"Dvorana {dvorana.OznDvorana} dodana.";
+                    TempData[Constants.Message] = $"Predmet {predmet.Naziv} dodan.";
                     TempData[Constants.ErrorOccurred] = false;
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception exc)
                 {
-                    logger.LogError("Pogreška prilikom dodavanje nove dvorane: {0}", exc.CompleteExceptionMessage());
+                    logger.LogError("Pogreška prilikom dodavanje novog predmeta: {0}", exc.CompleteExceptionMessage());
                     ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
-                    return View(dvorana);
+                    return View(predmet);
                 }
             }
             else
             {
-                return View(dvorana);
+                return View(predmet);
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int IdDvorana, int page = 1, int sort = 1, bool ascending = true)
+        public IActionResult Delete(int SifPredmet, int page = 1, int sort = 1, bool ascending = true)
         {
-            var dvorana = ctx.Dvoranas.Find(IdDvorana);
-            if (dvorana != null)
+            var predmet = ctx.Predmets.Find(SifPredmet);
+            if (predmet != null)
             {
                 try
                 {
-                    string naziv = dvorana.OznDvorana;
-                    ctx.Remove(dvorana);
+                    string naziv = predmet.Naziv;
+                    ctx.Remove(predmet);
                     ctx.SaveChanges();
-                    logger.LogInformation($"Dvorana {naziv} uspješno obrisana");
-                    TempData[Constants.Message] = $"Dvorana {naziv} uspješno obrisana";
+                    logger.LogInformation($"Predmet {naziv} uspješno obrisana");
+                    TempData[Constants.Message] = $"Predmet {naziv} uspješno obrisana";
                     TempData[Constants.ErrorOccurred] = false;
                 }
                 catch (Exception exc)
@@ -136,8 +136,8 @@ namespace RPPP_WebApp.Controllers
             }
             else
             {
-                logger.LogWarning("Ne postoji dvorana s oznakom: {0} ", IdDvorana);
-                TempData[Constants.Message] = "Ne postoji dvorana s oznakom: " + IdDvorana;
+                logger.LogWarning("Ne postoji predmet s oznakom: {0} ", SifPredmet);
+                TempData[Constants.Message] = "Ne postoji predmet s oznakom: " + SifPredmet;
                 TempData[Constants.ErrorOccurred] = true;
             }
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
@@ -146,18 +146,18 @@ namespace RPPP_WebApp.Controllers
         [HttpGet]
         public IActionResult Edit(int id, int page = 1, int sort = 1, bool ascending = true)
         {
-            var dvorana = ctx.Dvoranas.AsNoTracking().Where(d => d.IdDvorana == id).SingleOrDefault();
-            if (dvorana == null)
+            var predmet = ctx.Predmets.AsNoTracking().Where(d => d.SifPredmet == id).SingleOrDefault();
+            if (predmet == null)
             {
-                logger.LogWarning("Ne postoji dvorana s id: {0} ", id);
-                return NotFound("Ne postoji dvorana s id: " + id);
+                logger.LogWarning("Ne postoji predmet s sifrom: {0} ", id);
+                return NotFound("Ne postoji predmet s sifrom: " + id);
             }
             else
             {
                 ViewBag.Page = page;
                 ViewBag.Sort = sort;
                 ViewBag.Ascending = ascending;
-                return View(dvorana);
+                return View(predmet);
             }
         }
 
@@ -167,14 +167,14 @@ namespace RPPP_WebApp.Controllers
         {
             try
             {
-                Dvorana dvorana = await ctx.Dvoranas.FindAsync(id);
-                if (dvorana == null)
+                Predmet predmet = await ctx.Predmets.FindAsync(id);
+                if (predmet == null)
                 {
                     return NotFound("Neispravna oznaka dvorane: " + id);
                 }
 
-                if (await TryUpdateModelAsync<Dvorana>(dvorana, "",
-                    d => d.OznDvorana, d => d.Kapacitet
+                if (await TryUpdateModelAsync<Predmet>(predmet, "",
+                    d => d.Naziv, d => d.PlanProgram, d => d.Program, d => d.JelIzboran, d => d.Ects
                 ))
                 {
                     ViewBag.Page = page;
@@ -183,20 +183,20 @@ namespace RPPP_WebApp.Controllers
                     try
                     {
                         await ctx.SaveChangesAsync();
-                        TempData[Constants.Message] = "Dvorana ažurirana.";
+                        TempData[Constants.Message] = "Predmet ažurirana.";
                         TempData[Constants.ErrorOccurred] = false;
                         return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
                     }
                     catch (Exception exc)
                     {
                         ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
-                        return View(dvorana);
+                        return View(predmet);
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Podatke o državi nije moguće povezati s forme");
-                    return View(dvorana);
+                    ModelState.AddModelError(string.Empty, "Podatke o predmetu nije moguće povezati s forme");
+                    return View(predmet);
                 }
             }
             catch (Exception exc)

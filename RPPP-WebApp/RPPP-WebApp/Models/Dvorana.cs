@@ -2,15 +2,20 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RPPP_WebApp.Models;
 
 public partial class Dvorana
 {
+
+    [Display(Name = "Oznaka dvorane", Prompt = "Unesite naziv")]
     public string OznDvorana { get; set; }
 
+    [Display(Name = "ID dvorane", Prompt = "Unesite ID")]
     public int IdDvorana { get; set; }
 
+    [Display(Name = "Kapacitet dvorane", Prompt = "Unesite kapacitet")]
     public int Kapacitet { get; set; }
 
     public virtual ICollection<Raspored> Rasporeds { get; set; } = new List<Raspored>();

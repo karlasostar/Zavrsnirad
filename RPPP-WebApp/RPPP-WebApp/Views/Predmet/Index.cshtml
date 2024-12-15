@@ -1,12 +1,12 @@
-﻿@model DvoranaViewModel
+﻿@model PredmetViewModel
 
 @{
-    ViewBag.Title = "Dvorane";
+    ViewBag.Title = "Predmeti";
 }
 
-<h2>Popis dvorana</h2>
+<h2>Popis predmeta</h2>
 
-<a asp-action="Create">Unos nove dvorane</a>
+<a asp-action="Create">Unos novog predmeta</a>
 
 <pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu"
        class="float-end">
@@ -17,32 +17,45 @@
         <tr>
             <th>
                 <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
-                    Oznaka dvorane
+                    Naziv predmeta
                 </a>
             </th>
             <th>
                 <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
-                    ID dvorane
+                    Plan i program predmeta
                 </a>
             </th>
             <th>
                 <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
-                    Kapacitet
+                    Program
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
+                    Je li predmet izboran
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
+                    ECTS
                 </a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var dvorana in Model.Dvorane)
+        @foreach (var predmet in Model.Predmeti)
         {
             <tr>
-                <td class="text-left">@dvorana.OznDvorana</td>
-                <td class="text-center">@dvorana.IdDvorana</td>
-                <td class="text-center">@dvorana.Kapacitet</td>
+                <td class="text-center">@predmet.SifPredmet</td>
+                <td class="text-left">@predmet.Naziv</td>
+                <td class="text-center">@predmet.PlanProgram</td>
+                <td class="text-center">@predmet.Program</td>
+                <td class="text-center">@predmet.JelIzboran</td>
+                <td class="text-center">@predmet.Ects</td>
                 <td class="btn-group">
                     <a asp-action="Edit"
-                       asp-route-id="@dvorana.IdDvorana"
+                       asp-route-id="@predmet.SifPredmet"
                        asp-route-page="@Model.PagingInfo.CurrentPage"
                        asp-route-sort="@Model.PagingInfo.Sort"
                        asp-route-ascending="@Model.PagingInfo.Ascending"
@@ -52,7 +65,7 @@
                           asp-route-page="@Model.PagingInfo.CurrentPage"
                           asp-route-sort="@Model.PagingInfo.Sort"
                           asp-route-ascending="@Model.PagingInfo.Ascending">
-                        <input type="hidden" name="IdDvorana" value="@dvorana.IdDvorana" />
+                        <input type="hidden" name="SifPredmet" value="@predmet.SifPredmet" />
                         <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši"><i class="fas fa-trash-alt"></i></button>
                     </form>
                 </td>

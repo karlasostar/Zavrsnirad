@@ -11,10 +11,11 @@ public static class StartupExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddDbContext<RPPP08Context>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("Server")));
-
         builder.Services.AddControllersWithViews();
+        builder.Services.AddDbContext<RPPP08Context>(options =>
+		options.UseSqlServer(builder.Configuration.GetConnectionString("Server")));
+
+        builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
         return builder.Build();
     }
