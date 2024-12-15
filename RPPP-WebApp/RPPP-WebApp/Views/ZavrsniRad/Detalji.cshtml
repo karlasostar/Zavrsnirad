@@ -12,6 +12,7 @@
     </div>
     <div class="card-body">
         <p><strong>Tema:</strong> @Model.Tema</p>
+        <p><strong>Metodologija:</strong> @Model.Metodologija</p>
         <p><strong>Opis:</strong> @Model.Opis</p>
         <p><strong>Sazetak:</strong> @Model.Sazetak</p>
         <p><strong>Datum Obrane:</strong> @Model.DatumObrane?.ToString("dd.MM.yyyy")</p>
@@ -31,6 +32,7 @@
             <th>Datum Odluke</th>
             <th>Opis Odluke</th>
             <th>Vrsta Odluke</th>
+            <th>Akcije</th>
         </tr>
     </thead>
     <tbody>
@@ -41,9 +43,18 @@
                 <td>@odluka.DatumOdluke.ToString("dd.MM.yyyy")</td>
                 <td>@odluka.OpisOdluke</td>
                 <td>@odluka.IdVrstaOdlukeNavigation?.VrstaOdluke1</td>
+
+                <td>
+                    <a asp-action="EditOdluka" asp-route-id="@odluka.IdOdluke" class="btn btn-primary">Uredi</a>
+                    <a asp-action="DeleteOdluka" asp-route-id="@odluka.IdOdluke" class="btn btn-danger">Izbrisi</a>
+                </td>
+
             </tr>
         }
+        <a asp-action="CreateOdluka" asp-route-id="@Model.IdRad" class="btn btn-danger">Unos nove odluke za rad</a>
     </tbody>
 </table>
 
 <a asp-action="Index" class="btn btn-secondary">Povratak na popis</a>
+
+

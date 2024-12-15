@@ -48,7 +48,7 @@ namespace RPPP_WebApp.Controllers
             return View();
         }
 
-        // POST: ZavrsniRad/Create
+     
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ZavrsniRad zavrsniRad)
@@ -111,6 +111,13 @@ namespace RPPP_WebApp.Controllers
                     .ToListAsync(),
                 "IdVijeca", "IdVijeca"
             );
+
+            ViewBag.VrsteOdlukes = new SelectList(
+                await _context.VrstaOdlukes
+                .OrderBy(p => p.IdVrstaOdluke)
+                .Select(z => new {z.IdVrstaOdluke, z.VrstaOdluke1 })
+                .ToListAsync(),
+                "IdVrstaOdluke", "VrstaOdluke1");
 
         }
 
@@ -183,18 +190,6 @@ namespace RPPP_WebApp.Controllers
             return _context.ZavrsniRads.Any(e => e.IdRad == id);
         }
 
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null) return NotFound();
-
-        //    var zavrsniRad = await _context.ZavrsniRads
-        //        .FirstOrDefaultAsync(m => m.IdRad == id);
-
-        //    if (zavrsniRad == null) return NotFound();
-
-        //    return View(zavrsniRad);
-        //}
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -222,11 +217,150 @@ namespace RPPP_WebApp.Controllers
             {
                 return NotFound($"Završni rad sa ID-om {id} nije pronađen.");
             }
-
+            ViewBag.VrsteOdlukes = new SelectList(
+                        await _context.VrstaOdlukes
+                        .OrderBy(p => p.IdVrstaOdluke)
+                        .Select(z => new { z.IdVrstaOdluke, z.VrstaOdluke1 })
+                        .ToListAsync(),
+                         "IdVrstaOdluke", "VrstaOdluke");
             return View(zavrsniRad);
         }
 
+   
+        public async Task<IActionResult> EditOdluka(int id)
+        {
+            var odluka = await _context.OdlukeFvs
+                .Include(o => o.IdVrstaOdlukeNavigation)
+                .Include(o => o.IdRadNavigation) 
+                .FirstOrDefaultAsync(o => o.IdOdluke == id);
+
+            if (odluka == null)
+            {
+                return NotFound($"Odluka s ID-om {id} nije pronađena.");
+            }
+
+            await PrepareDropDownLists(); 
+            return View(odluka);
+        }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> EditOdluka(int id, OdlukeFv odluka)
+        {
+            if (id != odluka.IdOdluke)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Ensure IdRad is set correctly before saving
+                    if (odluka.IdRad == 0)
+                    {
+                        ModelState.AddModelError(string.Empty, "IdRad is missing.");
+                        return View(odluka);
+                    }
+
+                    _context.Update(odluka);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Detalji), new { id = odluka.IdRad });
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!OdlukaExists(odluka.IdOdluke))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                
+            }
+
+            await PrepareDropDownLists();
+            return View(odluka);
+        }
+
+
+        private bool OdlukaExists(int id)
+        {
+            return _context.OdlukeFvs.Any(e => e.IdOdluke == id);
+        }
+
+        public IActionResult DeleteOdluka(int id)
+        {
+            var odluka = _context.OdlukeFvs.FirstOrDefault(o => o.IdOdluke == id);
+            if (odluka == null)
+            {
+                return NotFound();
+            }
+
+            _context.OdlukeFvs.Remove(odluka);
+            _context.SaveChanges();
+
+            return RedirectToAction("Detalji", new { id = odluka.IdRad});
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateOdluka(int id)
+        {
+            var zavrsniRad = await _context.ZavrsniRads.FindAsync(id);
+
+            if (zavrsniRad == null)
+            {
+                return NotFound($"Završni rad s ID-om {id} nije pronađen.");
+            }
+
+            ViewBag.VrsteOdluke = new SelectList(
+                await _context.VrstaOdlukes
+                    .OrderBy(v => v.VrstaOdluke1)
+                    .ToListAsync(),
+                "IdVrstaOdluke", "VrstaOdluke1"
+            );
+
+            return View(new OdlukeFv { IdRad = id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateOdluka(OdlukeFv odluka)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var zavrsniRad = await _context.ZavrsniRads.FindAsync(odluka.IdRad);
+                    if (zavrsniRad == null)
+                    {
+                        ModelState.AddModelError("", "Završni rad nije pronađen.");
+                        return View(odluka);
+                    }
+
+                    _context.Add(odluka);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Detalji), new { id = odluka.IdRad });
+                }
+                catch (DbUpdateException ex)
+                {
+                    ModelState.AddModelError(string.Empty, $"Greška prilikom spremanja: {ex.Message}");
+                }
+            }
+
+            ViewBag.VrsteOdluke = new SelectList(
+                await _context.VrstaOdlukes
+                    .OrderBy(v => v.VrstaOdluke1)
+                    .ToListAsync(),
+                "IdVrstaOdluke", "VrstaOdluke1"
+            );
+
+            return View(odluka);
+        }
     }
 }
