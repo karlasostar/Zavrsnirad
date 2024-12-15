@@ -46,7 +46,10 @@
 
                 <td>
                     <a asp-action="EditOdluka" asp-route-id="@odluka.IdOdluke" class="btn btn-primary">Uredi</a>
-                    <a asp-action="DeleteOdluka" asp-route-id="@odluka.IdOdluke" class="btn btn-danger">Izbrisi</a>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@odluka.IdOdluke" data-name="@odluka.OpisOdluke">
+                     Izbriši
+                     </button>
+
                 </td>
 
             </tr>
@@ -56,5 +59,50 @@
 </table>
 
 <a asp-action="Index" class="btn btn-secondary">Povratak na popis</a>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Potvrda brisanja stavke</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Jeste li sigurni da želite izbrisati <strong id="deleteItemName"></strong>?
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="post">
+                    <input type="hidden" id="deleteItemId" name="id" />
+                    <input type="hidden" id="deleteRadId" name="idRad" value="@Model.IdRad" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+                    <button type="submit" class="btn btn-danger">Izbriši</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var itemId = button.getAttribute('data-id');
+            var itemName = button.getAttribute('data-name');
+
+            document.getElementById('deleteItemId').value = itemId;
+            document.getElementById('deleteItemName').textContent = itemName;
+
+            // Ensure the form action is set properly
+            var deleteForm = document.getElementById('deleteForm');
+            deleteForm.action = '/ZavrsniRad/DeleteConfirmedOdluka';
+        });
+
+
+    </script>
+
+    <script src="~/js/pager.js" asp-append-version="true"></script>
+}
 
 

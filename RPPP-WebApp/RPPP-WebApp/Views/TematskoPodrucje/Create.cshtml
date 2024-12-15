@@ -12,14 +12,3 @@
     <a asp-action="Index" class="btn btn-secondary">Odustani</a>
 </form>
 
-@section Scripts {
-    <script>
-        document.getElementById("tematskoPodrucjeForm").addEventListener("submit", function (e) {
-            const tematskoPodrucje = document.getElementById("TematskoPodrucje1").value.trim();
-            if (!tematskoPodrucje) {
-                e.preventDefault();
-                alert("Tematsko područje ne smije biti prazno.");
-            }
-        });
-    </script>
-}

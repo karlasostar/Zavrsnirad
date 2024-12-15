@@ -25,31 +25,13 @@ namespace RPPP_WebApp.Controllers
             appData = options.Value;
         }
 
-        //public async Task<IActionResult> Index()
-        //{
-        //    var zavrsniRadovi = await _context.ZavrsniRads
-        //        .Include(z => z.IdTematskogPodrucjaNavigation)
-        //        .Include(z => z.IdVijecaNavigation)
-        //        .Include(z => z.Student)
-        //        .Select(z => new ZavrsniRadViewModel
-        //        {
-        //            ZavrsniRad = z,
-        //            ZadnjaOdluka = _context.OdlukeFvs
-        //                .Where(o => o.IdRad == z.IdRad)
-        //                .OrderByDescending(o => o.DatumOdluke)
-        //                .Select(o => o.IdVrstaOdlukeNavigation.VrstaOdluke1)
-        //                .FirstOrDefault()
-        //        })
-        //        .ToListAsync();
-
-        //    return View(zavrsniRadovi);
-        //}
         public async Task<IActionResult> Index(int page = 1, int sort = 1, bool ascending = true)
         {
             int pagesize = appData.PageSize;
             var query = (IQueryable<ZavrsniRad>)_context.ZavrsniRads
                 .Include(zr => zr.IdTematskogPodrucjaNavigation)
                 .Include(zr => zr.IdVijecaNavigation)
+                .Include(zr => zr.Student)
                 .Include(zr => zr.OdlukeFvs);
 
             int count = await query.CountAsync();
@@ -72,29 +54,30 @@ namespace RPPP_WebApp.Controllers
 
             var zavrsniRads = await query.Skip((page - 1) * pagesize).Take(pagesize).ToListAsync();
 
-            // Map ZavrsniRad to ZavrsniRadWithDecision
+            
             var zavrsniRadWithDecisions = zavrsniRads
                 .Select(zr => new ZavrsniRadSOdlukom
-            {
-                IdRad = zr.IdRad,
-                Naslov = zr.Naslov,
-                Metodologija = zr.Metodologija,
-                Ocjena = zr.Ocjena,
-                Tema = zr.Tema,
-                Opis = zr.Opis,
-                Sazetak = zr.Sazetak,
-                DatumObrane = zr.DatumObrane,
-                IdTematskogPodrucja = zr.IdTematskogPodrucja,
-                IdTematskogPodrucjaNavigation = zr.IdTematskogPodrucjaNavigation,
-                IdVijecaNavigation = zr.IdVijecaNavigation,
-                Oib = zr.Oib,
-                IdUpisa = zr.IdUpisa,
-                IdVijeca = zr.IdVijeca,
-                // Fetch the latest Odluka
-                ZadnjaOdluka = zr.OdlukeFvs
+                {
+                    IdRad = zr.IdRad,
+                    Naslov = zr.Naslov,
+                    Metodologija = zr.Metodologija,
+                    Ocjena = zr.Ocjena,
+                    Tema = zr.Tema,
+                    Opis = zr.Opis,
+                    Sazetak = zr.Sazetak,
+                    DatumObrane = zr.DatumObrane,
+                    IdTematskogPodrucja = zr.IdTematskogPodrucja,
+                    IdTematskogPodrucjaNavigation = zr.IdTematskogPodrucjaNavigation,
+                    IdVijecaNavigation = zr.IdVijecaNavigation,
+                    Student = zr.Student,
+                    Oib = zr.Oib,
+                    IdUpisa = zr.IdUpisa,
+                    IdVijeca = zr.IdVijeca,
+                    
+                    ZadnjaOdluka = zr.OdlukeFvs
                     .OrderByDescending(od => od.DatumOdluke)
-                    .FirstOrDefault()?.OpisOdluke // Get the latest decision description
-            }).ToList();
+                    .FirstOrDefault()?.OpisOdluke 
+                }).ToList();
 
             var model = new ZavrsniRadViewModel2
             {
@@ -123,6 +106,7 @@ namespace RPPP_WebApp.Controllers
             {
                 try
                 {
+
                     var student = await _context.Students.FirstOrDefaultAsync(s => s.Oib == zavrsniRad.Oib);
 
                     if (student == null)
@@ -372,6 +356,22 @@ namespace RPPP_WebApp.Controllers
 
             return RedirectToAction("Detalji", new { id = odluka.IdRad});
         }
+        [HttpPost]
+        public IActionResult DeleteConfirmedOdluka(int id, int idRad)
+        {
+            var odluka = _context.OdlukeFvs.FirstOrDefault(o => o.IdOdluke == id);
+            if (odluka == null)
+            {
+                return NotFound();
+            }
+
+            _context.OdlukeFvs.Remove(odluka);
+            _context.SaveChanges();
+
+            // Redirect to the correct ZavrsniRad details page
+            return RedirectToAction("Detalji", new { id = idRad });
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> CreateOdluka(int id)

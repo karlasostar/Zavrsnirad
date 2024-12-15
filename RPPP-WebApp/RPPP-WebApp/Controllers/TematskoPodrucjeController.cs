@@ -1,13 +1,9 @@
-﻿using System.Text.Json;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualBasic;
 using RPPP_WebApp.Models;
 using RPPP_WebApp.ViewModels;
 using RPPP_WebApp.Extensions.Selectors;
-using RPPP_WebApp.Extensions;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -69,7 +65,13 @@ namespace RPPP_WebApp.Controllers
                 ModelState.AddModelError(string.Empty, "Tematsko područje ne može biti prazno");
                 return View(tematskoPodrucje);
             }
-            
+
+            if (_context.TematskoPodrucjes.Any(tp => tp.TematskoPodrucje1 == tematskoPodrucje.TematskoPodrucje1))
+            {
+                ModelState.AddModelError("TematskoPodrucje1", "Tematsko područje s tim nazivom već postoji.");
+                return View(tematskoPodrucje);
+            }
+
             if (ModelState.IsValid)
             {
                 try
@@ -106,6 +108,13 @@ namespace RPPP_WebApp.Controllers
                 ModelState.AddModelError(string.Empty, "Tematsko područje ne može biti prazno.");
                 return View(tematskoPodrucje);
             }
+
+            if (_context.TematskoPodrucjes.Any(tp => tp.TematskoPodrucje1 == tematskoPodrucje.TematskoPodrucje1 && tp.IdTematskogPodrucja != id))
+            {
+                ModelState.AddModelError("TematskoPodrucje1", "Tematsko područje s tim nazivom već postoji.");
+                return View(tematskoPodrucje);
+            }
+
 
             if (id != tematskoPodrucje.IdTematskogPodrucja) return NotFound();
 

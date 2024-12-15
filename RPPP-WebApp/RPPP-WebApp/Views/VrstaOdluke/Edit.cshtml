@@ -5,7 +5,7 @@
 <form asp-action="Edit" method="post" id="vrstaOdlukeForm">
     <input type="hidden" asp-for="IdVrstaOdluke" />
     <div class="form-group">
-        <label for="TematskoPodrucje1">Naziv</label>
+        <label for="VrstaOdluka1">Naziv</label>
         <input asp-for="VrstaOdluke1" class="form-control" />
         <span asp-validation-for="VrstaOdluke1" class="text-danger"></span>
     </div>
@@ -13,14 +13,3 @@
     <a asp-action="Index" class="btn btn-secondary">Odustani</a>
 </form>
 
-@section Scripts {
-    <script>
-        document.getElementById("vrstaOdlukeForm").addEventListener("submit", function (e) {
-            const vrstaOdluke = document.getElementById("VrstaOdluke1").value.trim();
-            if (!vrstaOdluke) {
-                e.preventDefault();
-                alert("Vrsta odluke ne smije biti prazna.");
-            }
-        });
-    </script>
-}

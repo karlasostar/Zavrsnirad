@@ -10,10 +10,10 @@ namespace RPPP_WebApp.Controllers
     public class VrstaOdlukeController : Controller
     {
         private readonly RPPP08Context _context;
-        private readonly ILogger<TematskoPodrucjeController> logger;
+        private readonly ILogger<VrstaOdlukeController> logger;
         private readonly AppSettings appData;
 
-        public VrstaOdlukeController(RPPP08Context context, IOptionsSnapshot<AppSettings> options, ILogger<TematskoPodrucjeController> logger)
+        public VrstaOdlukeController(RPPP08Context context, IOptionsSnapshot<AppSettings> options, ILogger<VrstaOdlukeController> logger)
         {
             _context = context;
             this.logger = logger;
@@ -65,6 +65,11 @@ namespace RPPP_WebApp.Controllers
                 ModelState.AddModelError(string.Empty, "Vrsta odluke ne može biti prazna.");
                 return View(vrsteOdluke);
             }
+            if (_context.VrstaOdlukes.Any(tp => tp.VrstaOdluke1 == vrsteOdluke.VrstaOdluke1))
+            {
+                ModelState.AddModelError("VrstaOdluke1", "Vrsta odluke s tim nazivom već postoji.");
+                return View(vrsteOdluke);
+            }
 
             if (ModelState.IsValid)
             {
@@ -107,6 +112,12 @@ namespace RPPP_WebApp.Controllers
             if (id != vrsteOdluke.IdVrstaOdluke)
             {
                 return NotFound();
+            }
+
+            if (_context.VrstaOdlukes.Any(tp => tp.VrstaOdluke1 == vrsteOdluke.VrstaOdluke1 && tp.IdVrstaOdluke != id))
+            {
+                ModelState.AddModelError("VrstaOdluke1", "Vrsta odluke s tim nazivom već postoji.");
+                return View(vrsteOdluke);
             }
 
             if (ModelState.IsValid)

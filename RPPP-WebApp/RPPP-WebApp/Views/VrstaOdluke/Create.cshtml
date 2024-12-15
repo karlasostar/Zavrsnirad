@@ -12,14 +12,4 @@
     <a asp-action="Index" class="btn btn-secondary">Odustani</a>
 </form>
 
-@section Scripts {
-    <script>
-        document.getElementById("vrstaOdlukeForm").addEventListener("submit", function (e) {
-            const vrstaOdluke = document.getElementById("VrstaOdluke1").value.trim();
-            if (!vrstaOdluke) {
-                e.preventDefault();  
-                alert("Vrsta odluke ne smije biti prazna.");
-            }
-        });
-    </script>
-}
+
