@@ -1,0 +1,130 @@
+﻿@model IEnumerable<RPPP_WebApp.Models.UpisViewModel>
+
+<h2>Natjecaj za upis</h2>
+
+
+@if (TempData["ErrorMessageDeleted"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessageDeleted"]
+    </div>
+}
+@if (TempData["SuccessMessageDeleted"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessageDeleted"]
+    </div>
+}
+@if (TempData["SuccessMessageEdited"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessageEdited"]
+    </div>
+}
+@if (TempData["ErrorMessageEdited"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessageEdited"]
+    </div>
+}
+@if (TempData["SuccessMessageCreated"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessageCreated"]
+    </div>
+}
+
+
+<a asp-action="Create" class="btn btn-primary mb-3">Dodaj novu stavku</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParam"]">ID natjecaja</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DatesSortParam"]">Datum Otvaranja</a>
+            </th>
+            <th>Broj mjesta</th>
+            <th>Broj Prijava</th>
+            <th>Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.IdNatjecanja</td>
+                    <td>@item.DatumOtvaranja</td>
+                    <td>@item.BrojMjesta</td>
+                    <td>@item.BrojPrijava</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.IdNatjecanja" class="btn btn-success">Detalji</a>
+                        <a asp-action="Edit" asp-route-id="@item.IdNatjecanja" class="btn btn-primary">Uredi</a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteModal" data-id="@item.IdNatjecanja">
+                            Izbriši
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center">Nema podataka za prikaz.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-end mt-3">
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= (int)ViewData["TotalPages"]; i++)
+            {
+                <li class="page-item @(i == (int)ViewData["CurrentPage"] ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-pageNumber="@i" asp-route-sortOrder="@ViewData["CurrentSort"]">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+<!-- Modal for delete confirmation -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Potvrda brisanja</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Jeste li sigurni da želite obrisati ovaj natječaj za upis?
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="post" asp-action="Delete" asp-route-id="@ViewData["ItemId"]">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">Izbriši</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Set the ID for the delete action dynamically
+    var deleteButtons = document.querySelectorAll('[data-bs-target="#deleteModal"]');
+    deleteButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var id = button.getAttribute('data-id');
+            document.getElementById('deleteForm').action = '@Url.Action("Delete", "NatjecajZaUpis")/' + id;
+            // Also set the hidden input for the Id if necessary
+            document.getElementById('deleteForm').querySelector('input[name="IdNatjecanja"]').value = id;
+        });
+    });
+</script>
