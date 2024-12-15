@@ -200,9 +200,10 @@ namespace RPPP_WebApp.Controllers
                 return NotFound();
             }
 
-            // Fetch the NatjecajZaUpis entity with related Prijava entities
+            // Fetch the NatjecajZaUpis entity and related Prijava with StatusPrijave
             var natjecaj = await _context.NatjecajZaUpis
-                .Include(n => n.IdUpisas) // Load related Prijava
+                .Include(n => n.IdUpisas) // Include Prijava entities
+                    .ThenInclude(p => p.IdPrijaveNavigation) // Include StatusPrijave navigation
                 .FirstOrDefaultAsync(n => n.IdNatjecanja == id);
 
             if (natjecaj == null)
@@ -212,6 +213,84 @@ namespace RPPP_WebApp.Controllers
 
             return View(natjecaj);
         }
+
+        // GET: Prijava/CreatePrijava
+        public IActionResult CreatePrijava(int idNatjecanja)
+        {
+            // Populate StatusPrijaveList with SelectListItems
+            var statusPrijaveList = _context.StatusPrijaves
+                .Select(status => new SelectListItem
+                {
+                    Value = status.IdPrijave.ToString(),
+                    Text = status.StatusPrijave1
+                })
+                .ToList();
+
+            // Assign the list to ViewData["StatusPrijaveList"]
+            ViewData["StatusPrijaveList"] = new SelectList(statusPrijaveList, "Value", "Text");
+
+            // Ensure ViewBag or ViewData contains the Natjecanja ID
+            ViewBag.IdNatjecanja = idNatjecanja;
+
+            return View();
+        }
+
+
+
+
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreatePrijava(Prijava prijava, int idNatjecanja)
+        {
+            // Check if the model is valid
+            if (ModelState.IsValid)
+            {
+                // Set the NatjecajZaUpis ID to the Prijava object
+                prijava.IdNatjecanjas = new List<NatjecajZaUpi>
+        {
+            new NatjecajZaUpi { IdNatjecanja = idNatjecanja }
+        };
+
+                // Add the new prijava to the context
+                _context.Prijavas.Add(prijava);
+
+                // Save the changes to the database
+                _context.SaveChanges();
+
+                // Redirect to the details page or another relevant page after successful submission
+                return RedirectToAction("Details", new { id = idNatjecanja });
+            }
+
+            // If the model is invalid, reload the form with the current data
+            var statusPrijaveList = _context.StatusPrijaves.ToList();
+            ViewData["StatusPrijaveList"] = new SelectList(statusPrijaveList, "IdPrijave", "StatusPrijave1");
+            ViewBag.IdNatjecanja = idNatjecanja;
+            return View(prijava);
+        }
+
+
+
+
+
+
+        // GET/POST: Prijava/DeletePrijava
+        [HttpPost]
+        public IActionResult DeletePrijava(int id)
+        {
+            var prijava = _context.Prijavas.Find(id);
+            if (prijava != null)
+            {
+                _context.Prijavas.Remove(prijava);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Details", "NatjecajZaUpis", new { id = prijava?.IdNatjecanjas.First().IdNatjecanja });
+        }
+
+
 
 
 

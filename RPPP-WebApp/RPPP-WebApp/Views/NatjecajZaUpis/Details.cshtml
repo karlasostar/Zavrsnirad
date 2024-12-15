@@ -19,25 +19,33 @@
 <h4>Prijave povezane s natječajem</h4>
 @if (Model.IdUpisas != null && Model.IdUpisas.Any())
 {
-    <table class="table table-bordered">
+    <table class="table">
         <thead>
             <tr>
-                <th>ID Prijave</th>
+                <th>Status Prijave</th>
                 <th>Status Upisa</th>
                 <th>Datum Upisa</th>
                 <th>Rok Trajanja</th>
                 <th>Broj Upisa</th>
+                <th>Akcije</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var prijava in Model.IdUpisas)
             {
                 <tr>
-                    <td>@prijava.IdPrijave</td>
+                    <td>@(prijava.IdPrijaveNavigation?.StatusPrijave1 ?? "N/A")</td>
                     <td>@prijava.StatusUpisa</td>
                     <td>@prijava.DatumUpisa</td>
                     <td>@prijava.RokTrajanja</td>
                     <td>@prijava.BrUpisa</td>
+                    <td>
+                    <a asp-action="DeletePrijava" asp-route-id="@prijava.IdUpisa"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Jeste li sigurni da želite izbrisati ovu prijavu?');">
+                        Izbriši
+                    </a>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -49,3 +57,8 @@ else
 }
 
 <a asp-action="Index" class="btn btn-secondary">Natrag</a>
+
+<a asp-action="CreatePrijava" asp-route-id="@Model.IdNatjecanja" class="btn btn-primary">
+    Dodaj novu prijavu
+</a>
+
