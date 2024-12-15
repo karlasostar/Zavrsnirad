@@ -193,6 +193,27 @@ namespace RPPP_WebApp.Controllers
             return _context.NatjecajZaUpis.Any(e => e.IdNatjecanja == id);
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // Fetch the NatjecajZaUpis entity with related Prijava entities
+            var natjecaj = await _context.NatjecajZaUpis
+                .Include(n => n.IdUpisas) // Load related Prijava
+                .FirstOrDefaultAsync(n => n.IdNatjecanja == id);
+
+            if (natjecaj == null)
+            {
+                return NotFound();
+            }
+
+            return View(natjecaj);
+        }
+
+
 
     }
 }
