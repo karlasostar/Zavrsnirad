@@ -1,12 +1,12 @@
-﻿@model PredmetViewModel
+﻿@model PredavanjeViewModel
 
 @{
-    ViewBag.Title = "Predmeti";
+    ViewBag.Title = "Predavanja";
 }
 
-<h2>Popis predmeta</h2>
+<h2>Popis predavanja</h2>
 
-<a asp-action="Create" class="btn btn-primary">Unos novog predmeta</a>
+<a asp-action="Create" asp-route-idRaspored="@Model.IdRaspored" class="btn btn-primary">Unos novog predavanja</a>
 
 <pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu"
        class="float-end">
@@ -17,26 +17,31 @@
         <tr>
             <th>
                 <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
-                    Naziv predmeta
+                    Vrijeme početka
                 </a>
             </th>
             <th>
                 <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
-                    Plan i program predmeta
+                    Vrijeme završetka
                 </a>
             </th>
             <th>
                 <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
-                    Program
+                    ID predavanja
                 </a>
             </th>
             <th>
                 <a asp-route-sort="4" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
-                    Je li predmet izboran
+                    Raspored
                 </a>
             </th>
             <th>
                 <a asp-route-sort="5" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
+                    Predmet
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="6" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
                     ECTS
                 </a>
             </th>
@@ -44,18 +49,17 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var predmet in Model.Predmeti)
+        @foreach (var predavanje in Model.Predavanja)
         {
             <tr>
-                <td class="text-center">@predmet.SifPredmet</td>
-                <td class="text-left">@predmet.Naziv</td>
-                <td class="text-center">@predmet.PlanProgram</td>
-                <td class="text-center">@predmet.Program</td>
-                <td class="text-center">@predmet.JelIzboran</td>
-                <td class="text-center">@predmet.Ects</td>
+                <td class="text-center">@predavanje.VrijemePocetka</td>
+                <td class="text-left">@predavanje.VrijemeZavrsetka</td>
+                <td class="text-center">@predavanje.IdPredavanja</td>
+                <td class="text-center">@predavanje.IdRaspored</td>
+                <td class="text-center">@predavanje.SifPredmet</td>
                 <td class="btn-group">
                     <a asp-action="Edit"
-                       asp-route-id="@predmet.SifPredmet"
+                       asp-route-id="@predavanje.IdPredavanja"
                        asp-route-page="@Model.PagingInfo.CurrentPage"
                        asp-route-sort="@Model.PagingInfo.Sort"
                        asp-route-ascending="@Model.PagingInfo.Ascending"
@@ -65,7 +69,7 @@
                           asp-route-page="@Model.PagingInfo.CurrentPage"
                           asp-route-sort="@Model.PagingInfo.Sort"
                           asp-route-ascending="@Model.PagingInfo.Ascending">
-                        <input type="hidden" name="SifPredmet" value="@predmet.SifPredmet" />
+                        <input type="hidden" name="IdPredavanja" value="@predavanje.IdPredavanja" />
                         <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši"><i class="fas fa-trash-alt"></i></button>
                     </form>
                 </td>

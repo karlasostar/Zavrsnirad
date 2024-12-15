@@ -1,0 +1,46 @@
+﻿@model Predavanje
+
+@{
+    ViewBag.Title = "Ažuriranje predavanja";
+}
+
+<form asp-route-id="@Model.IdPredavanja"
+      asp-route-page="@ViewBag.Page"
+      asp-route-sort="@ViewBag.Sort"
+      asp-route-ascending="@ViewBag.Ascending"
+      method="post">
+    <div asp-validation-summary="All"></div>
+	<div class="form-group">
+		<label asp-for="VrijemePocetka" class="control-label"></label>
+		<input asp-for="VrijemePocetka" class="form-control" />
+		<span asp-validation-for="VrijemePocetka" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="VrijemeZavrsetka" class="control-label"></label>
+		<input asp-for="VrijemeZavrsetka" class="form-control" />
+		<span asp-validation-for="VrijemeZavrsetka" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="IdRaspored" class="control-label"></label>
+		<input asp-for="IdRaspored" class="form-control" />
+		<span asp-validation-for="IdRaspored" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="SifPredmet" class="control-label"></label>
+		<input asp-for="SifPredmet" class="form-control" />
+		<span asp-validation-for="SifPredmet" class="text-danger"></span>
+	</div>
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Spremi</button>
+        <a asp-action="Index"
+		   asp-route-idRaspored="@Model.IdRaspored"
+           asp-route-page="@ViewBag.Page"
+           asp-route-sort="@ViewBag.Sort"
+           asp-route-ascending="@ViewBag.Ascending"
+		   class="btn btn-secondary" asp-route-idRaspored="@Model.IdRaspored">Odustani</a>
+    </div>
+</form>
+
+@section scripts {
+    <partial name="IncludeValidation" />
+}

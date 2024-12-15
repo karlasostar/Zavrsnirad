@@ -6,7 +6,7 @@
 
 <h2>Popis rasporeda</h2>
 
-<a asp-action="Create">Unos novog rasporeda</a>
+<a asp-action="Create" class="btn btn-primary">Unos novog rasporeda</a>
 
 <pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu"
        class="float-end">
@@ -21,20 +21,20 @@
                 </a>
             </th>
             <th>
-                <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
+                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
                     Opis rasporeda
                 </a>
             </th>
             <th>
-                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
+                <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
                     ID akademske godine
                 </a>
             </th>
             <th>
-                <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
+                <a asp-route-sort="4" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
                     ID dvorane
                 </a>
-            </th
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -47,12 +47,10 @@
                 <td class="text-center">@raspored.IdAkGodNavigation?.Razdoblje</td>
                 <td class="text-center">@raspored.IdDvoranaNavigation?.OznDvorana</td>
                 <td class="btn-group">
-                    <a asp-action="Detalji"
-                       asp-route-id="@raspored.IdRaspored"
-                       asp-route-page="@Model.PagingInfo.CurrentPage"
-                       asp-route-sort="@Model.PagingInfo.Sort"
-                       asp-route-ascending="@Model.PagingInfo.Ascending"
-                       class="btn btn-sm" title="Detalji">Detalji</a>
+                    <a asp-controller="Predavanje"
+                    asp-action="Index"
+                    asp-route-idRaspored="@raspored.IdRaspored"
+                    class="btn btn-sm" title="Detalji">Detalji</a>
 
                     <a asp-action="Edit"
                        asp-route-id="@raspored.IdRaspored"
