@@ -2,6 +2,37 @@
 
 <h2>Status Prijave</h2>
 
+@if (TempData["ErrorMessageDeleted"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessageDeleted"]
+    </div>
+}
+@if (TempData["SuccessMessageDeleted"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessageDeleted"]
+    </div>
+}
+@if (TempData["SuccessMessageEdited"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessageEdited"]
+    </div>
+}
+@if (TempData["ErrorMessageEdited"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessageEdited"]
+    </div>
+}
+@if (TempData["SuccessMessageCreated"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessageCreated"]
+    </div>
+}
+
 <a asp-action="Create" class="btn btn-primary">Dodaj novu stavku</a>
 <table class="table">
     <thead>

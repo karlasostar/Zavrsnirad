@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RPPP_WebApp.Models;
 using System.Threading.Tasks;
@@ -63,6 +63,7 @@ namespace RPPP_WebApp.Controllers
             {
                 _context.Add(statusPrijave);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessageCreated"] = "Stavka je uspješno kreirana.";
                 return RedirectToAction(nameof(Index));
             }
             return View(statusPrijave);
@@ -90,10 +91,12 @@ namespace RPPP_WebApp.Controllers
                 {
                     _context.Update(statusPrijave);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessageEdited"] = "Odabrana stavka je uspješno uređena.";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!StatusPrijaveExists(id)) return NotFound();
+                    TempData["ErrorMessageEdited"] = "Odabrana stavka nije uređena.";
                     throw;
                 }
                 return RedirectToAction(nameof(Index));
@@ -122,11 +125,23 @@ namespace RPPP_WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+
+            var associatedRecords = await _context.NatjecajZaUpis
+                    .Where(n => n.IdStatus == id)
+                    .FirstOrDefaultAsync();
+
+            if (associatedRecords != null)
+            {
+                TempData["ErrorMessageDeleted"] = "Odabrana stavka se ne može obrisati, dozvoljeno je uređivanje.";
+                return RedirectToAction(nameof(Index));
+            }
+
             var statusPrijave = await _context.StatusPrijaves.FindAsync(id);
             if (statusPrijave != null)
             {
                 _context.StatusPrijaves.Remove(statusPrijave);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessageDeleted"] = "Stavka je uspješno obrisana.";
             }
             return RedirectToAction(nameof(Index));
         }

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RPPP_WebApp.Models;
 using System.Threading.Tasks;
@@ -64,7 +64,9 @@ namespace RPPP_WebApp.Controllers
             {
                 _context.Add(statusNatjecaja);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessageCreated"] = "Stavka je uspješno kreirana.";
                 return RedirectToAction(nameof(Index));
+                
             }
             return View(statusNatjecaja);
         }
@@ -91,10 +93,12 @@ namespace RPPP_WebApp.Controllers
                 {
                     _context.Update(statusNatjecaja);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessageEdited"] = "Odabrana stavka je uspješno uređena.";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!StatusNatjecajaExists(id)) return NotFound();
+                    TempData["ErrorMessageEdited"] = "Odabrana stavka nije uređena.";
                     throw;
                 }
                 return RedirectToAction(nameof(Index));
@@ -123,11 +127,22 @@ namespace RPPP_WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var associatedRecords = await _context.NatjecajZaUpis
+                    .Where(n => n.IdStatus == id)
+                    .FirstOrDefaultAsync();
+
+            if (associatedRecords != null)
+            {
+                TempData["ErrorMessageDeleted"] = "Odabrana stavka se ne može obrisati, dozvoljeno je uređivanje.";
+                return RedirectToAction(nameof(Index));
+            }
+
             var statusNatjecaja = await _context.StatusNatjecajas.FindAsync(id);
             if (statusNatjecaja != null)
             {
                 _context.Remove(statusNatjecaja);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessageDeleted"] = "Odabrana stavka je uspješno obrisana.";
             }
             return RedirectToAction(nameof(Index));
         }
