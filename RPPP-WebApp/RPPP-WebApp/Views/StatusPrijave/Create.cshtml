@@ -1,0 +1,13 @@
+@model RPPP_WebApp.Models.StatusPrijave
+
+<h2>Stvaranje novog statusa prijave</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="StatusPrijave1">Naziv</label>
+        <input asp-for="StatusPrijave1" class="form-control" />
+        <span asp-validation-for="StatusPrijave1" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Stvori</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>

@@ -24,10 +24,7 @@ public class KarlaSostarController : Controller
     //    return View();
     //}
 
-    public IActionResult StatusPrijave()
-    {
-        return View();
-    }
+    
 
     public IActionResult NatjecajZaUpis()
     {
