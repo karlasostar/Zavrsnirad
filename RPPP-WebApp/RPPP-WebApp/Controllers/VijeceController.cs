@@ -18,9 +18,10 @@ namespace RPPP_WebApp.Controllers
         {
             var vijeca = await context.Vijećes
                 .Include(v => v.IdAkGodNavigation) 
+                .Include(v => v.Sjednicas)
                 .Include(v => v.Fakultetsko) 
                 .Include(v => v.Strucno)   
-                .Include(v => v.Povjerentsvo)     
+                .Include(v => v.Povjerentsvo)
                 .Select(v => new VijeceSaSjednicom
                 {
                     IdVijece = v.IdVijeca,
@@ -29,7 +30,9 @@ namespace RPPP_WebApp.Controllers
                         v.Fakultetsko != null ? "Fakultetsko" :
                         v.Strucno != null ? "Stručno" :
                         v.Povjerentsvo != null ? "Povjerenstvo" : "Nepoznato", 
-                    sjednice = v.Sjednicas 
+                    sjednice = v.Sjednicas,
+                    Rbr = v.Sjednicas.OrderByDescending(s => s.RBr)
+                    .FirstOrDefault().RBr // Get the latest decision description
                 })
                 .ToListAsync();
             /*

@@ -19,6 +19,7 @@ namespace RPPP_WebApp.ViewModels
         public virtual Akgod IdAkGodNavigation { get; set; }
         public virtual ICollection<VijeceUlogaZap> VijeceUlogaZaps { get; set; } = new List<VijeceUlogaZap>();
         public virtual ICollection<Sjednica> sjednice { get; set; } = new List<Sjednica>();
+        public virtual int? Rbr { get; set; }
 
     }
 }

@@ -15,6 +15,7 @@
             <th>ID</th>
             <th>Vrsta vijeća</th>
             <th>AkGod</th>
+            <th>Rbr sjednice</th>
             <th>Akcije</th>
         </tr>
     </thead>
@@ -25,9 +26,9 @@
                 <td>@item.IdVijece</td>
                 <td>@item.TipVijeca</td>
                 <td>@item.Akgod?.Razdoblje</td>
+                <td>@item.Rbr</td>
                 <td>
-                    <a asp-action="Detalji" asp-route-id="@item.IdVijece" class="btn btn-info">Detalji</a>
-                    <a asp-action="Edit" asp-route-id="@item.IdVijece" class="btn btn-primary">Uredi</a>
+                    <a asp-action="Detail" asp-route-id="@item.IdVijece" class="btn btn-info">Detalji</a>
                     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.IdVijece" data-name="@item.TipVijeca">
                         Izbriši
                     </button>
