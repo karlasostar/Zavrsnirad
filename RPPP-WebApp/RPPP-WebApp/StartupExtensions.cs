@@ -12,9 +12,9 @@ public static class StartupExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
+        builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
         builder.Services.AddDbContext<RPPP08Context>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("Server")));
-        builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
         builder.Services.AddControllersWithViews();
 
         return builder.Build();
