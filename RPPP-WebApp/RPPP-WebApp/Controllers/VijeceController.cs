@@ -32,7 +32,7 @@ namespace RPPP_WebApp.Controllers
                         v.Povjerentsvo != null ? "Povjerenstvo" : "Nepoznato", 
                     sjednice = v.Sjednicas,
                     Rbr = v.Sjednicas.OrderByDescending(s => s.RBr)
-                    .FirstOrDefault().RBr // Get the latest decision description
+                    .FirstOrDefault().RBr
                 })
                 .ToListAsync();
             /*
@@ -50,5 +50,6 @@ namespace RPPP_WebApp.Controllers
 
             return View(model);
         }
+
     }
 }
