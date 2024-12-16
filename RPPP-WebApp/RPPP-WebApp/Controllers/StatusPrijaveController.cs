@@ -17,6 +17,7 @@ namespace RPPP_WebApp.Controllers
         }
         public async Task<IActionResult> Index(string sortOrder, int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
             ViewData["NazivSortParam"] = sortOrder == "Naziv" ? "naziv_desc" : "Naziv";
 
@@ -28,10 +29,10 @@ namespace RPPP_WebApp.Controllers
                     statusPrijave = statusPrijave.OrderByDescending(v => v.IdPrijave);
                     break;
                 case "Naziv":
-                    statusPrijave = statusPrijave.OrderBy(v => v.StatusPrijave1);
+                    statusPrijave = statusPrijave.OrderBy(v => v.StatusPrijave1 == null ? "" : v.StatusPrijave1.ToUpper());
                     break;
                 case "naziv_desc":
-                    statusPrijave = statusPrijave.OrderByDescending(v => v.StatusPrijave1);
+                    statusPrijave = statusPrijave.OrderByDescending(v => v.StatusPrijave1 == null ? "" : v.StatusPrijave1.ToUpper());
                     break;
                 default:
                     statusPrijave = statusPrijave.OrderBy(v => v.IdPrijave);

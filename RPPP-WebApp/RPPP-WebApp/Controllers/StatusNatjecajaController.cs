@@ -29,11 +29,11 @@ namespace RPPP_WebApp.Controllers
                     statusNatjecaja = statusNatjecaja.OrderByDescending(v => v.IdStatus);
                     break;
                 case "Naziv":
-                    statusNatjecaja = statusNatjecaja.OrderBy(v => v.StatusNatjecanja);
+                    statusNatjecaja = statusNatjecaja.OrderBy(v => v.StatusNatjecanja == null ? "": v.StatusNatjecanja.ToUpper());
 
                     break;
                 case "naziv_desc":
-                    statusNatjecaja = statusNatjecaja.OrderByDescending(v => v.StatusNatjecanja);
+                    statusNatjecaja = statusNatjecaja.OrderBy(v => v.StatusNatjecanja == null ? "" : v.StatusNatjecanja.ToUpper());
                     break;
                 default:
                     statusNatjecaja = statusNatjecaja.OrderBy(v => v.IdStatus);
