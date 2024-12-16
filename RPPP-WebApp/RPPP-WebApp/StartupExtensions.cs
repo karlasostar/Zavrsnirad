@@ -35,6 +35,19 @@ public static class StartupExtensions
         }
         #endregion
 
+        //unos podataka u bazu test
+
+        //using (var scope = app.Services.CreateScope()) 
+        //{
+        //    var context = scope.ServiceProvider.GetRequiredService<RPPP08Context>();
+        //    Dvorana dvorana = new Dvorana
+        //    {
+        //        OznDvorana = "D2",
+        //        Kapacitet = 260
+        //    };
+        //    context.Dvoranas.Add(dvorana);
+        //    context.SaveChanges();
+        //}
 
         if (app.Environment.IsDevelopment())
         {
@@ -45,6 +58,10 @@ public static class StartupExtensions
            .UseRouting();
 
         app.MapDefaultControllerRoute();
+
+        app.MapControllerRoute(
+            name: "dvorana",
+            pattern: "{controller=Dvorana}/{action=Index}/{id?}");
 
         return app;
     }

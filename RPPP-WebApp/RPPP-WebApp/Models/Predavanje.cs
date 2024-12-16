@@ -2,20 +2,28 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using RPPP_WebApp.Models.Validation;
 
 namespace RPPP_WebApp.Models;
 
 public partial class Predavanje
 {
+	[Display(Name = "Vrijeme početka", Prompt = "Odaberite vrijeme početka")]
     public DateTime VrijemePocetka { get; set; }
 
+	[Display(Name = "Vrijeme završetka", Prompt = "Odaberite vrijeme završetka")]
+    [ValidnoVrijemeZavrsetka(ErrorMessage = "Vrijeme završetka mora biti nakon vremena početka.")]
     public DateTime VrijemeZavrsetka { get; set; }
 
-    public int IdPredavanja { get; set; }
+	[Display(Name = "ID predavanja", Prompt = "Unesite ID predavanja")]
+	public int IdPredavanja { get; set; }
 
-    public int IdRaspored { get; set; }
+	[Display(Name = "Raspored", Prompt = "Odaberite raspored")]
+	public int IdRaspored { get; set; }
 
-    public int SifPredmet { get; set; }
+	[Display(Name = "Predmet", Prompt = "Odaberite predmet")]
+	public int SifPredmet { get; set; }
 
     public virtual Raspored IdRasporedNavigation { get; set; }
 

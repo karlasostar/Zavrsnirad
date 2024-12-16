@@ -1,0 +1,112 @@
+﻿@model RasporedViewModel
+
+@{
+    ViewBag.Title = "Rasporedi";
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+@if (TempData["Info"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Info"]
+    </div>
+}
+
+<h2>Popis rasporeda</h2>
+
+<a asp-action="Create" class="btn btn-primary">Unos novog rasporeda</a>
+
+<pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu"
+       class="float-end">
+</pager>
+
+<table class="table table-sm table-striped table-hover">
+    <thead>
+        <tr>
+            <th class="text-center">
+                <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
+                    ID rasporeda
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
+                    Opis rasporeda
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
+                    Akademska godina
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="4" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 4 ? !Model.PagingInfo.Ascending : true)">
+                    Dvorana
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var raspored in Model.Rasporedi)
+        {
+            <tr>
+                <td class="text-center">@raspored.IdRaspored</td>
+                <td class="text-center">@raspored.Opis</td>
+                <td class="text-center">@raspored.IdAkGodNavigation?.Razdoblje</td>
+                <td class="text-center">@raspored.IdDvoranaNavigation?.OznDvorana</td>
+                <td class="btn-group">
+                    <a asp-controller="Predavanje"
+                    asp-action="Index"
+                    asp-route-idRaspored="@raspored.IdRaspored"
+                       class="btn btn-sm" style="background-color: #58b957; color: white;" title="Detalji">Detalji</a>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@raspored.IdRaspored"
+                       asp-route-page="@Model.PagingInfo.CurrentPage"
+                       asp-route-sort="@Model.PagingInfo.Sort"
+                       asp-route-ascending="@Model.PagingInfo.Ascending"
+                       class="btn btn-sm btn-warning edit" title="Ažuriraj">Uredi</a>
+
+                    <form asp-action="Delete" method="post"
+                          asp-route-page="@Model.PagingInfo.CurrentPage"
+                          asp-route-sort="@Model.PagingInfo.Sort"
+                          asp-route-ascending="@Model.PagingInfo.Ascending">
+                        <input type="hidden" name="IdRaspored" value="@raspored.IdRaspored" />
+                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">Obriši</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    <script src="~/js/pager.js" asp-append-version="true"></script>
+}
+
+
+@* stranicenje na klijentskoj strani *@
+
+@* @section styles{
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+}
+
+@section scripts{
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script>
+     $(document).ready(function(){
+            $('#tablicaDvorane').DataTable();
+         });
+    </script>
+    } *@

@@ -2,18 +2,24 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RPPP_WebApp.Models;
 
 public partial class Raspored
 {
-    public int IdRaspored { get; set; }
+	[Display(Name = "ID rasporeda", Prompt = "Unesite ID")]
+	public int IdRaspored { get; set; }
 
+	[Display(Name = "Opis", Prompt = "Unesite kratki opis")]
+    [StringLength(200, ErrorMessage = "Opis može imati najviše 200 znakova.")]
     public string Opis { get; set; }
 
-    public int IdAkGod { get; set; }
+	[Display(Name = "Akademska godina", Prompt = "Odaberite akademsku godinu")]
+	public int IdAkGod { get; set; }
 
-    public int IdDvorana { get; set; }
+	[Display(Name = "Dvorana", Prompt = "Odaberite dvoranu")]
+	public int IdDvorana { get; set; }
 
     public virtual Akgod IdAkGodNavigation { get; set; }
 

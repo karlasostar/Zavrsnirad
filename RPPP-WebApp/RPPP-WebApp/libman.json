@@ -17,6 +17,22 @@
     {
       "library": "bootstrap@5.3.3",
       "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "library": "font-awesome@6.7.1",
+      "destination": "wwwroot/lib/font-awesome/"
     }
-  ]
+  ,
+{
+  "provider": "cdnjs",
+  "library": "htmx@2.0.4",
+  "destination": "wwwroot/lib/htmx/"
+}
+,
+{
+  "provider": "cdnjs",
+  "library": "toastr.js@2.1.4",
+  "destination": "wwwroot/lib/toastr.js/"
+}
+]
 }

@@ -2,22 +2,32 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RPPP_WebApp.Models;
 
 public partial class Predmet
 {
-    public int SifPredmet { get; set; }
+	[Display(Name = "ID predmeta", Prompt = "Unesite ID predmeta")]
+	public int SifPredmet { get; set; }
 
+	[Display(Name = "Naziv", Prompt = "Unesite naziv")]
+    [StringLength(40, ErrorMessage = "Naziv predmeta može biti najviše 40 znakova.")]
     public string Naziv { get; set; }
 
+	[Display(Name = "Plan", Prompt = "Unesite plan predmeta")]
+    [StringLength(500, ErrorMessage = "Plan predmeta može biti najviše 500 znakova.")]
     public string PlanProgram { get; set; }
 
+	[Display(Name = "Program", Prompt = "Unesite program predmeta")]
+    [StringLength(500, ErrorMessage = "Program predmeta može biti najviše 500 znakova.")]
     public string Program { get; set; }
 
-    public int JelIzboran { get; set; }
+	[Display(Name = "Izboran predmet", Prompt = "Odaberite je li predmet izboran")]
+	public int JelIzboran { get; set; }
 
-    public double Ects { get; set; }
+	[Display(Name = "ECTS", Prompt = "Unesite broj ECTS-a")]
+	public double Ects { get; set; }
 
     public virtual ICollection<PredUlogaZap> PredUlogaZaps { get; set; } = new List<PredUlogaZap>();
 

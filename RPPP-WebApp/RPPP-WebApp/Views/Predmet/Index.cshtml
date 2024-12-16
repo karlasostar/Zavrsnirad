@@ -1,0 +1,121 @@
+﻿@model PredmetViewModel
+
+@{
+    ViewBag.Title = "Predmeti";
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+@if (TempData["Info"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Info"]
+    </div>
+}
+
+<h2>Popis predmeta</h2>
+
+<a asp-action="Create" class="btn btn-primary">Unos novog predmeta</a>
+
+<pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu"
+       class="float-end">
+</pager>
+
+<table class="table table-sm table-striped table-hover">
+    <thead>
+        <tr>
+            <th class="text-center">
+                <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
+                    #
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
+                    Naziv predmeta
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
+                    Plan i program predmeta
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="4" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 4 ? !Model.PagingInfo.Ascending : true)">
+                    Program
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="5" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 5 ? !Model.PagingInfo.Ascending : true)">
+                    Izboran predmet
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="6" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 6 ? !Model.PagingInfo.Ascending : true)">
+                    ECTS
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var predmet in Model.Predmeti)
+        {
+            <tr>
+                <td class="text-center">@predmet.SifPredmet</td>
+                <td class="text-center">@predmet.Naziv</td>
+                <td class="text-center">@(!string.IsNullOrEmpty(predmet.PlanProgram) ? predmet.PlanProgram : "-")</td>
+                <td class="text-center">@(!string.IsNullOrEmpty(predmet.Program) ? predmet.Program : "-")</td>
+                <td class="text-center">
+                    @(predmet.JelIzboran == 1 ? "DA" : "NE")
+                </td>
+                <td class="text-center">@predmet.Ects</td>
+                <td class="btn-group">
+                    <a asp-action="Edit"
+                       asp-route-id="@predmet.SifPredmet"
+                       asp-route-page="@Model.PagingInfo.CurrentPage"
+                       asp-route-sort="@Model.PagingInfo.Sort"
+                       asp-route-ascending="@Model.PagingInfo.Ascending"
+                       class="btn btn-sm btn-warning edit" title="Ažuriraj">Uredi</a>
+
+                    <form asp-action="Delete" method="post"
+                          asp-route-page="@Model.PagingInfo.CurrentPage"
+                          asp-route-sort="@Model.PagingInfo.Sort"
+                          asp-route-ascending="@Model.PagingInfo.Ascending">
+                        <input type="hidden" name="SifPredmet" value="@predmet.SifPredmet" />
+                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši" >Obriši</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    <script src="~/js/pager.js" asp-append-version="true"></script>
+}
+
+
+@* stranicenje na klijentskoj strani *@
+
+@* @section styles{
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+}
+
+@section scripts{
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script>
+     $(document).ready(function(){
+            $('#tablicaDvorane').DataTable();
+         });
+    </script>
+    } *@
