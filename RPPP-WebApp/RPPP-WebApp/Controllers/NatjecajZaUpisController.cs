@@ -107,7 +107,7 @@ namespace RPPP_WebApp.Controllers
             }
 
             var natjecaj = await _context.NatjecajZaUpis
-                .Include(n => n.IdStatusNavigation) // Include the related StatusNatjecaja
+                .Include(n => n.IdStatusNavigation) 
                 .FirstOrDefaultAsync(m => m.IdNatjecanja == id);
 
             if (natjecaj == null)
@@ -140,7 +140,7 @@ namespace RPPP_WebApp.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var natjecaj = await _context.NatjecajZaUpis
-                                        .Include(n => n.IdStatusNavigation) // include related data
+                                        .Include(n => n.IdStatusNavigation) 
                                         .FirstOrDefaultAsync(m => m.IdNatjecanja == id);
 
             if (natjecaj == null)
@@ -251,7 +251,7 @@ namespace RPPP_WebApp.Controllers
                 _context.SaveChanges();
             }
 
-            return RedirectToAction("Index");  // Redirect to the list page or appropriate view after deletion
+            return RedirectToAction("Index");  
         }
 
 
@@ -264,8 +264,8 @@ namespace RPPP_WebApp.Controllers
             var statusPrijaveList = _context.StatusPrijaves
                 .Select(status => new SelectListItem
                 {
-                    Value = status.IdPrijave.ToString(), // Use the IdPrijave for the value
-                    Text = status.StatusPrijave1 // Use the StatusPrijave1 for the display text
+                    Value = status.IdPrijave.ToString(), 
+                    Text = status.StatusPrijave1 
                 })
                 .ToList();
 
@@ -291,7 +291,7 @@ namespace RPPP_WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Retrieve the StatusPrijave entity based on the selected IdPrijave
+                
                 var statusPrijave = _context.StatusPrijaves
                                             .FirstOrDefault(s => s.IdPrijave == idPrijave);
 
@@ -301,10 +301,10 @@ namespace RPPP_WebApp.Controllers
                     return View(prijava);
                 }
 
-                // Associate the StatusPrijave with the Prijava
+                
                 prijava.IdPrijaveNavigation = statusPrijave;
 
-                // Retrieve the NatjecajZaUpi based on the given idNatjecanja
+                
                 var natjecajZaUpi = _context.NatjecajZaUpis
                                             .FirstOrDefault(n => n.IdNatjecanja == idNatjecanja);
 
@@ -314,20 +314,20 @@ namespace RPPP_WebApp.Controllers
                     return View(prijava);
                 }
 
-                // Associate the NatjecajZaUpi with the Prijava via the join table (NatjeceSe)
+                
                 prijava.IdNatjecanjas.Add(natjecajZaUpi);
 
-                // Add the new Prijava entity to the context
+                
                 _context.Prijavas.Add(prijava);
 
-                // Save changes to the database
+                
                 _context.SaveChanges();
 
-                // Redirect to the details page or list view after successful creation
+                
                 return RedirectToAction("Details", new { id = idNatjecanja });
             }
 
-            // If the model state is invalid, reload the form with current data
+            
             var statusPrijaveList = _context.StatusPrijaves.ToList();
             ViewData["StatusPrijaveList"] = new SelectList(statusPrijaveList, "IdPrijave", "StatusPrijave1");
             ViewBag.IdNatjecanja = idNatjecanja;
