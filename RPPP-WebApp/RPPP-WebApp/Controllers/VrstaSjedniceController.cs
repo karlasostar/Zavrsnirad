@@ -13,11 +13,40 @@ namespace RPPP_WebApp.Controllers
             this.context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, int? pageNumber)
         {
-            var vrstaSjedniceList = await context.VrstaSjednices.ToListAsync();
+            ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
+            ViewData["NazivSortParam"] = sortOrder == "Naziv" ? "naziv_desc" : "Naziv";
+            ViewData["CurrentSort"] = sortOrder;
 
-            return View(vrstaSjedniceList);
+            var vrsta = from v in context.VrstaSjednices select v;
+
+            switch (sortOrder)
+            {
+                case "id_desc":
+                    vrsta = vrsta.OrderByDescending(v => v.IdVrsteSjednice);
+                    break;
+                case "Naziv":
+                    vrsta = vrsta.OrderBy(v => v.NazivVrsteSjednice == null ? "" : v.NazivVrsteSjednice.ToUpper());
+                    break;
+                case "naziv_desc":
+                    vrsta = vrsta.OrderByDescending(v => v.NazivVrsteSjednice == null ? "" : v.NazivVrsteSjednice.ToUpper());
+                    break;
+                default:
+                    vrsta = vrsta.OrderBy(v => v.IdVrsteSjednice);
+                    break;
+            }
+
+            int pageSize = 5;
+            int currentPage = pageNumber ?? 1;
+            int totalRecords = await vrsta.CountAsync();
+
+            var pagedData = await vrsta.Skip((currentPage - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            ViewData["CurrentPage"] = currentPage;
+            ViewData["TotalPages"] = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+            return View(pagedData);
         }
 
         [HttpGet]
@@ -30,7 +59,6 @@ namespace RPPP_WebApp.Controllers
         public async Task<IActionResult> Create(VrstaSjednice vrsta)
         {
             var existingVrstaSjednice = await context.VrstaSjednices.FirstOrDefaultAsync(a => a.NazivVrsteSjednice == vrsta.NazivVrsteSjednice);
-
 
             if (existingVrstaSjednice != null)
             {

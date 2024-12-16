@@ -15,12 +15,32 @@
 
 <a asp-action="Create" class="btn btn-primary">Dodaj novu stavku</a>
 
+<div class="d-flex justify-content-end mt-3">
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= (int)ViewData["TotalPages"]; i++)
+            {
+                <li class="page-item @(i == (int)ViewData["CurrentPage"] ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-pageNumber="@i" asp-route-sortOrder="@ViewData["CurrentSort"]">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
 <table class="table">
     <thead>
+    <thead>
         <tr>
-            <th>ID</th>
-            <th>Naziv vrste sjednice</th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParam"]">ID</a>
+            </th>
+
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NazivSortParam"]">Vrsta sjednice</a>
+            </th>
         </tr>
+    </thead>
     </thead>
     <tbody>
         @foreach (var sjednica in Model)

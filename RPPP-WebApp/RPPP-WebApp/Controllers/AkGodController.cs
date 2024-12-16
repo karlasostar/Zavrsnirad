@@ -48,12 +48,6 @@ namespace RPPP_WebApp.Controllers
             ViewData["TotalPages"] = (int)Math.Ceiling(totalRecords / (double)pageSize);
 
             return View(pagedData);
-
-            /*
-            var akGodList = await context.Akgods.ToListAsync();
-
-            return View(akGodList);
-            */
         }
 
         [HttpGet]
