@@ -33,13 +33,6 @@ namespace RPPP_WebApp.Controllers
 						   .AsNoTracking().Where(p => p.IdRaspored == idRaspored);
 
 			int count = query.Count();
-			if (count == 0)
-			{
-				logger.LogInformation("Ne postoji nijedno predavanje");
-				TempData[Constants.Message] = "Ne postoji niti jedno predavanje.";
-				TempData[Constants.ErrorOccurred] = false;
-				return RedirectToAction(nameof(Create), new { idRaspored });
-			}
 
 			var pagingInfo = new PagingInfo
 			{
@@ -63,11 +56,24 @@ namespace RPPP_WebApp.Controllers
 						.Include(r => r.SifPredmetNavigation)
 						.ToList();
 
-			var model = new PredavanjeViewModel
+            var raspored = ctx.Rasporeds
+                      .AsNoTracking()
+                      .Include(r => r.IdAkGodNavigation)
+                      .Include(r => r.IdDvoranaNavigation)
+                      .FirstOrDefault(r => r.IdRaspored == idRaspored);
+
+            if (raspored == null)
+            {
+                TempData["Info"] = "Raspored nije pronađen.";
+                return RedirectToAction("Index", "Raspored");
+            }
+
+            var model = new PredavanjeViewModel
 			{
 				Predavanja = predavanja,
 				PagingInfo = pagingInfo,
-				IdRaspored = idRaspored
+				IdRaspored = idRaspored,
+				Raspored = raspored
 			};
 
 			return View(model);
@@ -97,8 +103,7 @@ namespace RPPP_WebApp.Controllers
 					await ctx.SaveChangesAsync();
 					logger.LogInformation(new EventId(1000), $"Predavanje {predavanje.IdPredavanja} dodan.");
 
-					TempData[Constants.Message] = $"Predavanje {predavanje.IdPredavanja} dodan.";
-					TempData[Constants.ErrorOccurred] = false;
+					TempData["Success"] = $"Predavanje {predavanje.IdPredavanja} dodan.";
 					return RedirectToAction(nameof(Index), new { predavanje.IdRaspored});
 				}
 				catch (Exception exc)
@@ -128,21 +133,18 @@ namespace RPPP_WebApp.Controllers
 					ctx.Remove(predavanje);
 					ctx.SaveChanges();
 					logger.LogInformation($"Predavanje {naziv} uspješno obrisano");
-					TempData[Constants.Message] = $"Predavanje {naziv} uspješno obrisano";
-					TempData[Constants.ErrorOccurred] = false;
+					TempData["Success"] = $"Predavanje {naziv} uspješno obrisano";
 				}
 				catch (Exception exc)
 				{
-					TempData[Constants.Message] = "Pogreška prilikom brisanja predavanja: " + exc.CompleteExceptionMessage();
-					TempData[Constants.ErrorOccurred] = true;
+					TempData["Error"] = "Pogreška prilikom brisanja predavanja: " + exc.CompleteExceptionMessage();
 					logger.LogError("Pogreška prilikom brisanja predavanja: " + exc.CompleteExceptionMessage());
 				}
 			}
 			else
 			{
 				logger.LogWarning("Ne postoji predavanje s oznakom: {0} ", IdPredavanje);
-				TempData[Constants.Message] = "Ne postoji predavanje s oznakom: " + IdPredavanje;
-				TempData[Constants.ErrorOccurred] = true;
+				TempData["Error"] = "Ne postoji predavanje s oznakom: " + IdPredavanje;
 			}
 			return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
 		}
@@ -189,8 +191,7 @@ namespace RPPP_WebApp.Controllers
 					try
 					{
 						await ctx.SaveChangesAsync();
-						TempData[Constants.Message] = "Predavanje ažurirano.";
-						TempData[Constants.ErrorOccurred] = false;
+						TempData["Success"] = "Predavanje ažurirano.";
 						await PrepareDropDownLists();
 						return RedirectToAction(nameof(Index), new { idRaspored = idRaspored, page = page, sort = sort, ascending = ascending });
 					}
@@ -208,8 +209,7 @@ namespace RPPP_WebApp.Controllers
 			}
 			catch (Exception exc)
 			{
-				TempData[Constants.Message] = exc.CompleteExceptionMessage();
-				TempData[Constants.ErrorOccurred] = true;
+				TempData["Error"] = exc.CompleteExceptionMessage();
 				return RedirectToAction(nameof(Edit), id);
 			}
 		}

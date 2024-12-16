@@ -41,8 +41,7 @@ namespace RPPP_WebApp.Controllers
             if (count == 0)
             {
                 logger.LogInformation("Ne postoji nijedan predmet");
-                TempData[Constants.Message] = "Ne postoji niti jedan predmet.";
-                TempData[Constants.ErrorOccurred] = false;
+                TempData["Error"] = "Ne postoji niti jedan predmet.";
                 return RedirectToAction(nameof(Create));
             }
 
@@ -94,8 +93,7 @@ namespace RPPP_WebApp.Controllers
                     ctx.SaveChanges();
                     logger.LogInformation(new EventId(1000), $"Predmet {predmet.Naziv} dodan.");
 
-                    TempData[Constants.Message] = $"Predmet {predmet.Naziv} dodan.";
-                    TempData[Constants.ErrorOccurred] = false;
+                    TempData["Success"] = $"Predmet {predmet.Naziv} dodan.";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception exc)
@@ -124,21 +122,18 @@ namespace RPPP_WebApp.Controllers
                     ctx.Remove(predmet);
                     ctx.SaveChanges();
                     logger.LogInformation($"Predmet {naziv} uspješno obrisana");
-                    TempData[Constants.Message] = $"Predmet {naziv} uspješno obrisana";
-                    TempData[Constants.ErrorOccurred] = false;
+                    TempData["Success"] = $"Predmet {naziv} uspješno obrisana";
                 }
                 catch (Exception exc)
                 {
-                    TempData[Constants.Message] = "Pogreška prilikom brisanja dvorane: " + exc.CompleteExceptionMessage();
-                    TempData[Constants.ErrorOccurred] = true;
+                    TempData["Error"] = "Pogreška prilikom brisanja dvorane: " + exc.CompleteExceptionMessage();
                     logger.LogError("Pogreška prilikom brisanja dvorane: " + exc.CompleteExceptionMessage());
                 }
             }
             else
             {
                 logger.LogWarning("Ne postoji predmet s oznakom: {0} ", SifPredmet);
-                TempData[Constants.Message] = "Ne postoji predmet s oznakom: " + SifPredmet;
-                TempData[Constants.ErrorOccurred] = true;
+                TempData["Error"] = "Ne postoji predmet s oznakom: " + SifPredmet;
             }
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
         }
@@ -183,8 +178,7 @@ namespace RPPP_WebApp.Controllers
                     try
                     {
                         await ctx.SaveChangesAsync();
-                        TempData[Constants.Message] = "Predmet ažurirana.";
-                        TempData[Constants.ErrorOccurred] = false;
+                        TempData["Success"] = "Predmet ažurirana.";
                         return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
                     }
                     catch (Exception exc)
@@ -201,8 +195,7 @@ namespace RPPP_WebApp.Controllers
             }
             catch (Exception exc)
             {
-                TempData[Constants.Message] = exc.CompleteExceptionMessage();
-                TempData[Constants.ErrorOccurred] = true;
+                TempData["Error"] = "Nije moguće obrisati ovu stavku";
                 return RedirectToAction(nameof(Edit), id);
             }
         }

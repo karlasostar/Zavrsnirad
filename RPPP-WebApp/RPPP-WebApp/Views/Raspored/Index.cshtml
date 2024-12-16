@@ -4,6 +4,25 @@
     ViewBag.Title = "Rasporedi";
 }
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+@if (TempData["Info"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Info"]
+    </div>
+}
+
 <h2>Popis rasporeda</h2>
 
 <a asp-action="Create" class="btn btn-primary">Unos novog rasporeda</a>

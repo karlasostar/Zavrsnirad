@@ -6,6 +6,26 @@
 
 <h2>Popis dvorana</h2>
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+@if (TempData["Info"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Info"]
+    </div>
+}
+   
+
 <a asp-action="Create" class="btn btn-primary">Unos nove dvorane</a>
 
 <pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu"
@@ -83,9 +103,18 @@
 </div>
 
 @section Scripts {
-
-
     <script src="~/js/pager.js" asp-append-version="true"></script>
+
+    <script src="~/lib/htmx/htmx.min.js" asp-append-version="true"></script>
+
+    <script>
+        document.body.addEventListener("showMessage", function (evt) {
+            toastr[evt.detail.messageType](evt.detail.message);
+        })
+        document.body.addEventListener("htmx:responseError", function (evt) {
+            toastr["error"](evt.detail.error);
+        })
+    </script>
 }
 
 

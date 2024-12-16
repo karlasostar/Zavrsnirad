@@ -41,8 +41,7 @@ namespace RPPP_WebApp.Controllers
             if (count == 0)
             {
                 logger.LogInformation("Ne postoji nijedna dvorana");
-                TempData[Constants.Message] = "Ne postoji niti jedna dvorana.";
-                TempData[Constants.ErrorOccurred] = false;
+                TempData["Info"] = "Ne postoji niti jedna dvorana.";
                 return RedirectToAction(nameof(Create));
             }
 
@@ -94,8 +93,7 @@ namespace RPPP_WebApp.Controllers
                     ctx.SaveChanges();
                     logger.LogInformation(new EventId(1000), $"Dvorana {dvorana.OznDvorana} dodana.");
 
-                    TempData[Constants.Message] = $"Dvorana {dvorana.OznDvorana} dodana.";
-                    TempData[Constants.ErrorOccurred] = false;
+                    TempData["Success"] = $"Dvorana {dvorana.OznDvorana} dodana.";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception exc)
@@ -124,21 +122,18 @@ namespace RPPP_WebApp.Controllers
                     ctx.Remove(dvorana);
                     ctx.SaveChanges();
                     logger.LogInformation($"Dvorana {naziv} uspješno obrisana");
-                    TempData[Constants.Message] = $"Dvorana {naziv} uspješno obrisana";
-                    TempData[Constants.ErrorOccurred] = false;
+                    TempData["Success"] = $"Dvorana {naziv} uspješno obrisana";
                 }
                 catch (Exception exc)
                 {
-                    TempData[Constants.Message] = "Pogreška prilikom brisanja dvorane: " + exc.CompleteExceptionMessage();
-                    TempData[Constants.ErrorOccurred] = true;
+                    TempData["Error"] = "Nije moguće obrisati ovu stavku";
                     logger.LogError("Pogreška prilikom brisanja dvorane: " + exc.CompleteExceptionMessage());
                 }
             }
             else
             {
                 logger.LogWarning("Ne postoji dvorana s oznakom: {0} ", IdDvorana);
-                TempData[Constants.Message] = "Ne postoji dvorana s oznakom: " + IdDvorana;
-                TempData[Constants.ErrorOccurred] = true;
+                TempData["Error"] = "Ne postoji dvorana s oznakom: " + IdDvorana;
             }
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
         }
@@ -183,8 +178,7 @@ namespace RPPP_WebApp.Controllers
                     try
                     {
                         await ctx.SaveChangesAsync();
-                        TempData[Constants.Message] = "Dvorana ažurirana.";
-                        TempData[Constants.ErrorOccurred] = false;
+                        TempData["Success"] = "Dvorana ažurirana.";
                         return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
                     }
                     catch (Exception exc)
@@ -201,8 +195,7 @@ namespace RPPP_WebApp.Controllers
             }
             catch (Exception exc)
             {
-                TempData[Constants.Message] = exc.CompleteExceptionMessage();
-                TempData[Constants.ErrorOccurred] = true;
+                TempData["Error"] = exc.CompleteExceptionMessage();
                 return RedirectToAction(nameof(Edit), id);
             }
         }

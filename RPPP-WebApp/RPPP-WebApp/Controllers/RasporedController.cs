@@ -35,8 +35,7 @@ namespace RPPP_WebApp.Controllers
 			if (count == 0)
 			{
 				logger.LogInformation("Ne postoji nijedan raspored");
-				TempData[Constants.Message] = "Ne postoji niti jedan raspored.";
-				TempData[Constants.ErrorOccurred] = false;
+				TempData["Info"] = "Ne postoji niti jedan raspored.";
 				return RedirectToAction(nameof(Create));
 			}
 
@@ -91,8 +90,7 @@ namespace RPPP_WebApp.Controllers
 					await ctx.SaveChangesAsync();
 					logger.LogInformation(new EventId(1000), $"Raspored {raspored.IdRaspored} dodan.");
 
-					TempData[Constants.Message] = $"Raspored {raspored.IdRaspored} dodan.";
-					TempData[Constants.ErrorOccurred] = false;
+					TempData["Success"] = $"Raspored {raspored.IdRaspored} dodan.";
 					return RedirectToAction(nameof(Index));
 				}
 				catch (Exception exc)
@@ -122,21 +120,18 @@ namespace RPPP_WebApp.Controllers
 					ctx.Remove(raspored);
 					ctx.SaveChanges();
 					logger.LogInformation($"Raspored {naziv} uspješno obrisan");
-					TempData[Constants.Message] = $"Raspored {naziv} uspješno obrisan";
-					TempData[Constants.ErrorOccurred] = false;
+					TempData["Success"] = $"Raspored {naziv} uspješno obrisan";
 				}
 				catch (Exception exc)
 				{
-					TempData[Constants.Message] = "Pogreška prilikom brisanja rasporeda: " + exc.CompleteExceptionMessage();
-					TempData[Constants.ErrorOccurred] = true;
+					TempData["Error"] = "Pogreška prilikom brisanja rasporeda: " + exc.CompleteExceptionMessage();
 					logger.LogError("Pogreška prilikom brisanja rasporeda: " + exc.CompleteExceptionMessage());
 				}
 			}
 			else
 			{
 				logger.LogWarning("Ne postoji raspored s oznakom: {0} ", IdRaspored);
-				TempData[Constants.Message] = "Ne postoji raspored s oznakom: " + IdRaspored;
-				TempData[Constants.ErrorOccurred] = true;
+				TempData["Error"] = "Ne postoji raspored s oznakom: " + IdRaspored;
 			}
 			return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
 		}
@@ -182,8 +177,7 @@ namespace RPPP_WebApp.Controllers
 					try
 					{
 						await ctx.SaveChangesAsync();
-						TempData[Constants.Message] = "Raspored ažuriran.";
-						TempData[Constants.ErrorOccurred] = false;
+						TempData["Success"] = "Raspored ažuriran.";
 						return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
 					}
 					catch (Exception exc)
@@ -201,8 +195,7 @@ namespace RPPP_WebApp.Controllers
 			}
 			catch (Exception exc)
 			{
-				TempData[Constants.Message] = exc.CompleteExceptionMessage();
-				TempData[Constants.ErrorOccurred] = true;
+				TempData["Success"] = exc.CompleteExceptionMessage();
 				return RedirectToAction(nameof(Edit), id);
 			}
 		}

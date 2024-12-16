@@ -4,7 +4,51 @@
     ViewBag.Title = "Predavanja";
 }
 
-<h2>Popis predavanja</h2>
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+@if (TempData["Info"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Info"]
+    </div>
+}
+
+<h2>Odabrani raspored:</h2>
+
+<div class="card-body">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <th>Raspored ID:</th>
+                <td>@Model.Raspored.IdRaspored</td>
+            </tr>
+            <tr>
+                <th>Opis:</th>
+                <td>@Model.Raspored.Opis</td>
+            </tr>
+            <tr>
+                <th>Akademska godina:</th>
+                <td>@Model.Raspored.IdAkGodNavigation.Razdoblje</td>
+            </tr>
+            <tr>
+                <th>Dvorana:</th>
+                <td>@Model.Raspored.IdDvoranaNavigation.OznDvorana</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h2>Predavanja iz odabranog rasporeda:</h2>
 
 <a asp-action="Create" asp-route-idRaspored="@Model.IdRaspored" class="btn btn-primary">Unos novog predavanja</a>
 

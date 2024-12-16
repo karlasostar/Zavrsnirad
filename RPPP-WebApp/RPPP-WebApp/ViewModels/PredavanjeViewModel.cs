@@ -9,5 +9,7 @@ namespace RPPP_WebApp.ViewModels
         public PagingInfo PagingInfo { get; set; }
 
         public int IdRaspored { get; set; }
+
+        public Raspored Raspored { get; set; }
     }
 }
