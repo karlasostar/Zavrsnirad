@@ -10,7 +10,8 @@ public partial class StatusNatjecaja
 {
     public int IdStatus { get; set; }
 
-    
+    [Required(ErrorMessage = "Naziv statusa natjecanja je obavezan.")]
+    [StringLength(250, ErrorMessage = "Naziv statusa natjecanja ne može imati više od 250 znakova.")]
     public string StatusNatjecanja { get; set; }
 
     public virtual ICollection<NatjecajZaUpi> NatjecajZaUpis { get; set; } = new List<NatjecajZaUpi>();

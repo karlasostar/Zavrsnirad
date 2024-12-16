@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RPPP_WebApp.Models;
 
@@ -9,6 +10,8 @@ public partial class StatusPrijave
 {
     public int IdPrijave { get; set; }
 
+    [Required(ErrorMessage = "Naziv statusa natjecanja je obavezan.")]
+    [StringLength(40, ErrorMessage = "Naziv statusa natjecanja ne može imati više od 40 znakova.")]
     public string StatusPrijave1 { get; set; }
 
     public virtual ICollection<Prijava> Prijavas { get; set; } = new List<Prijava>();
