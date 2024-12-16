@@ -57,7 +57,7 @@ public static class StartupExtensions
         app.UseStaticFiles()
            .UseRouting();
 
-        app.MapDefaultControllerRoute();
+        
 
         app.MapControllerRoute(
             name: "dvorana",
