@@ -1,0 +1,43 @@
+﻿@model RPPP_WebApp.Models.NatjecajZaUpi
+
+<h2>Uređivanje natječaja za upis</h2>
+
+<form asp-action="Edit" method="post" id="natjecajZaUpiForm">
+    <input type="hidden" asp-for="IdNatjecanja" />
+    
+    <div class="form-group">
+        <label for="DatumOtvaranja">Datum Otvaranja</label>
+        <input type="date" asp-for="DatumOtvaranja" class="form-control" />
+        <span asp-validation-for="DatumOtvaranja" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="BrojMjesta">Broj Mjesta</label>
+        <input asp-for="BrojMjesta" class="form-control" type="number" />
+        <span asp-validation-for="BrojMjesta" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="IdStatus">Status natječaja</label>
+        <select asp-for="IdStatus" class="form-control" asp-items="@(ViewData["StatusList"] as SelectList)">
+        </select>
+        <span asp-validation-for="IdStatus" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spremi</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById("natjecajZaUpiForm").addEventListener("submit", function (e) {
+            const datumOtvaranja = document.getElementById("DatumOtvaranja").value.trim();
+            const brojMjesta = document.getElementById("BrojMjesta").value.trim();
+
+            if (!datumOtvaranja || !brojMjesta) {
+                e.preventDefault();
+                alert("Datum otvaranja i broj mjesta ne smiju biti prazni.");
+            }
+        });
+    </script>
+}

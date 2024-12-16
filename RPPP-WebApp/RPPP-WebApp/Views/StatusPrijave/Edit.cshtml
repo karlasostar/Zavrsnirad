@@ -1,0 +1,14 @@
+﻿@model RPPP_WebApp.Models.StatusPrijave
+
+<h2>Uređivanje statusa prijave</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="IdPrijave" />
+    <div class="form-group">
+        <label for="StatusPrijave1">Naziv</label>
+        <input asp-for="StatusPrijave1" class="form-control" />
+        <span asp-validation-for="StatusPrijave1" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Spremi</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>

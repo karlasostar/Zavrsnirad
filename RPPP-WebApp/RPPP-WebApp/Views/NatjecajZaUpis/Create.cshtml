@@ -1,0 +1,39 @@
+﻿@model RPPP_WebApp.Models.NatjecajZaUpi
+
+<h2>Stvaranje novog natječaja za upis</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="DatumOtvaranja">Datum Otvaranja</label>
+        <input asp-for="DatumOtvaranja" class="form-control" type="date" />
+        <span asp-validation-for="DatumOtvaranja" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="BrojMjesta">Broj Mjesta</label>
+        <input asp-for="BrojMjesta" class="form-control" type="number" />
+        <span asp-validation-for="BrojMjesta" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="IdStatus">Status Natjecaja</label>
+
+        @if (ViewData["StatusList"] == null || !((List<RPPP_WebApp.Models.StatusNatjecaja>)ViewData["StatusList"]).Any())
+        {
+            <div class="alert alert-warning">No statuses available. Please add statuses to the database.</div>
+        }
+        else
+        {
+            var statusList = ViewData["StatusList"] as List<RPPP_WebApp.Models.StatusNatjecaja>;
+
+            <select asp-for="IdStatus" class="form-control" asp-items="@(new SelectList(statusList, "IdStatus", "StatusNatjecanja"))">
+                <option value="">Odaberite status</option>
+            </select>
+        }
+
+        <span asp-validation-for="IdStatus" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Stvori</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>

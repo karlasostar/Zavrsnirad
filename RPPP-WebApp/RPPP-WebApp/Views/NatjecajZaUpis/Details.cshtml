@@ -1,0 +1,65 @@
+﻿@model RPPP_WebApp.Models.NatjecajZaUpi
+
+<h2>Detalji natječaja za upis</h2>
+
+<div>
+    <h4>Informacije o natječaju</h4>
+    <dl class="row">
+        <dt class="col-sm-2">ID Natjecanja</dt>
+        <dd class="col-sm-10">@Model.IdNatjecanja</dd>
+
+        <dt class="col-sm-2">Datum Otvaranja</dt>
+        <dd class="col-sm-10">@Model.DatumOtvaranja</dd>
+
+        <dt class="col-sm-2">Broj Mjesta</dt>
+        <dd class="col-sm-10">@Model.BrojMjesta</dd>
+    </dl>
+</div>
+
+<h4>Prijave povezane s natječajem</h4>
+@if (Model.IdUpisas != null && Model.IdUpisas.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Status Prijave</th>
+                <th>Status Upisa</th>
+                <th>Datum Upisa</th>
+                <th>Rok Trajanja</th>
+                <th>Broj Upisa</th>
+                <th>Akcije</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var prijava in Model.IdUpisas)
+            {
+                <tr>
+                    <td>@(prijava.IdPrijaveNavigation?.StatusPrijave1 ?? "N/A")</td>
+                    <td>@prijava.StatusUpisa</td>
+                    <td>@prijava.DatumUpisa</td>
+                    <td>@prijava.RokTrajanja</td>
+                    <td>@prijava.BrUpisa</td>
+                    <td>
+                    <a asp-action="DeletePrijava" asp-route-id="@prijava.IdPrijave"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Jeste li sigurni da želite izbrisati ovu prijavu?');">
+                        Izbriši
+                    </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Nema prijava povezanih s ovim natječajem.</p>
+}
+
+<a asp-action="Index"  asp-route-pageNumber="@ViewData["CurrentPage"]" 
+   asp-route-sortOrder="@ViewData["CurrentSort"]"  class="btn btn-secondary">Natrag</a>
+
+<a asp-action="CreatePrijava" asp-route-id="@Model.IdNatjecanja" class="btn btn-primary">
+    Dodaj novu prijavu
+</a>
+
