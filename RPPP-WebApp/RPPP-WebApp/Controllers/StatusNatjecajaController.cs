@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RPPP_WebApp.Models;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Security.Cryptography;
 
 
 namespace RPPP_WebApp.Controllers
@@ -61,6 +62,15 @@ namespace RPPP_WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(StatusNatjecaja statusNatjecaja)
         {
+
+            var existingStatusNatjecaja = await _context.StatusNatjecajas.FirstOrDefaultAsync(a => a.StatusNatjecanja == statusNatjecaja.StatusNatjecanja);
+
+            if (existingStatusNatjecaja != null)
+            {
+                ModelState.AddModelError("StatusNatjecanja", "Status natječaja sa ovim imenom vec postoji!");
+                return View(statusNatjecaja);
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(statusNatjecaja);
@@ -73,7 +83,10 @@ namespace RPPP_WebApp.Controllers
         }
 
         public async Task<IActionResult> Edit(int? id)
+
         {
+
+
             if (id == null) return NotFound();
 
             var statusNatjecaja = await _context.StatusNatjecajas.FindAsync(id);
@@ -87,6 +100,14 @@ namespace RPPP_WebApp.Controllers
         public async Task<IActionResult> Edit(int id, StatusNatjecaja statusNatjecaja)
         {
             if (id != statusNatjecaja.IdStatus) return NotFound();
+
+            var existingStatusNatjecaja = await _context.StatusNatjecajas.FirstOrDefaultAsync(a => a.StatusNatjecanja == statusNatjecaja.StatusNatjecanja);
+
+            if (existingStatusNatjecaja != null)
+            {
+                ModelState.AddModelError("StatusNatjecanja", "Status natječaja sa ovim imenom vec postoji!");
+                return View(statusNatjecaja);
+            }
 
             if (ModelState.IsValid)
             {

@@ -19,20 +19,21 @@ namespace RPPP_WebApp.Controllers
 
         public async Task<IActionResult> Index(string sortOrder, int? pageNumber)
         {
-            // ViewData for sorting
+            
             ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
             ViewData["DateSortParam"] = sortOrder == "date" ? "date_desc" : "date";
+            ViewData["CurrentSort"] = sortOrder;
 
-            // Define query to fetch data
+            
             var query = from natjecaj in _context.NatjecajZaUpis
-                            // Join with the IdUpisas navigation property to get related Prijava
-                        let brojPrijava = natjecaj.IdUpisas.Count()  // Counting the related Prijava records
+                            
+                        let brojPrijava = natjecaj.IdUpisas.Count()  
                         select new UpisViewModel
                         {
                             IdNatjecanja = natjecaj.IdNatjecanja,
                             BrojMjesta = natjecaj.BrojMjesta,
                             DatumOtvaranja = natjecaj.DatumOtvaranja,
-                            BrojPrijava = brojPrijava  // The count of Prijava
+                            BrojPrijava = brojPrijava  
                         };
 
             // Sorting
@@ -67,10 +68,10 @@ namespace RPPP_WebApp.Controllers
         }
         public IActionResult Create()
         {
-            // Fetch all statuses from the StatusNatjecaja table
+            
             var statusList = _context.StatusNatjecajas.ToList();
 
-            // Pass the list to the view via ViewData
+            
             ViewData["StatusList"] = statusList;
 
             return View();
@@ -81,6 +82,10 @@ namespace RPPP_WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DatumOtvaranja,BrojMjesta,IdStatus")] NatjecajZaUpi natjecajZaUpi)
         {
+
+
+            
+
             if (ModelState.IsValid)
             {
                 _context.Add(natjecajZaUpi);
@@ -89,7 +94,7 @@ namespace RPPP_WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // If model is not valid, return to the Create view with the current status list
+           
             ViewBag.StatusList = _context.StatusNatjecajas.ToList();
             return View(natjecajZaUpi);
         }
@@ -143,7 +148,7 @@ namespace RPPP_WebApp.Controllers
                 return NotFound();
             }
 
-            // Ensure you load the list of statuses into ViewData
+            
             var statusList = await _context.StatusNatjecajas.ToListAsync();
             ViewData["StatusList"] = new SelectList(statusList, "IdStatus", "StatusNatjecanja");
 
@@ -184,7 +189,7 @@ namespace RPPP_WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // If something goes wrong, re-load the statuses and return the view again with the current model
+            
             ViewData["StatusList"] = new SelectList(await _context.StatusNatjecajas.ToListAsync(), "IdStatus", "StatusNatjecanja");
             return View(natjecajZaUpi);
         }
@@ -218,7 +223,7 @@ namespace RPPP_WebApp.Controllers
         }
 
 
-        // Display confirmation page for deletion of Prijava
+        
         public IActionResult DeletePrijava(int id)
         {
             var prijava = _context.Prijavas
@@ -229,10 +234,10 @@ namespace RPPP_WebApp.Controllers
                 return NotFound();  // If not found, return a 404 error
             }
 
-            return View(prijava); // Return the view with the Prijava details for confirmation
+            return View(prijava); 
         }
 
-        // Handle the actual deletion of the Prijava
+        
         [HttpPost, ActionName("DeletePrijava")]
         [ValidateAntiForgeryToken]
         public IActionResult DeletePrijavaConfirmed(int id)
@@ -241,7 +246,7 @@ namespace RPPP_WebApp.Controllers
 
             if (prijava != null)
             {
-                // Remove the Prijava from the context and save changes
+                
                 _context.Prijavas.Remove(prijava);
                 _context.SaveChanges();
             }
@@ -255,7 +260,7 @@ namespace RPPP_WebApp.Controllers
 
         public IActionResult CreatePrijava(int idNatjecanja)
         {
-            // Fetch the StatusPrijave from your database
+            
             var statusPrijaveList = _context.StatusPrijaves
                 .Select(status => new SelectListItem
                 {
@@ -264,10 +269,10 @@ namespace RPPP_WebApp.Controllers
                 })
                 .ToList();
 
-            // Add the status list to ViewData
+            
             ViewData["StatusPrijaveList"] = statusPrijaveList;
 
-            // Optional: Add other data to ViewData or ViewBag if needed
+            
             ViewBag.IdNatjecanja = idNatjecanja;
 
             return View();

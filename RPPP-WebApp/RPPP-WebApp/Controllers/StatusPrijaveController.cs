@@ -60,6 +60,15 @@ namespace RPPP_WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(StatusPrijave statusPrijave)
         {
+
+            var existingStatusPrijave = await _context.StatusPrijaves.FirstOrDefaultAsync(a => a.StatusPrijave1 == statusPrijave.StatusPrijave1);
+
+            if (existingStatusPrijave != null)
+            {
+                ModelState.AddModelError("StatusPrijave1", "Status prijave sa ovim imenom vec postoji!");
+                return View(statusPrijave);
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(statusPrijave);
@@ -73,8 +82,10 @@ namespace RPPP_WebApp.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
+            
 
             var statusPrijave = await _context.StatusPrijaves.FindAsync(id);
+
             if (statusPrijave == null) return NotFound();
 
             return View(statusPrijave);
@@ -85,6 +96,15 @@ namespace RPPP_WebApp.Controllers
         public async Task<IActionResult> Edit(int id, StatusPrijave statusPrijave)
         {
             if (id != statusPrijave.IdPrijave) return NotFound();
+
+
+            var existingStatusPrijave = await _context.StatusPrijaves.FirstOrDefaultAsync(a => a.StatusPrijave1 == statusPrijave.StatusPrijave1);
+
+            if (existingStatusPrijave != null)
+            {
+                ModelState.AddModelError("StatusPrijave1", "Status prijave sa ovim imenom vec postoji!");
+                return View(statusPrijave);
+            }
 
             if (ModelState.IsValid)
             {
