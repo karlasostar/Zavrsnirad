@@ -7,41 +7,47 @@
 <h2>Dodaj novu prijavu</h2>
 
 <form asp-action="CreatePrijava" method="post">
-    <!-- Hidden field for associating NatjecajZaUpis -->
+    <!-- Hidden field for associating NatjecajZaUpi -->
     <input type="hidden" name="idNatjecanja" value="@ViewBag.IdNatjecanja" />
 
     <div class="form-group">
-        <label for="IdPrijave">Status prijave</label>
-        <select asp-for="IdPrijave" asp-items="@(ViewData["StatusPrijaveList"] as SelectList)" class="form-control">
+        <label for="IdPrijave">Status Prijave</label>
+        <select asp-for="IdPrijave" asp-items="@(ViewData["StatusPrijaveList"] as IEnumerable<SelectListItem>)" class="form-control">
             <option value="">Odaberite status prijave</option>
         </select>
         <span asp-validation-for="IdPrijave" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label>Broj Upisa</label>
+        <label for="StatusUpisa">Status upisa</label>
+        <input asp-for="StatusUpisa" class="form-control" />
+        <span asp-validation-for="StatusUpisa" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="BrUpisa">Broj Upisa</label>
         <input asp-for="BrUpisa" class="form-control" />
         <span asp-validation-for="BrUpisa" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label>Rok Trajanja</label>
+        <label for="RokTrajanja">Rok Trajanja</label>
         <input asp-for="RokTrajanja" type="date" class="form-control" />
         <span asp-validation-for="RokTrajanja" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label>Datum Upisa</label>
+        <label for="DatumUpisa">Datum Upisa</label>
         <input asp-for="DatumUpisa" type="date" class="form-control" />
         <span asp-validation-for="DatumUpisa" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-success">Spremi</button>
-    <a asp-action="Details" asp-route-id="@ViewBag.IdNatjecanja" class="btn btn-secondary">Odustani</a>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
 </form>
 
 @section Scripts {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.4/jquery.validate.min.js"></script>
-    <script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.4/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
 }

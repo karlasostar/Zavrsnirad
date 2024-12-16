@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RPPP_WebApp.Models;
 
@@ -9,6 +10,7 @@ public partial class StatusNatjecaja
 {
     public int IdStatus { get; set; }
 
+    
     public string StatusNatjecanja { get; set; }
 
     public virtual ICollection<NatjecajZaUpi> NatjecajZaUpis { get; set; } = new List<NatjecajZaUpi>();

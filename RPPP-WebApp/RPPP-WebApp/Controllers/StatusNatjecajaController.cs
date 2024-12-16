@@ -19,6 +19,7 @@ namespace RPPP_WebApp.Controllers
         {
             ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
             ViewData["NazivSortParam"] = sortOrder == "Naziv" ? "naziv_desc" : "Naziv";
+            ViewData["CurrentSort"] = sortOrder;
 
             var statusNatjecaja = from v in _context.StatusNatjecajas select v;
 
@@ -28,11 +29,11 @@ namespace RPPP_WebApp.Controllers
                     statusNatjecaja = statusNatjecaja.OrderByDescending(v => v.IdStatus);
                     break;
                 case "Naziv":
-                    statusNatjecaja = statusNatjecaja.OrderBy(v => v.StatusNatjecanja.Trim());
+                    statusNatjecaja = statusNatjecaja.OrderBy(v => v.StatusNatjecanja);
 
                     break;
                 case "naziv_desc":
-                    statusNatjecaja = statusNatjecaja.OrderByDescending(v => v.StatusNatjecanja.Trim());
+                    statusNatjecaja = statusNatjecaja.OrderByDescending(v => v.StatusNatjecanja);
                     break;
                 default:
                     statusNatjecaja = statusNatjecaja.OrderBy(v => v.IdStatus);
