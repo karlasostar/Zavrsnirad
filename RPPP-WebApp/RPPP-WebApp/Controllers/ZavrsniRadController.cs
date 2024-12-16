@@ -148,7 +148,7 @@ namespace RPPP_WebApp.Controllers
 
             ViewBag.Studenti = new SelectList(
                 await _context.Students
-                    .OrderBy(s => s.Jmbag)
+                    .OrderBy(s => s.Oib)
                     .Select(z => new { z.Oib })
                     .ToListAsync(),
                 "Oib", "Oib"

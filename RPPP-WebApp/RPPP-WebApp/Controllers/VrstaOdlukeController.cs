@@ -77,6 +77,7 @@ namespace RPPP_WebApp.Controllers
                 {
                     _context.Add(vrsteOdluke);
                     await _context.SaveChangesAsync();
+                    TempData["Success"] = $"Podrucje {vrsteOdluke.VrstaOdluke1} dodan.";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateException)
@@ -170,8 +171,17 @@ namespace RPPP_WebApp.Controllers
             var vrstaOdluke = await _context.VrstaOdlukes.FindAsync(id);
             if (vrstaOdluke != null)
             {
-                _context.VrstaOdlukes.Remove(vrstaOdluke);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.VrstaOdlukes.Remove(vrstaOdluke);
+                    await _context.SaveChangesAsync();
+                    TempData["Success"] = "Uspješno ste obrisali tematsko područje.";
+                }
+                catch (Exception ex)
+                {
+                    TempData["Error"] = "Nije moguće obrisati ovu stavku jer je to tematsko područj postojećeg završnog rada";
+                }
+
             }
             return RedirectToAction(nameof(Index));
         }

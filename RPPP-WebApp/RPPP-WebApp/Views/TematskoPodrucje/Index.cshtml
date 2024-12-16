@@ -3,6 +3,19 @@
 
 
 <h2>Tematska Područja</h2>
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
 
 <a asp-action="Create" class="btn btn-primary">Dodaj novu stavku</a>
 

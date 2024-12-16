@@ -68,7 +68,7 @@
             </th>
             <th>
                 <a asp-route-sort="11" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 11 ? !Model.PagingInfo.Ascending : true)">
-                    Oib
+                    Oib/Jmbag
                 </a>
             </th>
             <th>Zadnja odluka</th>
@@ -89,7 +89,7 @@
                 <td>@item.DatumObrane?.ToString("dd.MM.yyyy")</td>
                 <td>@item.IdTematskogPodrucjaNavigation.TematskoPodrucje1</td>
                 <td>@item.IdVijecaNavigation?.IdVijeca</td>
-                <td>@item.Student?.Oib</td>
+                <td>@item.Student?.Oib / @item.Student?.Jmbag</td>
                 <td>@item.ZadnjaOdluka</td>
                 <td>
                     <a asp-action="Detalji" asp-route-id="@item.IdRad" class="btn btn-info">Detalji</a>
