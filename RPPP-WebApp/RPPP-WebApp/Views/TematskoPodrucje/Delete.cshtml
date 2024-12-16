@@ -1,0 +1,18 @@
+﻿@model RPPP_WebApp.Models.TematskoPodrucje
+
+<h2>Brisanje tematskog područja</h2>
+
+<h4>Jeste li sigurni da želite obrisati ovu stavku?</h4>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Naziv</dt>
+        <dd class="col-sm-10">@Model.TematskoPodrucje1</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="IdTematskogPodrucja" />
+        <button type="submit" class="btn btn-danger">Obrisi</button>
+        <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+    </form>
+</div>

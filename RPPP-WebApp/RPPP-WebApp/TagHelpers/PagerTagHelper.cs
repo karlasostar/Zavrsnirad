@@ -9,19 +9,6 @@ using RPPP_WebApp.ViewModels;
 
 namespace RPPP_WebApp.TagHelpers
 {
-	/// <summary>
-	/// Tag helper za kreiranje vlastitih poveznica na stranice u rezultatu nekog upravljača
-	/// Upotrebljava se kao atribut HTML oznake *pager* koju mijenja u div
-	/// <example>
-	/// Primjer upotrebe
-	/// ```
-	/// <pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu" class="float-end">
-	/// </pager>
-	/// ```
-	/// U datoteku *_ViewImports.cshtml* potrebno dodati `@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers`  
-	/// te u pogled uključiti vlastitu javascript datoteku *gotopage.js*
-	/// </example>
-	/// </summary>  
 	[HtmlTargetElement(Attributes = "page-info")]
 	public class PagerTagHelper : TagHelper
 	{

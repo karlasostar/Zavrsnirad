@@ -1,0 +1,146 @@
+﻿@using RPPP_WebApp.ViewModels
+@model ZavrsniRadViewModel2
+
+@{
+    ViewData["Title"] = "Završni Radovi";
+}
+
+<h1>Završni Radovi</h1>
+
+<a asp-action="Create" class="btn btn-primary">Stvori novi Završni Rad</a>
+
+<pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu"
+       class="float-end">
+</pager>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
+                    Id
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
+                    Naslov
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
+                    Metodologija
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="4" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 4 ? !Model.PagingInfo.Ascending : true)">
+                    Ocjena
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="5" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 5 ? !Model.PagingInfo.Ascending : true)">
+                    Tema
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="6" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 6 ? !Model.PagingInfo.Ascending : true)">
+                    Opis
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="7" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 7 ? !Model.PagingInfo.Ascending : true)">
+                    Sazetak
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="8" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 8 ? !Model.PagingInfo.Ascending : true)">
+                    Datum obrane
+                </a>
+            </th>
+             <th>
+                <a asp-route-sort="9" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 9 ? !Model.PagingInfo.Ascending : true)">
+                    Tematsko podrucje
+                </a>
+            </th>
+            <th>
+                 <a asp-route-sort="10" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 10 ? !Model.PagingInfo.Ascending : true)">
+                        Id vijeca
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="11" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 11 ? !Model.PagingInfo.Ascending : true)">
+                    Oib/Jmbag
+                </a>
+            </th>
+            <th>Zadnja odluka</th>
+            <th>Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ZavrsniRad)
+        {
+            <tr>
+                <td>@item.IdRad</td>
+                <td>@item.Naslov</td>
+                <td>@item.Metodologija</td>
+                <td>@item.Ocjena</td>
+                <td>@item.Tema</td>
+                <td>@item.Opis</td>
+                <td>@item.Sazetak</td>
+                <td>@item.DatumObrane?.ToString("dd.MM.yyyy")</td>
+                <td>@item.IdTematskogPodrucjaNavigation.TematskoPodrucje1</td>
+                <td>@item.IdVijecaNavigation?.IdVijeca</td>
+                <td>@item.Student?.Oib / @item.Student?.Jmbag</td>
+                <td>@item.ZadnjaOdluka</td>
+                <td>
+                    <a asp-action="Detalji" asp-route-id="@item.IdRad" class="btn btn-info">Detalji</a>
+                    <a asp-action="Edit" asp-route-id="@item.IdRad" class="btn btn-primary">Uredi</a>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                            data-id="@item.IdRad" data-name="@item.Naslov">
+                        Izbriši
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Jeste li sigurni da želite izbrisati stavku <strong id="deleteItemName"></strong>?
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="post">
+                    <input type="hidden" id="deleteItemId" name="id" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+                    <button type="submit" class="btn btn-danger">Izbriši</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var itemId = button.getAttribute('data-id');
+            var itemName = button.getAttribute('data-name');
+
+            document.getElementById('deleteItemId').value = itemId;
+            document.getElementById('deleteItemName').textContent = itemName;
+
+            var deleteForm = document.getElementById('deleteForm');
+            deleteForm.action = '/ZavrsniRad/DeleteConfirmed/' + itemId;
+        });
+    </script>
+
+    <script src="~/js/pager.js" asp-append-version="true"></script>
+}
+

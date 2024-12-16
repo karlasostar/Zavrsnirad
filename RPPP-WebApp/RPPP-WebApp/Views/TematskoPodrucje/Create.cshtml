@@ -1,0 +1,14 @@
+﻿@model RPPP_WebApp.Models.TematskoPodrucje
+
+<h2>Stvorite novo tematsko područje</h2>
+
+<form asp-action="Create" method="post" id="tematskoPodrucjeForm">
+    <div class="form-group">
+        <label for="TematskoPodrucje1">Naziv</label>
+        <input asp-for="TematskoPodrucje1" class="form-control" />
+        <span asp-validation-for="TematskoPodrucje1" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Stvori</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>
+

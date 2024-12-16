@@ -1,0 +1,34 @@
+﻿@model RPPP_WebApp.Models.OdlukeFv
+
+
+
+<h1>Uredi Odluku</h1>
+
+<form asp-action="EditOdluka" method="post">
+    <input type="hidden" asp-for="IdOdluke" />
+    <input type="hidden" asp-for="IdRad" />
+
+
+    <div class="form-group">
+        <label asp-for="DatumOdluke" class="control-label"></label>
+        <input asp-for="DatumOdluke" class="form-control" type="date" />
+        <span asp-validation-for="DatumOdluke" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="OpisOdluke" class="control-label"></label>
+        <textarea asp-for="OpisOdluke" class="form-control"></textarea>
+        <span asp-validation-for="OpisOdluke" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IdVrstaOdluke" class="control-label"></label>
+        <select asp-for="IdVrstaOdluke" class="form-control" asp-items="ViewBag.VrsteOdlukes">
+            <option value="">-- Odaberite vrstu odluke --</option>
+        </select>
+        <span asp-validation-for="IdVrstaOdluke" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spremi</button>
+    <a asp-action="Detalji" asp-route-id="@Model.IdRad" class="btn btn-secondary">Odustani</a>
+</form>

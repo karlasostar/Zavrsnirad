@@ -1,0 +1,96 @@
+﻿@using RPPP_WebApp.ViewModels
+@model VrstaOdlukeViewModel
+
+<h2>Vrste Odluke</h2>
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+<a asp-action="Create" class="btn btn-primary">Dodaj novu stavku</a>
+
+<pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu"
+       class="float-end">
+</pager>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
+                    ID
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
+                    Vrsta odluke
+                </a>
+            </th>
+            <th>Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.VrstaOdluke)
+        {
+            <tr>
+                <td>@item.IdVrstaOdluke</td>
+                <td>@item.VrstaOdluke1</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdVrstaOdluke" class="btn btn-primary">Uredi</a>
+                    <button class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal" data-id="@item.IdVrstaOdluke" data-name="@item.VrstaOdluke1">
+                        Izbriši
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Potvrda brisanja stavke</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Jeste li sigurni da želite izbrisati <strong id="deleteItemName"></strong>?
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="post">
+                    <input type="hidden" id="deleteItemId" name="id" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+                    <button type="submit" class="btn btn-danger">Izbriši</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var itemId = button.getAttribute('data-id');
+            var itemName = button.getAttribute('data-name');
+
+            document.getElementById('deleteItemId').value = itemId;
+            document.getElementById('deleteItemName').textContent = itemName;
+
+            var deleteForm = document.getElementById('deleteForm');
+            deleteForm.action = '/VrstaOdluke/DeleteConfirmed/' + itemId;
+        });
+    </script>
+}
