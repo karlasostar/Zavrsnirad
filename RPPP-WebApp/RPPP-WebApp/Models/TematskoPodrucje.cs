@@ -2,11 +2,14 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RPPP_WebApp.Models;
 
 public partial class TematskoPodrucje
 {
+    [Required(ErrorMessage ="Potrebno je unijeti područje.")]
+    [Display(Name = "Tematsko područje")]
     public string TematskoPodrucje1 { get; set; }
 
     public int IdTematskogPodrucja { get; set; }

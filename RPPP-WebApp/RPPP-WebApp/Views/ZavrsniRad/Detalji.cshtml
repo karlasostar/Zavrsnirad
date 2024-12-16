@@ -1,0 +1,108 @@
+﻿@model RPPP_WebApp.Models.ZavrsniRad
+
+@{
+    ViewData["Title"] = "Detalji Završnog Rada";
+}
+
+<h1>Detalji završnog rada</h1>
+
+<div class="card">
+    <div class="card-header">
+        <h2>@Model.Naslov</h2>
+    </div>
+    <div class="card-body">
+        <p><strong>Tema:</strong> @Model.Tema</p>
+        <p><strong>Metodologija:</strong> @Model.Metodologija</p>
+        <p><strong>Opis:</strong> @Model.Opis</p>
+        <p><strong>Sazetak:</strong> @Model.Sazetak</p>
+        <p><strong>Datum Obrane:</strong> @Model.DatumObrane?.ToString("dd.MM.yyyy")</p>
+        <p><strong>Ocjena:</strong> @Model.Ocjena</p>
+        <p><strong>Student:</strong> @Model.Student?.Jmbag</p>
+        <p><strong>Tematsko Područje:</strong> @Model.IdTematskogPodrucjaNavigation?.TematskoPodrucje1</p>
+        <p><strong>Vijeće:</strong> @Model.IdVijecaNavigation?.IdVijeca</p>
+    </div>
+</div>
+
+<h2>Odluke Fakultetskog Vijeća</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Datum Odluke</th>
+            <th>Opis Odluke</th>
+            <th>Vrsta Odluke</th>
+            <th>Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var odluka in Model.OdlukeFvs)
+        {
+            <tr>
+                <td>@odluka.IdOdluke</td>
+                <td>@odluka.DatumOdluke.ToString("dd.MM.yyyy")</td>
+                <td>@odluka.OpisOdluke</td>
+                <td>@odluka.IdVrstaOdlukeNavigation?.VrstaOdluke1</td>
+
+                <td>
+                    <a asp-action="EditOdluka" asp-route-id="@odluka.IdOdluke" class="btn btn-primary">Uredi</a>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@odluka.IdOdluke" data-name="@odluka.OpisOdluke">
+                     Izbriši
+                     </button>
+
+                </td>
+
+            </tr>
+        }
+        <a asp-action="CreateOdluka" asp-route-id="@Model.IdRad" class="btn btn-danger">Unos nove odluke za rad</a>
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Povratak na popis</a>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Potvrda brisanja stavke</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Jeste li sigurni da želite izbrisati <strong id="deleteItemName"></strong>?
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="post">
+                    <input type="hidden" id="deleteItemId" name="id" />
+                    <input type="hidden" id="deleteRadId" name="idRad" value="@Model.IdRad" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+                    <button type="submit" class="btn btn-danger">Izbriši</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var itemId = button.getAttribute('data-id');
+            var itemName = button.getAttribute('data-name');
+
+            document.getElementById('deleteItemId').value = itemId;
+            document.getElementById('deleteItemName').textContent = itemName;
+
+            // Ensure the form action is set properly
+            var deleteForm = document.getElementById('deleteForm');
+            deleteForm.action = '/ZavrsniRad/DeleteConfirmedOdluka';
+        });
+
+
+    </script>
+
+    <script src="~/js/pager.js" asp-append-version="true"></script>
+}
+
+

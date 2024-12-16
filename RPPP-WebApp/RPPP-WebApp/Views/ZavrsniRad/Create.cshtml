@@ -1,0 +1,74 @@
+﻿@model RPPP_WebApp.Models.ZavrsniRad
+
+<h2>Kreiranje Završnog Rada</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Naslov"></label>
+        <input type="text" class="form-control" asp-for="Naslov" />
+        <span asp-validation-for="Naslov" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Metodologija"></label>
+        <textarea class="form-control" asp-for="Metodologija"></textarea>
+        <span asp-validation-for="Metodologija" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Ocjena"></label>
+        <input class="form-control" asp-for="Ocjena">
+        <span asp-validation-for="Ocjena" class="text-danger"></span>
+    </div> 
+
+    <div class="form-group">
+        <label asp-for="Tema"></label>
+        <textarea class="form-control" asp-for="Tema"></textarea>
+        <span asp-validation-for="Tema" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Opis"></label>
+        <textarea class="form-control" asp-for="Opis"></textarea>
+        <span asp-validation-for="Opis" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Sazetak"></label>
+        <textarea class="form-control" asp-for="Sazetak"></textarea>
+        <span asp-validation-for="Sazetak" class="text-danger"></span>
+    </div>
+
+     <div class="form-group">
+        <label asp-for="DatumObrane"></label>
+        <input type="date" class="form-control" asp-for="DatumObrane">
+        <span asp-validation-for="DatumObrane" class="text-danger"></span>
+    </div>  
+    <div class="form-group">
+        <label asp-for="IdTematskogPodrucja"></label>
+        <select class="form-control" asp-for="IdTematskogPodrucja" asp-items="ViewBag.TematskaPodrucja" re>
+            <option value="">-- Odaberite tematsko područje --</option>
+        </select>
+        <span asp-validation-for="IdTematskogPodrucja" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Oib"></label>
+        <select class="form-control" asp-for="Oib" asp-items="ViewBag.Studenti">
+            <option value="">-- Odaberite studenta --</option>
+        </select>
+        <span asp-validation-for="Oib" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IdVijeca"></label>
+        <select class="form-control" asp-for="IdVijeca" asp-items="ViewBag.Povjerenstva">
+            <option value="">-- Odaberite povjerenstvo --</option>
+        </select>
+        <span asp-validation-for="IdVijeca" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spremi</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>
+

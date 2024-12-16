@@ -2,13 +2,16 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RPPP_WebApp.Models;
 
 public partial class VrstaOdluke
 {
-    public int IdVrstaOdluke { get; set; }
 
+    public int IdVrstaOdluke { get; set; }
+    [Required(ErrorMessage = "Potrebno je unijeti vrstu odluke.")]
+    [Display(Name = "Vrsta odluke")]
     public string VrstaOdluke1 { get; set; }
 
     public virtual ICollection<OdlukeFv> OdlukeFvs { get; set; } = new List<OdlukeFv>();

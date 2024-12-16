@@ -1,0 +1,35 @@
+﻿@model RPPP_WebApp.Models.OdlukeFv
+
+
+<h1>Unos nove odluke za završni rad</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="IdRad" />
+    <input type="hidden" asp-for="IdOdluke" />
+
+    <div class="form-group">
+        <label asp-for="DatumOdluke" class="control-label">Datum odluke</label>
+        <input type="date" class="form-control" asp-for="DatumOdluke"
+               value="@Model.DatumOdluke != DateOnly.MinValue ? @Model.DatumOdluke.ToString("yyyy-MM-dd") : DateTime.Now.ToString(" yyyy-MM-dd")" />
+
+        <span asp-validation-for="DatumOdluke" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="OpisOdluke" class="control-label">Opis odluke</label>
+        <textarea class="form-control" asp-for="OpisOdluke"></textarea>
+        <span asp-validation-for="OpisOdluke" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IdVrstaOdluke" class="control-label">Vrsta odluke</label>
+        <select class="form-control" asp-for="IdVrstaOdluke" asp-items="ViewBag.VrsteOdluke">
+            <option value="">Odaberite vrstu odluke</option>
+        </select>
+        <span asp-validation-for="IdVrstaOdluke" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spremi</button>
+    <a asp-action="Detalji" asp-route-id="@Model.IdRad" class="btn btn-secondary">Povratak na detalje</a>
+</form>
+
