@@ -1,0 +1,35 @@
+﻿@model RPPP_WebApp.Models.Akgod
+
+@{
+    ViewData["Title"] = "Uredi Akademsku Godinu";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<!-- Error message display if validation fails -->
+@if (TempData["ErrorMessage"] != null)
+
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="IdAkGod" />
+
+    <div class="form-group">
+        <label for="Razdoblje">Razdoblje</label>
+        <input asp-for="Razdoblje" class="form-control" />
+        <span asp-validation-for="Razdoblje" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spremi</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>
+
+@section Scripts {
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate.unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+}

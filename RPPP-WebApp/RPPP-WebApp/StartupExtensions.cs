@@ -9,26 +9,12 @@ namespace RPPP_WebApp;
 
 public static class StartupExtensions
 {
-  public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
-  {
-        IConfiguration configuration = new ConfigurationBuilder()
-        .AddJsonFile("appsettings.json")
-        .AddUserSecrets<Program>()
-         .Build();
-
-        IServiceCollection services = new ServiceCollection();
-        var provider = services
-        .AddDbContext<RPPP08Context>(options => {
-            options.UseSqlServer(
-            configuration.GetConnectionString("Server"));
-        }, contextLifetime: ServiceLifetime.Transient)
-        .BuildServiceProvider();
+    public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddDbContext<RPPP08Context>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("Server")));
 
         builder.Services.AddControllersWithViews();
-        builder.Services.AddDbContext<RPPP08Context>(options =>
-		options.UseSqlServer(builder.Configuration.GetConnectionString("Server")));
-
-        builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
         return builder.Build();
     }

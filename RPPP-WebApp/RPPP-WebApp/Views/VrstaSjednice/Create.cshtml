@@ -1,0 +1,14 @@
+﻿@model RPPP_WebApp.Models.VrstaSjednice
+
+<h2>Stvaranje nove vrste sjednica</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="NazivVrsteSjednice">Naziv</label>
+        <input asp-for="NazivVrsteSjednice" class="form-control" />
+        <span asp-validation-for="NazivVrsteSjednice" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Stvori</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>

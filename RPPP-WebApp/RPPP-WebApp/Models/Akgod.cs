@@ -2,16 +2,43 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace RPPP_WebApp.Models;
-
-public partial class Akgod
+namespace RPPP_WebApp.Models
 {
-    public int IdAkGod { get; set; }
+    public partial class Akgod
+    {
+        public int IdAkGod { get; set; }
 
-    public string Razdoblje { get; set; }
+        [Required]
+        [RegularExpression(@"^\d{4}/\d{4}$", ErrorMessage = "Razdoblje must be in the format 'year/year'")]
+        [ValidYearRange(ErrorMessage = "The second year must be one greater than the first year.")]
+        public string Razdoblje { get; set; }
 
-    public virtual ICollection<Raspored> Rasporeds { get; set; } = new List<Raspored>();
+        public virtual ICollection<Raspored> Rasporeds { get; set; } = new List<Raspored>();
 
-    public virtual ICollection<Vijeće> Vijećes { get; set; } = new List<Vijeće>();
+        public virtual ICollection<Vijeće> Vijećes { get; set; } = new List<Vijeće>();
+    }
+
+    // Custom Validation Attribute for year range comparison
+    public class ValidYearRangeAttribute : ValidationAttribute
+    {
+        public override bool IsValid(object value)
+        {
+            var razdoblje = value as string;
+            if (string.IsNullOrEmpty(razdoblje))
+                return false;
+
+            var years = razdoblje.Split('/');
+            if (years.Length == 2)
+            {
+                if (int.TryParse(years[0], out int firstYear) && int.TryParse(years[1], out int secondYear))
+                {
+                    // Check if the second year is exactly one more than the first
+                    return secondYear == firstYear + 1;
+                }
+            }
+            return false;
+        }
+    }
 }

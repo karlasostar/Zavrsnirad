@@ -1,0 +1,104 @@
+﻿@model IEnumerable<RPPP_WebApp.Models.VrstaSjednice>
+
+@{
+    ViewData["Title"] = "Vrsta Sjednice";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<a asp-action="Create" class="btn btn-primary">Dodaj novu stavku</a>
+
+<div class="d-flex justify-content-end mt-3">
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= (int)ViewData["TotalPages"]; i++)
+            {
+                <li class="page-item @(i == (int)ViewData["CurrentPage"] ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-pageNumber="@i" asp-route-sortOrder="@ViewData["CurrentSort"]">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+<table class="table">
+    <thead>
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParam"]">ID</a>
+            </th>
+
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NazivSortParam"]">Vrsta sjednice</a>
+            </th>
+        </tr>
+    </thead>
+    </thead>
+    <tbody>
+        @foreach (var sjednica in Model)
+        {
+            <tr>
+                <td>@sjednica.IdVrsteSjednice</td>
+                <td>@sjednica.NazivVrsteSjednice</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@sjednica.IdVrsteSjednice" class="btn btn-primary">Uredi</a>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                            data-id="@sjednica.IdVrsteSjednice" data-name="@sjednica.NazivVrsteSjednice">
+                        Izbriši
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <p>No academic years found.</p>
+}
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Jeste li sigurni da želite izbrisati stavku <strong id="deleteItemName"></strong>?
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="post">
+                    <input type="hidden" id="deleteItemId" name="id" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+                    <button type="submit" class="btn btn-danger">Izbrisi</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var itemId = button.getAttribute('data-id');
+            var itemName = button.getAttribute('data-name');
+
+            document.getElementById('deleteItemId').value = itemId;
+            document.getElementById('deleteItemName').textContent = itemName;
+
+            var deleteForm = document.getElementById('deleteForm');
+            deleteForm.action = '/VrstaSjednice/Delete/' + itemId;
+        });
+    </script>
+}
