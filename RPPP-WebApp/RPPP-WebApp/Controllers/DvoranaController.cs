@@ -41,7 +41,6 @@ namespace RPPP_WebApp.Controllers
             if (count == 0)
             {
                 logger.LogInformation("Ne postoji nijedna dvorana");
-                TempData["Info"] = "Ne postoji niti jedna dvorana.";
                 return RedirectToAction(nameof(Create));
             }
 
@@ -126,7 +125,7 @@ namespace RPPP_WebApp.Controllers
                 }
                 catch (Exception exc)
                 {
-                    TempData["Error"] = "Nije moguće obrisati ovu stavku";
+                    TempData["Error"] = "Nije moguće obrisati ovu stavku zato što se koristi na drugom mjestu.";
                     logger.LogError("Pogreška prilikom brisanja dvorane: " + exc.CompleteExceptionMessage());
                 }
             }

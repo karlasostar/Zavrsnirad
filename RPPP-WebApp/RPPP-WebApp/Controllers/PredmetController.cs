@@ -41,7 +41,6 @@ namespace RPPP_WebApp.Controllers
             if (count == 0)
             {
                 logger.LogInformation("Ne postoji nijedan predmet");
-                TempData["Error"] = "Ne postoji niti jedan predmet.";
                 return RedirectToAction(nameof(Create));
             }
 
@@ -121,12 +120,12 @@ namespace RPPP_WebApp.Controllers
                     string naziv = predmet.Naziv;
                     ctx.Remove(predmet);
                     ctx.SaveChanges();
-                    logger.LogInformation($"Predmet {naziv} uspješno obrisana");
-                    TempData["Success"] = $"Predmet {naziv} uspješno obrisana";
+                    logger.LogInformation($"Predmet {naziv} uspješno obrisan");
+                    TempData["Success"] = $"Predmet {naziv} uspješno obrisan";
                 }
                 catch (Exception exc)
                 {
-                    TempData["Error"] = "Pogreška prilikom brisanja dvorane: " + exc.CompleteExceptionMessage();
+                    TempData["Error"] = "Nije moguće obrisati ovu stavku zato što se koristi na drugom mjestu.";
                     logger.LogError("Pogreška prilikom brisanja dvorane: " + exc.CompleteExceptionMessage());
                 }
             }
@@ -178,7 +177,7 @@ namespace RPPP_WebApp.Controllers
                     try
                     {
                         await ctx.SaveChangesAsync();
-                        TempData["Success"] = "Predmet ažurirana.";
+                        TempData["Success"] = "Predmet ažuriran.";
                         return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
                     }
                     catch (Exception exc)
@@ -195,7 +194,7 @@ namespace RPPP_WebApp.Controllers
             }
             catch (Exception exc)
             {
-                TempData["Error"] = "Nije moguće obrisati ovu stavku";
+                TempData["Error"] = "Nije moguće urediti ovu stavku";
                 return RedirectToAction(nameof(Edit), id);
             }
         }

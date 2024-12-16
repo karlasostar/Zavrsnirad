@@ -35,7 +35,6 @@ namespace RPPP_WebApp.Controllers
 			if (count == 0)
 			{
 				logger.LogInformation("Ne postoji nijedan raspored");
-				TempData["Info"] = "Ne postoji niti jedan raspored.";
 				return RedirectToAction(nameof(Create));
 			}
 
@@ -124,8 +123,8 @@ namespace RPPP_WebApp.Controllers
 				}
 				catch (Exception exc)
 				{
-					TempData["Error"] = "Pogreška prilikom brisanja rasporeda: " + exc.CompleteExceptionMessage();
-					logger.LogError("Pogreška prilikom brisanja rasporeda: " + exc.CompleteExceptionMessage());
+                    TempData["Error"] = "Nije moguće obrisati ovu stavku zato što se koristi na drugom mjestu.";
+                    logger.LogError("Pogreška prilikom brisanja rasporeda: " + exc.CompleteExceptionMessage());
 				}
 			}
 			else
@@ -195,8 +194,8 @@ namespace RPPP_WebApp.Controllers
 			}
 			catch (Exception exc)
 			{
-				TempData["Success"] = exc.CompleteExceptionMessage();
-				return RedirectToAction(nameof(Edit), id);
+                TempData["Error"] = "Nije moguće urediti ovu stavku";
+                return RedirectToAction(nameof(Edit), id);
 			}
 		}
 

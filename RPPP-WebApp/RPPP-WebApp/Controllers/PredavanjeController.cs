@@ -34,7 +34,13 @@ namespace RPPP_WebApp.Controllers
 
 			int count = query.Count();
 
-			var pagingInfo = new PagingInfo
+            if (count == 0)
+            {
+                logger.LogInformation("Ne postoji nijedan predmet");
+                return RedirectToAction(nameof(Create), new { idRaspored = idRaspored });
+            }
+
+            var pagingInfo = new PagingInfo
 			{
 				CurrentPage = page,
 				Sort = sort,
@@ -101,9 +107,9 @@ namespace RPPP_WebApp.Controllers
 				{
 					ctx.Add(predavanje);
 					await ctx.SaveChangesAsync();
-					logger.LogInformation(new EventId(1000), $"Predavanje {predavanje.IdPredavanja} dodan.");
+					logger.LogInformation(new EventId(1000), $"Predavanje {predavanje.IdPredavanja} dodano.");
 
-					TempData["Success"] = $"Predavanje {predavanje.IdPredavanja} dodan.";
+					TempData["Success"] = $"Predavanje {predavanje.IdPredavanja} dodano.";
 					return RedirectToAction(nameof(Index), new { predavanje.IdRaspored});
 				}
 				catch (Exception exc)
@@ -122,9 +128,9 @@ namespace RPPP_WebApp.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Delete(int IdPredavanje, int page = 1, int sort = 1, bool ascending = true)
+		public IActionResult Delete(int IdPredavanja, int IdRaspored, int page = 1, int sort = 1, bool ascending = true)
 		{
-			var predavanje = ctx.Predavanjes.Find(IdPredavanje);
+			var predavanje = ctx.Predavanjes.Find(IdPredavanja);
 			if (predavanje != null)
 			{
 				try
@@ -137,16 +143,16 @@ namespace RPPP_WebApp.Controllers
 				}
 				catch (Exception exc)
 				{
-					TempData["Error"] = "Pogreška prilikom brisanja predavanja: " + exc.CompleteExceptionMessage();
-					logger.LogError("Pogreška prilikom brisanja predavanja: " + exc.CompleteExceptionMessage());
+                    TempData["Error"] = "Nije moguće obrisati ovu stavku zato što se koristi na drugom mjestu.";
+                    logger.LogError("Pogreška prilikom brisanja predavanja: " + exc.CompleteExceptionMessage());
 				}
 			}
 			else
 			{
-				logger.LogWarning("Ne postoji predavanje s oznakom: {0} ", IdPredavanje);
-				TempData["Error"] = "Ne postoji predavanje s oznakom: " + IdPredavanje;
+				logger.LogWarning("Ne postoji predavanje s oznakom: {0} ", IdPredavanja);
+				TempData["Error"] = "Ne postoji predavanje s oznakom: " + IdPredavanja;
 			}
-			return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
+			return RedirectToAction(nameof(Index), new { idRaspored = IdRaspored, page = page, sort = sort, ascending = ascending });
 		}
 
 		[HttpGet]
@@ -209,8 +215,8 @@ namespace RPPP_WebApp.Controllers
 			}
 			catch (Exception exc)
 			{
-				TempData["Error"] = exc.CompleteExceptionMessage();
-				return RedirectToAction(nameof(Edit), id);
+                TempData["Error"] = "Nije moguće urediti ovu stavku";
+                return RedirectToAction(nameof(Edit), id);
 			}
 		}
 
