@@ -33,7 +33,7 @@ namespace RPPP_WebApp.Controllers
 
                     break;
                 case "naziv_desc":
-                    statusNatjecaja = statusNatjecaja.OrderBy(v => v.StatusNatjecanja == null ? "" : v.StatusNatjecanja.ToUpper());
+                    statusNatjecaja = statusNatjecaja.OrderByDescending(v => v.StatusNatjecanja == null ? "" : v.StatusNatjecanja.ToUpper());
                     break;
                 default:
                     statusNatjecaja = statusNatjecaja.OrderBy(v => v.IdStatus);
