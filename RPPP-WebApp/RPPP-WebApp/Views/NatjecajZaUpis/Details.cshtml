@@ -56,7 +56,8 @@ else
     <p>Nema prijava povezanih s ovim natječajem.</p>
 }
 
-<a asp-action="Index" class="btn btn-secondary">Natrag</a>
+<a asp-action="Index"  asp-route-pageNumber="@ViewData["CurrentPage"]" 
+   asp-route-sortOrder="@ViewData["CurrentSort"]"  class="btn btn-secondary">Natrag</a>
 
 <a asp-action="CreatePrijava" asp-route-id="@Model.IdNatjecanja" class="btn btn-primary">
     Dodaj novu prijavu

@@ -62,7 +62,8 @@
                     <td>@item.BrojMjesta</td>
                     <td>@item.BrojPrijava</td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.IdNatjecanja" class="btn btn-success">Detalji</a>
+                        <a asp-action="Details" asp-route-id="@item.IdNatjecanja"  asp-route-pageNumber="@ViewData["CurrentPage"]" asp-route-sortOrder="@ViewData["CurrentSort"]" class="btn btn-success">Detalji</a>
+
                         <a asp-action="Edit" asp-route-id="@item.IdNatjecanja" class="btn btn-primary">Uredi</a>
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                 data-bs-target="#deleteModal" data-id="@item.IdNatjecanja">

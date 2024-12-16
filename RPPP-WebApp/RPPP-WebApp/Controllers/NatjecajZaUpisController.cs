@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using RPPP_WebApp.Models;
 using System.Linq;
@@ -193,23 +194,25 @@ namespace RPPP_WebApp.Controllers
             return _context.NatjecajZaUpis.Any(e => e.IdNatjecanja == id);
         }
 
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? pageNumber, string sortOrder)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            // Fetch the NatjecajZaUpis entity and related Prijava with StatusPrijave
             var natjecaj = await _context.NatjecajZaUpis
-                .Include(n => n.IdUpisas) // Include Prijava entities
-                    .ThenInclude(p => p.IdPrijaveNavigation) // Include StatusPrijave navigation
+                .Include(n => n.IdUpisas) 
+                    .ThenInclude(p => p.IdPrijaveNavigation) 
                 .FirstOrDefaultAsync(n => n.IdNatjecanja == id);
 
             if (natjecaj == null)
             {
                 return NotFound();
             }
+
+            ViewData["CurrentPage"] = pageNumber;
+            ViewData["CurrentSort"] = sortOrder;
 
             return View(natjecaj);
         }
@@ -326,24 +329,6 @@ namespace RPPP_WebApp.Controllers
 
             return View(prijava);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }
