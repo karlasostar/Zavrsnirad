@@ -63,7 +63,7 @@ namespace RPPP_WebApp.Controllers
 
             var model = new VijeceViewModel
             {
-                Vijece = vijece
+                Vijece = pagedData
             };
 
             return View(model);
