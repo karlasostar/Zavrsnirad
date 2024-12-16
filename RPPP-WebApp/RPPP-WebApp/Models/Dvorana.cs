@@ -9,12 +9,16 @@ namespace RPPP_WebApp.Models;
 public partial class Dvorana
 {
 
+    [Required]
+    [StringLength(5, ErrorMessage = "Oznaka dvorane mora biti najviše 5 znakova")]
     [Display(Name = "Oznaka dvorane", Prompt = "Unesite naziv")]
     public string OznDvorana { get; set; }
 
     [Display(Name = "ID dvorane", Prompt = "Unesite ID")]
     public int IdDvorana { get; set; }
 
+    [Required]
+    [Range(1, 1000, ErrorMessage = "Kapacitet mora biti između 1 i 1000.")]
     [Display(Name = "Kapacitet dvorane", Prompt = "Unesite kapacitet")]
     public int Kapacitet { get; set; }
 

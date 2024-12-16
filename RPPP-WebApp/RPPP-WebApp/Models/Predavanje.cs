@@ -3,16 +3,18 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using RPPP_WebApp.Models.Validation;
 
 namespace RPPP_WebApp.Models;
 
 public partial class Predavanje
 {
 	[Display(Name = "Vrijeme početka", Prompt = "Odaberite vrijeme početka")]
-	public DateTime VrijemePocetka { get; set; }
+    public DateTime VrijemePocetka { get; set; }
 
 	[Display(Name = "Vrijeme završetka", Prompt = "Odaberite vrijeme završetka")]
-	public DateTime VrijemeZavrsetka { get; set; }
+    [ValidnoVrijemeZavrsetka(ErrorMessage = "Vrijeme završetka mora biti nakon vremena početka.")]
+    public DateTime VrijemeZavrsetka { get; set; }
 
 	[Display(Name = "ID predavanja", Prompt = "Unesite ID predavanja")]
 	public int IdPredavanja { get; set; }

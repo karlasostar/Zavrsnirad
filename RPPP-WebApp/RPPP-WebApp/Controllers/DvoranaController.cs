@@ -83,6 +83,15 @@ namespace RPPP_WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Dvorana dvorana)
         {
+
+            var existingDvorana = ctx.Dvoranas.FirstOrDefault(a => a.OznDvorana == dvorana.OznDvorana);
+
+            if (existingDvorana != null)
+            {
+                ModelState.AddModelError("OznDvorana", "Dvorana s ovom oznakom vec postoji!");
+                return View(dvorana);
+            }
+
             logger.LogTrace(JsonSerializer.Serialize(dvorana));
             if (ModelState.IsValid)
             {
@@ -166,11 +175,23 @@ namespace RPPP_WebApp.Controllers
                 {
                     return NotFound("Neispravna oznaka dvorane: " + id);
                 }
-
+                string originalOznDvorana = dvorana.OznDvorana;
                 if (await TryUpdateModelAsync<Dvorana>(dvorana, "",
                     d => d.OznDvorana, d => d.Kapacitet
                 ))
                 {
+                    if (originalOznDvorana != dvorana.OznDvorana)
+                    {
+                        bool oznDvoranaExists = await ctx.Dvoranas
+                            .AnyAsync(d => d.OznDvorana == dvorana.OznDvorana && d.IdDvorana != id);
+
+                        if (oznDvoranaExists)
+                        {
+                            ModelState.AddModelError(nameof(Dvorana.OznDvorana), "Dvorana s ovom oznakom već postoji.");
+                            return View(dvorana);
+                        }
+                    }
+
                     ViewBag.Page = page;
                     ViewBag.Sort = sort;
                     ViewBag.Ascending = ascending;

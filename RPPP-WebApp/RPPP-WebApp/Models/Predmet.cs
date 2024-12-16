@@ -12,13 +12,16 @@ public partial class Predmet
 	public int SifPredmet { get; set; }
 
 	[Display(Name = "Naziv", Prompt = "Unesite naziv")]
-	public string Naziv { get; set; }
+    [StringLength(40, ErrorMessage = "Naziv predmeta može biti najviše 40 znakova.")]
+    public string Naziv { get; set; }
 
 	[Display(Name = "Plan", Prompt = "Unesite plan predmeta")]
-	public string PlanProgram { get; set; }
+    [StringLength(500, ErrorMessage = "Plan predmeta može biti najviše 500 znakova.")]
+    public string PlanProgram { get; set; }
 
 	[Display(Name = "Program", Prompt = "Unesite program predmeta")]
-	public string Program { get; set; }
+    [StringLength(500, ErrorMessage = "Program predmeta može biti najviše 500 znakova.")]
+    public string Program { get; set; }
 
 	[Display(Name = "Izboran predmet", Prompt = "Odaberite je li predmet izboran")]
 	public int JelIzboran { get; set; }

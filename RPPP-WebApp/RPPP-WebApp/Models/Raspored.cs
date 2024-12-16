@@ -12,7 +12,8 @@ public partial class Raspored
 	public int IdRaspored { get; set; }
 
 	[Display(Name = "Opis", Prompt = "Unesite kratki opis")]
-	public string Opis { get; set; }
+    [StringLength(200, ErrorMessage = "Opis može imati najviše 200 znakova.")]
+    public string Opis { get; set; }
 
 	[Display(Name = "Akademska godina", Prompt = "Odaberite akademsku godinu")]
 	public int IdAkGod { get; set; }

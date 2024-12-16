@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Security.Cryptography;
+using System.Text.Json;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -83,6 +84,14 @@ namespace RPPP_WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Predmet predmet)
         {
+            var existingPredmet = ctx.Predmets.FirstOrDefault(a => a.Naziv == predmet.Naziv);
+
+            if (existingPredmet != null)
+            {
+                ModelState.AddModelError("Naziv", "Predmet sa ovim imenom vec postoji!");
+                return View(predmet);
+            }
+
             logger.LogTrace(JsonSerializer.Serialize(predmet));
             if (ModelState.IsValid)
             {
@@ -164,13 +173,27 @@ namespace RPPP_WebApp.Controllers
                 Predmet predmet = await ctx.Predmets.FindAsync(id);
                 if (predmet == null)
                 {
-                    return NotFound("Neispravna oznaka dvorane: " + id);
+                    return NotFound("Neispravna oznaka predmeta: " + id);
                 }
+
+                string originalNaziv = predmet.Naziv;
 
                 if (await TryUpdateModelAsync<Predmet>(predmet, "",
                     d => d.Naziv, d => d.PlanProgram, d => d.Program, d => d.JelIzboran, d => d.Ects
                 ))
                 {
+                    if (originalNaziv != predmet.Naziv)
+                    {
+                        bool nazivPredmetaExists = await ctx.Predmets
+                            .AnyAsync(p => p.Naziv == predmet.Naziv && p.SifPredmet != id);
+
+                        if (nazivPredmetaExists)
+                        {
+                            ModelState.AddModelError(nameof(Predmet.Naziv), "Predmet s ovim nazivom već postoji.");
+                            return View(predmet);
+                        }
+                    }
+
                     ViewBag.Page = page;
                     ViewBag.Sort = sort;
                     ViewBag.Ascending = ascending;
