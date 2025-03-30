@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'izazov_scene.dart';  // Import the IzazovScene
 
 class HomeScene extends StatelessWidget {
   const HomeScene({super.key});
@@ -15,30 +16,47 @@ class HomeScene extends StatelessWidget {
         ),
         backgroundColor: Colors.green, // Optional: Set the app bar to green if needed
       ),
-
       body: Container(
         color: Colors.green[400],  // Set the background color of the screen to green
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: Stack(
           children: [
-            // Top row with 2 square buttons stretched
-            Row(
-              children: [
-                _expandedSquareButton("1, 2, 3"),
-                const SizedBox(width: 16),
-                _expandedSquareButton("5, 10"),
-              ],
+            // Place the image on the left side of the screen
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 25, right: 16), // Adjust the padding for positioning
+                child: Image.asset(
+                  'lib/pictures/home_4flowers.png', // Path to your image in the pictures folder
+                  width: 450, // Set the image size
+                  height: 450, // Set the image size
+                ),
+              ),
             ),
-            Row(
+            // Use a Column for the buttons and other elements
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _expandedSquareButton("4, 6, 9"),
-                const SizedBox(width: 16),
-                _expandedSquareButton("7, 8"),
+                // Top row with 2 square buttons stretched
+                Row(
+                  children: [
+                    _expandedSquareButton("1, 2, 3"),
+                    const SizedBox(width: 16),
+                    _expandedSquareButton("5, 10"),
+                  ],
+                ),
+                Row(
+                  children: [
+                    _expandedSquareButton("4, 6, 9"),
+                    const SizedBox(width: 16),
+                    _expandedSquareButton("7, 8"),
+                  ],
+                ),
+                // Centered "IZAZOV" button
+                Center(
+                  child: _bigCircleButton(context),  // Pass context to navigate
+                ),
               ],
-            ),
-            Center(
-              child: _bigCircleButton("IZAZOV"),
             ),
           ],
         ),
@@ -46,6 +64,7 @@ class HomeScene extends StatelessWidget {
     );
   }
 
+  // Expanded square button widget
   Widget _expandedSquareButton(String label) {
     return Expanded(
       child: SizedBox(
@@ -65,18 +84,23 @@ class HomeScene extends StatelessWidget {
     );
   }
 
-  Widget _bigCircleButton(String label) {
+  // Circle button widget (larger size)
+  Widget _bigCircleButton(BuildContext context) {
     return SizedBox(
-      width: 150,
-      height: 120,
+      width: 160, // Increase the width to make the button larger
+      height: 160, // Increase the height to make the button larger
       child: ElevatedButton(
         onPressed: () {
-          // TODO: Handle tap
+          // Navigate to IzazovScene when the button is pressed
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const IzazovScene()),
+          );
         },
         style: ElevatedButton.styleFrom(
           shape: const CircleBorder(),
         ),
-        child: Text(label, style: const TextStyle(fontSize: 28)),
+        child: const Text('IZAZOV', style: TextStyle(fontSize: 28)),
       ),
     );
   }
