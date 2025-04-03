@@ -58,8 +58,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - lib/pictures/home_flower.png
-    - lib/pictures/home_4flowers.png
+    - lib/pictures/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

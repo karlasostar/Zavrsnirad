@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'izazov_scene.dart';  // Import the IzazovScene
+import 'scene1.dart';  // Import Scene 1
+import 'scene2.dart';  // Import Scene 2
+import 'scene3.dart';  // Import Scene 3
+import 'scene4.dart';  // Import Scene 4
 
 class HomeScene extends StatelessWidget {
   const HomeScene({super.key});
@@ -8,53 +12,49 @@ class HomeScene extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: const Text(
+        title: const Center(
+          child: Text(
             "MNOŽILICA",
-            style: TextStyle(fontSize: 24), // Optional: Set a custom font size if needed
+            style: TextStyle(fontSize: 24),
           ),
         ),
-        backgroundColor: Colors.green, // Optional: Set the app bar to green if needed
+        backgroundColor: Colors.green,
       ),
       body: Container(
-        color: Colors.green[400],  // Set the background color of the screen to green
+        color: Colors.green[400],
         padding: const EdgeInsets.all(16.0),
         child: Stack(
           children: [
-            // Place the image on the left side of the screen
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 25, right: 16), // Adjust the padding for positioning
+                padding: const EdgeInsets.only(bottom: 25, right: 16),
                 child: Image.asset(
-                  'lib/pictures/home_4flowers.png', // Path to your image in the pictures folder
-                  width: 450, // Set the image size
-                  height: 450, // Set the image size
+                  'lib/pictures/home_4flowers.png',
+                  width: 450,
+                  height: 450,
                 ),
               ),
             ),
-            // Use a Column for the buttons and other elements
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // Top row with 2 square buttons stretched
                 Row(
                   children: [
-                    _expandedSquareButton("1, 2, 3"),
+                    _expandedSquareButton(context, "1, 2, 3", const Scene1()),
                     const SizedBox(width: 16),
-                    _expandedSquareButton("5, 10"),
+                    _expandedSquareButton(context, "5, 10",  Scene2()),
                   ],
                 ),
                 Row(
                   children: [
-                    _expandedSquareButton("4, 6, 9"),
+                    _expandedSquareButton(context, "4, 6, 9", const Scene3()),
                     const SizedBox(width: 16),
-                    _expandedSquareButton("7, 8"),
+                    _expandedSquareButton(context, "7, 8", const Scene4()),
                   ],
                 ),
-                // Centered "IZAZOV" button
                 Center(
-                  child: _bigCircleButton(context),  // Pass context to navigate
+                  child: _bigCircleButton(context),
                 ),
               ],
             ),
@@ -64,18 +64,20 @@ class HomeScene extends StatelessWidget {
     );
   }
 
-  // Expanded square button widget
-  Widget _expandedSquareButton(String label) {
+  Widget _expandedSquareButton(BuildContext context, String label, Widget scene) {
     return Expanded(
       child: SizedBox(
-        height: 100, // Bigger button height
+        height: 100,
         child: ElevatedButton(
           onPressed: () {
-            // TODO: Handle tap
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => scene),
+            );
           },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero, // force square look
+              borderRadius: BorderRadius.zero,
             ),
           ),
           child: Text(label, style: const TextStyle(fontSize: 24)),
@@ -84,14 +86,12 @@ class HomeScene extends StatelessWidget {
     );
   }
 
-  // Circle button widget (larger size)
   Widget _bigCircleButton(BuildContext context) {
     return SizedBox(
-      width: 160, // Increase the width to make the button larger
-      height: 160, // Increase the height to make the button larger
+      width: 160,
+      height: 160,
       child: ElevatedButton(
         onPressed: () {
-          // Navigate to IzazovScene when the button is pressed
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const IzazovScene()),
