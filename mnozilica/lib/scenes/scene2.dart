@@ -38,7 +38,9 @@ class Scene2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Scene 2 - Multiplication Grid")),
+      //myb remove AppBar
+      appBar: AppBar(title: const Text("Scene 2 - Multiplication Grid"), backgroundColor: Colors.green,),
+      backgroundColor: Colors.green[400],
       body: Column(
         children: [
           // Grid with flower images
@@ -67,9 +69,10 @@ class Scene2 extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-              Expanded(child: _ovalButton("Option 1")),  // Wrap with Expanded
-              Expanded(child: _ovalButton("Option 2")),  // Wrap with Expanded
-              Expanded(child: _ovalButton("Option 3")),
+
+              Expanded(child: _ovalButton("${flowers.first.num2} x ${flowers.first.num1}")),  // Wrap with Expanded
+              Expanded(child: _ovalButton("${flowers.first.num2 +1 } x ${flowers.first.num1}")),  // Wrap with Expanded
+              Expanded(child: _ovalButton("${flowers.first.num2 +1 } x ${flowers.first.num1 + 1}")),
                 ],
               ),
             ),
@@ -88,15 +91,15 @@ class Scene2 extends StatelessWidget {
     } else if (flowers.length == 4) {
       return flowers.length;
     } else if (flowers.length == 5) {
-      return 2;
+      return 3;
     } else if (flowers.length == 6) {
-      return 2;
+      return 3;
     } else if (flowers.length == 7) {
       return 3;
     } else if (flowers.length == 8) {
       return 3;
     } else {
-    return 3;
+    return 4;
     }
   }
 
@@ -126,7 +129,7 @@ class FlowerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-
+    //HSLColor.fromColor(Colors.green);
     // Get the number of columns in the grid dynamically from the parent widget
     int columns = (context.findAncestorWidgetOfExactType<Scene2>() as Scene2)._getGridColumns();
 
@@ -138,6 +141,7 @@ class FlowerTile extends StatelessWidget {
         print("${flower.num1} x ${flower.num2} = ${flower.num1 * flower.num2}");
       },
       child: Card(
+        color: Colors.green[400], //well done! remove gumbici
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -147,6 +151,7 @@ class FlowerTile extends StatelessWidget {
               width: imageSize,  // Adjust the image width dynamically based on available space
               height: imageSize, // Keep aspect ratio
               fit: BoxFit.contain, // Ensure image scales without distortion
+
             ),
           ],
         ),
