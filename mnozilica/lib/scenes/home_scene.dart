@@ -31,8 +31,8 @@ class HomeScene extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 25, right: 16),
                 child: Image.asset(
                   'lib/pictures/home_4flowers.png',
-                  width: 450,
-                  height: 450,
+                  width: 800,
+                  height: 520,
                 ),
               ),
             ),
@@ -50,7 +50,7 @@ class HomeScene extends StatelessWidget {
                   children: [
                     _expandedSquareButton(context, "4, 6, 9", const Scene3()),
                     const SizedBox(width: 16),
-                    _expandedSquareButton(context, "7, 8", const Scene4()),
+                    _expandedSquareButton(context, "7, 8", Scene4()),
                   ],
                 ),
                 Center(

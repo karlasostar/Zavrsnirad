@@ -38,7 +38,7 @@ class Scene2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //myb remove AppBar
+      // Remove AppBar if not needed
       appBar: AppBar(title: const Text("Scene 2 - Multiplication Grid"), backgroundColor: Colors.green,),
       backgroundColor: Colors.green[400],
       body: Column(
@@ -61,6 +61,18 @@ class Scene2 extends StatelessWidget {
               ),
             ),
           ),
+          // Text between the grid and the buttons
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Text(
+              "Prebroji koliko se latica nalazi na slici?", // Example text
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
           // Bottom section with buttons
           Flexible(
             flex: 2, // Smaller area for buttons
@@ -69,10 +81,9 @@ class Scene2 extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-
-              Expanded(child: _ovalButton("${flowers.first.num2} x ${flowers.first.num1}")),  // Wrap with Expanded
-              Expanded(child: _ovalButton("${flowers.first.num2 +1 } x ${flowers.first.num1}")),  // Wrap with Expanded
-              Expanded(child: _ovalButton("${flowers.first.num2 +1 } x ${flowers.first.num1 + 1}")),
+                  Expanded(child: _ovalButton("${flowers.first.num2} x ${flowers.first.num1}")),  // Wrap with Expanded
+                  Expanded(child: _ovalButton("${flowers.first.num2 + 1} x ${flowers.first.num1}")),  // Wrap with Expanded
+                  Expanded(child: _ovalButton("${flowers.first.num2 + 1} x ${flowers.first.num1 + 1}")),
                 ],
               ),
             ),
@@ -84,12 +95,12 @@ class Scene2 extends StatelessWidget {
 
   // Function to determine the number of grid cells based on num2
   int _getGridColumns() {
-    if (flowers.length == 1 ) {
+    if (flowers.length == 1) {
       return 1;
     } else if (flowers.length == 3 || flowers.length == 2) {
       return 2;
     } else if (flowers.length == 4) {
-      return flowers.length;
+      return 2;
     } else if (flowers.length == 5) {
       return 3;
     } else if (flowers.length == 6) {
@@ -98,8 +109,10 @@ class Scene2 extends StatelessWidget {
       return 3;
     } else if (flowers.length == 8) {
       return 3;
+    } else if (flowers.length == 9) {
+      return 3;
     } else {
-    return 4;
+      return 4;
     }
   }
 
@@ -129,19 +142,19 @@ class FlowerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    //HSLColor.fromColor(Colors.green);
+
     // Get the number of columns in the grid dynamically from the parent widget
     int columns = (context.findAncestorWidgetOfExactType<Scene2>() as Scene2)._getGridColumns();
 
     // Calculate the image size based on the number of columns and available space
-    double imageSize = (width - 8 * 2 - 4 * (columns - 1)) / columns;  // 8 padding (left + right), 4 spacing between items
+    double imageSize = (width - 30 * 2 - 4 * (columns - 1)) / columns;  // 8 padding (left + right), 4 spacing between items
 
     return GestureDetector(
       onTap: () {
         print("${flower.num1} x ${flower.num2} = ${flower.num1 * flower.num2}");
       },
       child: Card(
-        color: Colors.green[400], //well done! remove gumbici
+        color: Colors.green[400], // Card background color
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -151,7 +164,6 @@ class FlowerTile extends StatelessWidget {
               width: imageSize,  // Adjust the image width dynamically based on available space
               height: imageSize, // Keep aspect ratio
               fit: BoxFit.contain, // Ensure image scales without distortion
-
             ),
           ],
         ),
